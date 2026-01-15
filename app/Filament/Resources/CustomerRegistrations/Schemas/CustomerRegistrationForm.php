@@ -2,13 +2,15 @@
 
 namespace App\Filament\Resources\CustomerRegistrations\Schemas;
 
-use Filament\Schemas\Components\DateTimePicker;
-use Filament\Schemas\Components\FileUpload;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Select;
-use Filament\Schemas\Components\Textarea;
-use Filament\Schemas\Components\TextInput;
 use Filament\Schemas\Schema;
+
 
 class CustomerRegistrationForm
 {
@@ -16,17 +18,6 @@ class CustomerRegistrationForm
     {
         return $schema
             ->components([
-                Section::make('Data Surat')
-                    ->schema([
-                        TextInput::make('no_surat')
-                            ->label('No Surat')
-                            ->maxLength(255),
-                        DateTimePicker::make('tanggal')
-                            ->label('Tanggal')
-                            ->default(now()),
-                    ])
-                    ->columns(2),
-
                 Section::make('Data Pribadi')
                     ->schema([
                         TextInput::make('nama_lengkap')
@@ -105,6 +96,21 @@ class CustomerRegistrationForm
 
                 Section::make('Alamat Pasang')
                     ->schema([
+                        Toggle::make('alamat_sesuai_ktp')
+                            ->label('Alamat Sesuai KTP')
+                            ->live()
+                            ->afterStateUpdated(function ($state, callable $set, callable $get) {
+                                if ($state) {
+                                    $set('alamat_pasang', $get('alamat_ktp'));
+                                    $set('dusun_kampung_pasang', $get('dusun_kampung_ktp'));
+                                    $set('rt_pasang', $get('rt_ktp'));
+                                    $set('rw_pasang', $get('rw_ktp'));
+                                    $set('kel_desa_pasang', $get('kel_desa_ktp'));
+                                    $set('kecamatan_pasang', $get('kecamatan_ktp'));
+                                    $set('kab_kota_pasang', $get('kab_kota_ktp'));
+                                }
+                            })
+                            ->columnSpanFull(),
                         Textarea::make('alamat_pasang')
                             ->label('Alamat Pasang')
                             ->rows(3)

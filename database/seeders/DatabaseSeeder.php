@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Program;
 use App\Models\User;
 use App\UserRoleEnum;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -39,5 +40,8 @@ class DatabaseSeeder extends Seeder
             ->create([
                 'password' => Hash::make('password'),
             ]);
+
+        Program::factory(10)->create(['is_active' => true]);
+
     }
 }

@@ -12,7 +12,7 @@ class CustomerRegistration extends Model
     protected $fillable = [
         'no_surat',
         'nama_lengkap',
-        'program',
+        'program_id',
         'no_ktp',
         'no_kk',
         'alamat_ktp',
@@ -60,4 +60,9 @@ class CustomerRegistration extends Model
         'daya_listrik' => 'integer',
         'tanggal' => 'datetime',
     ];
+
+    public function program()
+    {
+        return $this->belongsTo(Program::class);
+    }
 }
