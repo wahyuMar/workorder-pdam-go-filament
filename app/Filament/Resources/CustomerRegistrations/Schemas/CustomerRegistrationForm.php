@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\CustomerRegistrations\Schemas;
 
+use App\Models\Program;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
@@ -24,13 +25,13 @@ class CustomerRegistrationForm
                             ->label('Nama Lengkap')
                             ->required()
                             ->maxLength(255),
-                        Select::make('program')
+                        Select::make('program_id')
                             ->label('Program')
-                            ->options([
-                                'Program A' => 'Program A',
-                                'Program B' => 'Program B',
-                                'Program C' => 'Program C',
-                            ])
+                            ->relationship('program', 'name')
+                            ->options(function () {
+                                return Program::whereIsActive(true)
+                                    ->pluck('name', 'id')->toArray();
+                            })
                             ->searchable(),
                         TextInput::make('no_ktp')
                             ->label('No KTP')
