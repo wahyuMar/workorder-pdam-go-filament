@@ -23,7 +23,7 @@ class CustomerRegistrationResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserPlus;
 
-    protected static ?string $recordTitleAttribute = 'Customer Registrations';
+    protected static ?string $recordTitleAttribute = 'nama_lengkap';
 
     protected static string|UnitEnum|null $navigationGroup = 'Customer Registrations';
 

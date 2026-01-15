@@ -23,7 +23,7 @@ class ProgramsResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $recordTitleAttribute = 'Programs';
+    protected static ?string $recordTitleAttribute = 'name';
     protected static string|UnitEnum|null $navigationGroup = 'Master Data';
     protected static ?int $navigationSort = 1;
 
