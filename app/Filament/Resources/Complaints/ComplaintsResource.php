@@ -21,7 +21,7 @@ class ComplaintsResource extends Resource
 {
     protected static ?string $model = Complaint::class;
 
-    // protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlineChatBubbleBottomCenterText;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::ChatBubbleBottomCenterText;
 
     protected static ?string $recordTitleAttribute = 'title';
     protected static ?string $navigationLabel = 'Complaints';
