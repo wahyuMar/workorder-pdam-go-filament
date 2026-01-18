@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Complaints\Schemas;
 
+use App\Models\Complaint;
 use App\Models\ComplaintType;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\DateTimePicker;
@@ -22,6 +23,7 @@ class ComplaintsForm
                         TextInput::make('no_pengaduan')
                             ->label('No. Pengaduan')
                             ->disabled()
+                            ->default(fn () => Complaint::peekNextNoPengaduan())
                             ->dehydrated(false)
                             ->placeholder('Auto Generated'),
                         TextInput::make('no_sambungan')

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Complaint extends Model
 {
@@ -47,19 +48,70 @@ class Complaint extends Model
 
     public static function generateNoPengaduan()
     {
-        $date = now()->format('Ymd');
-        $lastComplaint = static::whereDate('created_at', today())
-            ->orderBy('id', 'desc')
-            ->first();
+        return DB::transaction(function () {
+            $today = now()->toDateString();
 
-        if ($lastComplaint && $lastComplaint->no_pengaduan) {
-            $lastNumber = intval(substr($lastComplaint->no_pengaduan, -4));
-            $newNumber = str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
-        } else {
-            $newNumber = '0001';
+            $row = DB::table('complaint_numberings')
+                ->lockForUpdate()
+                ->first();
+
+            if (! $row) {
+                DB::table('complaint_numberings')->insert([
+                    'prefix' => 'PGD',
+                    'last_number' => 0,
+                    'last_date' => $today,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+
+                $row = DB::table('complaint_numberings')
+                    ->lockForUpdate()
+                    ->first();
+            }
+
+            $lastNumber = $row->last_number;
+
+            if ($row->last_date !== $today) {
+                $lastNumber = 0;
+            }
+
+            $newNumber = $lastNumber + 1;
+
+            DB::table('complaint_numberings')
+                ->where('id', $row->id)
+                ->update([
+                    'last_number' => $newNumber,
+                    'last_date' => $today,
+                    'updated_at' => now(),
+                ]);
+
+            $formattedNumber = str_pad($newNumber, 4, '0', STR_PAD_LEFT);
+
+            return $row->prefix . '-' . now()->format('Ymd') . '-' . $formattedNumber;
+        });
+    }
+
+    public static function peekNextNoPengaduan(): string
+    {
+        $today = now()->toDateString();
+
+        $row = DB::table('complaint_numberings')->first();
+
+        if (! $row) {
+            DB::table('complaint_numberings')->insert([
+                'prefix' => 'PGD',
+                'last_number' => 0,
+                'last_date' => $today,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            $row = DB::table('complaint_numberings')->first();
         }
 
-        return 'PGD-' . $date . '-' . $newNumber;
+        $nextNumber = ($row->last_date === $today) ? $row->last_number + 1 : 1;
+
+        return $row->prefix . '-' . now()->format('Ymd') . '-' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
     }
 
     public function complaintType()
