@@ -7,6 +7,7 @@ use App\Models\Program;
 use App\Models\Province;
 use App\Models\Regency;
 use App\Models\Village;
+use Dotswan\MapPicker\Fields\Map;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
@@ -260,20 +261,43 @@ class CustomerRegistrationForm
                             ->maxSize(2048)
                             ->visibility('public'),
                     ])
-                    ->columns(2),
+                    ->columns(4)
+                    ->columnSpanFull(),
 
                 Section::make('Koordinat Lokasi')
                     ->schema([
-                        TextInput::make('lat')
+                        Map::make('location')
+                            ->label('Location')
+                            ->columnSpanFull()
+                            ->live()
+                            ->defaultLocation(
+                                latitude: (float) env('DEFAULT_LATITUDE'),
+                                longitude: (float) env('DEFAULT_LONGITUDE')
+                            )
+                            ->afterStateUpdated(function (Set $set, ?array $state): void {
+                                $set('latitude', $state['lat']);
+                                $set('longitude', $state['lng']);
+                            })
+                            ->extraControl([
+                                'zoomControl' => true,
+                                'detectRetina' => true,
+                            ])
+                            ->extraStyles([
+                                'min-height: 50vh'
+                            ]),
+                        TextInput::make('latitude')
                             ->label('Latitude')
-                            ->maxLength(255)
-                            ->placeholder('-6.200000'),
-                        TextInput::make('lang')
+                            ->live()
+                            ->readonly()
+                            ->maxLength(255),
+                        TextInput::make('longitude')
+                            ->live()
                             ->label('Longitude')
-                            ->maxLength(255)
-                            ->placeholder('106.816666'),
+                            ->readonly()
+                            ->maxLength(255),
                     ])
-                    ->columns(2),
+                    ->columns(2)
+                    ->columnSpanFull(),
             ]);
     }
 }
