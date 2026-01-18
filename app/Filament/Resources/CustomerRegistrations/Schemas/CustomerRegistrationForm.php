@@ -2,7 +2,11 @@
 
 namespace App\Filament\Resources\CustomerRegistrations\Schemas;
 
+use App\Models\District;
 use App\Models\Program;
+use App\Models\Province;
+use App\Models\Regency;
+use App\Models\Village;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
@@ -10,6 +14,8 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 
 
@@ -74,24 +80,44 @@ class CustomerRegistrationForm
                             ->label('RW KTP')
                             ->numeric()
                             ->minValue(0),
-                        Select::make('kel_desa_ktp')
-                            ->label('Kel/Desa KTP')
-                            ->options([
-                                'Desa 1' => 'Desa 1',
-                                'Desa 2' => 'Desa 2',
-                                'Kelurahan 1' => 'Kelurahan 1',
-                            ])
-                            ->searchable(),
-                        Select::make('kecamatan_ktp')
-                            ->label('Kecamatan KTP')
-                            ->options([
-                                'Kecamatan 1' => 'Kecamatan 1',
-                                'Kecamatan 2' => 'Kecamatan 2',
-                            ])
-                            ->searchable(),
-                        TextInput::make('kab_kota_ktp')
+                        Select::make('province_id_ktp')
+                            ->label('Provinsi KTP')
+                            ->options(fn () => Province::where('is_selectable', true)->pluck('name', 'id'))
+                            ->searchable()
+                            ->live()
+                            ->afterStateUpdated(function (Set $set) {
+                                $set('regency_id_ktp', null);
+                                $set('district_id_ktp', null);
+                                $set('village_id_ktp', null);
+                            }),
+                        Select::make('regency_id_ktp')
                             ->label('Kab/Kota KTP')
-                            ->maxLength(255),
+                            ->options(fn (Get $get) => Regency::where('province_id', $get('province_id_ktp'))
+                                ->where('is_selectable', true)
+                                ->pluck('name', 'id'))
+                            ->searchable()
+                            ->live()
+                            ->afterStateUpdated(function (Set $set) {
+                                $set('district_id_ktp', null);
+                                $set('village_id_ktp', null);
+                            })
+                            ->disabled(fn (Get $get) => !$get('province_id_ktp')),
+                        Select::make('district_id_ktp')
+                            ->label('Kecamatan KTP')
+                            ->options(fn (Get $get) => District::where('regency_id', $get('regency_id_ktp'))
+                                ->pluck('name', 'id'))
+                            ->searchable()
+                            ->live()
+                            ->afterStateUpdated(function (Set $set) {
+                                $set('village_id_ktp', null);
+                            })
+                            ->disabled(fn (Get $get) => !$get('regency_id_ktp')),
+                        Select::make('village_id_ktp')
+                            ->label('Kel/Desa KTP')
+                            ->options(fn (Get $get) => Village::where('district_id', $get('district_id_ktp'))
+                                ->pluck('name', 'id'))
+                            ->searchable()
+                            ->disabled(fn (Get $get) => !$get('district_id_ktp')),
                     ])
                     ->columns(3),
 
@@ -100,15 +126,16 @@ class CustomerRegistrationForm
                         Toggle::make('alamat_sesuai_ktp')
                             ->label('Alamat Sesuai KTP')
                             ->live()
-                            ->afterStateUpdated(function ($state, callable $set, callable $get) {
+                            ->afterStateUpdated(function ($state, Set $set, Get $get) {
                                 if ($state) {
                                     $set('alamat_pasang', $get('alamat_ktp'));
                                     $set('dusun_kampung_pasang', $get('dusun_kampung_ktp'));
                                     $set('rt_pasang', $get('rt_ktp'));
                                     $set('rw_pasang', $get('rw_ktp'));
-                                    $set('kel_desa_pasang', $get('kel_desa_ktp'));
-                                    $set('kecamatan_pasang', $get('kecamatan_ktp'));
-                                    $set('kab_kota_pasang', $get('kab_kota_ktp'));
+                                    $set('province_id_pasang', $get('province_id_ktp'));
+                                    $set('regency_id_pasang', $get('regency_id_ktp'));
+                                    $set('district_id_pasang', $get('district_id_ktp'));
+                                    $set('village_id_pasang', $get('village_id_ktp'));
                                 }
                             })
                             ->columnSpanFull(),
@@ -127,24 +154,44 @@ class CustomerRegistrationForm
                             ->label('RW Pasang')
                             ->numeric()
                             ->minValue(0),
-                        Select::make('kel_desa_pasang')
-                            ->label('Kel/Desa Pasang')
-                            ->options([
-                                'Desa 1' => 'Desa 1',
-                                'Desa 2' => 'Desa 2',
-                                'Kelurahan 1' => 'Kelurahan 1',
-                            ])
-                            ->searchable(),
-                        Select::make('kecamatan_pasang')
-                            ->label('Kecamatan Pasang')
-                            ->options([
-                                'Kecamatan 1' => 'Kecamatan 1',
-                                'Kecamatan 2' => 'Kecamatan 2',
-                            ])
-                            ->searchable(),
-                        TextInput::make('kab_kota_pasang')
+                        Select::make('province_id_pasang')
+                            ->label('Provinsi Pasang')
+                            ->options(fn () => Province::where('is_selectable', true)->pluck('name', 'id'))
+                            ->searchable()
+                            ->live()
+                            ->afterStateUpdated(function (Set $set) {
+                                $set('regency_id_pasang', null);
+                                $set('district_id_pasang', null);
+                                $set('village_id_pasang', null);
+                            }),
+                        Select::make('regency_id_pasang')
                             ->label('Kab/Kota Pasang')
-                            ->maxLength(255),
+                            ->options(fn (Get $get) => Regency::where('province_id', $get('province_id_pasang'))
+                                ->where('is_selectable', true)
+                                ->pluck('name', 'id'))
+                            ->searchable()
+                            ->live()
+                            ->afterStateUpdated(function (Set $set) {
+                                $set('district_id_pasang', null);
+                                $set('village_id_pasang', null);
+                            })
+                            ->disabled(fn (Get $get) => !$get('province_id_pasang')),
+                        Select::make('district_id_pasang')
+                            ->label('Kecamatan Pasang')
+                            ->options(fn (Get $get) => District::where('regency_id', $get('regency_id_pasang'))
+                                ->pluck('name', 'id'))
+                            ->searchable()
+                            ->live()
+                            ->afterStateUpdated(function (Set $set) {
+                                $set('village_id_pasang', null);
+                            })
+                            ->disabled(fn (Get $get) => !$get('regency_id_pasang')),
+                        Select::make('village_id_pasang')
+                            ->label('Kel/Desa Pasang')
+                            ->options(fn (Get $get) => Village::where('district_id', $get('district_id_pasang'))
+                                ->pluck('name', 'id'))
+                            ->searchable()
+                            ->disabled(fn (Get $get) => !$get('district_id_pasang')),
                     ])
                     ->columns(3),
 
