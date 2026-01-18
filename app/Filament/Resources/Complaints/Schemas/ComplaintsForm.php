@@ -4,7 +4,9 @@ namespace App\Filament\Resources\Complaints\Schemas;
 
 use App\Models\Complaint;
 use App\Models\ComplaintType;
+use App\Services\CustomerLookupService;
 use Filament\Schemas\Components\Section;
+use Filament\Notifications\Notification;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
@@ -28,7 +30,47 @@ class ComplaintsForm
                             ->placeholder('Auto Generated'),
                         TextInput::make('no_sambungan')
                             ->label('No Sambungan')
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->placeholder('Masukkan No Sambungan pelanggan')
+                            ->helperText('Isi untuk auto-fill data pelanggan')
+                            ->reactive()
+                            ->debounce(500)
+                            ->afterStateUpdated(function ($state, callable $set) {
+                                if (blank($state)) {
+                                    $set('nama', null);
+                                    $set('alamat', null);
+                                    $set('no_hp', null);
+                                    $set('no_ktp', null);
+                                    $set('email', null);
+                                    return;
+                                }
+
+                                $lookup = app(CustomerLookupService::class)->fetchByNoSambungan($state);
+
+                                if (! $lookup['data']) {
+                                    $set('nama', null);
+                                    $set('alamat', null);
+                                    $set('no_hp', null);
+                                    $set('no_ktp', null);
+                                    $set('email', null);
+
+                                    Notification::make()
+                                        ->title('Customer tidak ditemukan')
+                                        ->body($lookup['message'] ?? 'Customer not found')
+                                        ->danger()
+                                        ->send();
+
+                                    return;
+                                }
+
+                                $data = $lookup['data'];
+
+                                $set('nama', $data['nama_pelanggan'] ?? null);
+                                $set('alamat', $data['alamat_pelanggan'] ?? null);
+                                $set('no_hp', $data['hp_pelanggan'] ?? $data['no_telp_pelanggan'] ?? null);
+                                $set('no_ktp', $data['no_ktp'] ?? null);
+                                $set('email', $data['email'] ?? null);
+                            }),
                         DateTimePicker::make('tanggal')
                             ->label('Tanggal')
                             ->default(now())
