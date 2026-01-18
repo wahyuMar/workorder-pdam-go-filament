@@ -51,8 +51,8 @@ class CustomerRegistration extends Model
         'upload_kk',
         'upload_tagihan_listrik',
         'upload_foto_rumah',
-        'lang',
-        'lat',
+        'longitude',
+        'latitude',
         'tanggal',
     ];
 
