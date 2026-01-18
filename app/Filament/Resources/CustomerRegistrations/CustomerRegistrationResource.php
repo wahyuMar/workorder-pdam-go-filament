@@ -15,6 +15,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use UnitEnum;
 
 class CustomerRegistrationResource extends Resource
@@ -59,5 +60,13 @@ class CustomerRegistrationResource extends Resource
             'view' => ViewCustomerRegistration::route('/{record}'),
             'edit' => EditCustomerRegistration::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with(
+                'program', 'provinceKtp', 'regencyKtp', 'districtKtp', 'villageKtp',
+                'provincePasang', 'regencyPasang', 'districtPasang', 'villagePasang'
+            );
     }
 }
