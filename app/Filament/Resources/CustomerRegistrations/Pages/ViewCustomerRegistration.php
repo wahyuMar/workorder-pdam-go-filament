@@ -13,7 +13,7 @@ class ViewCustomerRegistration extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            EditAction::make(),
+            EditAction::make()->visible(fn (): bool => $this->record->survey === null),
         ];
     }
 }

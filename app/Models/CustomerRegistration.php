@@ -115,4 +115,9 @@ class CustomerRegistration extends Model
     {
         return $this->belongsTo(Village::class, 'village_id_pasang');
     }
+
+    public function survey()
+    {
+        return $this->hasOne(Survey::class);
+    }
 }

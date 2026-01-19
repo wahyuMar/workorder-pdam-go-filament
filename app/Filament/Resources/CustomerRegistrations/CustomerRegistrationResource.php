@@ -24,7 +24,7 @@ class CustomerRegistrationResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserPlus;
 
-    protected static ?string $recordTitleAttribute = 'nama_lengkap';
+    protected static ?string $recordTitleAttribute = 'no_surat';
 
     protected static string|UnitEnum|null $navigationGroup = 'Customer Registrations';
 
@@ -66,7 +66,7 @@ class CustomerRegistrationResource extends Resource
     {
         return parent::getEloquentQuery()->with(
                 'program', 'provinceKtp', 'regencyKtp', 'districtKtp', 'villageKtp',
-                'provincePasang', 'regencyPasang', 'districtPasang', 'villagePasang'
+                'provincePasang', 'regencyPasang', 'districtPasang', 'villagePasang', 'survey'
             );
     }
 }
