@@ -39,6 +39,8 @@ class ComplaintsForm
                                 if (blank($state)) {
                                     $set('nama', null);
                                     $set('alamat', null);
+                                    $set('latitude', null);
+                                    $set('longitude', null);
                                     $set('no_hp', null);
                                     $set('no_ktp', null);
                                     $set('email', null);
@@ -50,6 +52,8 @@ class ComplaintsForm
                                 if (! $lookup['data']) {
                                     $set('nama', null);
                                     $set('alamat', null);
+                                    $set('latitude', null);
+                                    $set('longitude', null);
                                     $set('no_hp', null);
                                     $set('no_ktp', null);
                                     $set('email', null);
@@ -67,6 +71,8 @@ class ComplaintsForm
 
                                 $set('nama', $data['nama_pelanggan'] ?? null);
                                 $set('alamat', $data['alamat_pelanggan'] ?? null);
+                                $set('latitude', $data['latitude'] ?? null);
+                                $set('longitude', $data['longitude'] ?? null);
                                 $set('no_hp', $data['hp_pelanggan'] ?? $data['no_telp_pelanggan'] ?? null);
                                 $set('no_ktp', $data['no_ktp'] ?? null);
                                 $set('email', $data['email'] ?? null);
@@ -86,6 +92,18 @@ class ComplaintsForm
                         TextInput::make('alamat')
                             ->label('Alamat')
                             ->maxLength(255),
+                        TextInput::make('latitude')
+                            ->label('Latitude')
+                            ->numeric()
+                            ->minValue(-90)
+                            ->maxValue(90)
+                            ->placeholder('e.g., -6.200000'),
+                        TextInput::make('longitude')
+                            ->label('Longitude')
+                            ->numeric()
+                            ->minValue(-180)
+                            ->maxValue(180)
+                            ->placeholder('e.g., 106.816666'),
                         TextInput::make('email')
                             ->label('Email')
                             ->email()

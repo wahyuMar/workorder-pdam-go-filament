@@ -16,6 +16,8 @@ class Complaint extends Model
         'no_sambungan',
         'nama',
         'alamat',
+        'latitude',
+        'longitude',
         'email',
         'no_hp',
         'no_ktp',
