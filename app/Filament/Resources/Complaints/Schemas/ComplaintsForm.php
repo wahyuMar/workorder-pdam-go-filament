@@ -106,7 +106,8 @@ class ComplaintsForm
                                 'telepon' => 'Telepon',
                                 'mobile_apps' => 'Mobile Apps',
                             ])
-                            ->searchable(),
+                            ->searchable()
+                            ->required(),
                     ])
                     ->columns(3),
                 Section::make('Detail Pengaduan')

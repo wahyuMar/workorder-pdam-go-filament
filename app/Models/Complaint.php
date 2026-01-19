@@ -118,4 +118,9 @@ class Complaint extends Model
     {
         return $this->belongsTo(ComplaintType::class);
     }
+
+    public function followUps()
+    {
+        return $this->hasMany(ComplaintFollowUp::class);
+    }
 }
