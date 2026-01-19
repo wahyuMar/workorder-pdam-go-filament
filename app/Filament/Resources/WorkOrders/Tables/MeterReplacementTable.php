@@ -2,7 +2,15 @@
 
 namespace App\Filament\Resources\WorkOrders\Tables;
 
+use App\Models\MeterReplacement;
+use App\Services\EmployeeLookupService;
 use Filament\Actions\ViewAction;
+use Filament\Actions\Action;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -87,8 +95,102 @@ class MeterReplacementTable
                     ]),
             ])
             ->actions([
-                ViewAction::make()
-                    ->url(fn ($record) => route('filament.admin.resources.complaints.view', ['record' => $record])),
+                Action::make('create_spgm')
+                    ->label('Create SPGM')
+                    ->icon('heroicon-o-document-plus')
+                    ->color('success')
+                    ->form(function ($record) {
+                        $employeeService = app(EmployeeLookupService::class);
+                        $employeesData = $employeeService->fetchEmployees();
+                        
+                        $employeeOptions = [];
+                        if ($employeesData['data']) {
+                            foreach ($employeesData['data'] as $employee) {
+                                $employeeOptions[$employee['id']] = $employee['nama_pegawai'] ?? $employee['name'] ?? 'Unknown';
+                            }
+                        }
+
+                        return [
+                            TextInput::make('no_spgm')
+                                ->label('No. SPGM')
+                                ->disabled()
+                                ->default(MeterReplacement::peekNextNoSPGM())
+                                ->dehydrated(false),
+                            Select::make('pegawai_id')
+                                ->label('Pegawai')
+                                ->options($employeeOptions)
+                                ->searchable()
+                                ->required()
+                                ->reactive()
+                                ->afterStateUpdated(function ($state, callable $set) use ($employeesData) {
+                                    if ($employeesData['data']) {
+                                        $employee = collect($employeesData['data'])->firstWhere('id', $state);
+                                        if ($employee) {
+                                            $set('nama_pegawai', $employee['nama_pegawai'] ?? $employee['name'] ?? null);
+                                        }
+                                    }
+                                }),
+                            TextInput::make('no_sambungan')
+                                ->label('No Sambungan')
+                                ->default(fn () => $record->no_sambungan)
+                                ->disabled()
+                                ->dehydrated(),
+                            TextInput::make('nama')
+                                ->label('Nama')
+                                ->default(fn () => $record->nama)
+                                ->required(),
+                            TextInput::make('alamat')
+                                ->label('Alamat')
+                                ->default(fn () => $record->alamat),
+                            TextInput::make('latitude')
+                                ->label('Latitude')
+                                ->numeric()
+                                ->default(fn () => $record->latitude),
+                            TextInput::make('longitude')
+                                ->label('Longitude')
+                                ->numeric()
+                                ->default(fn () => $record->longitude),
+                            Textarea::make('alasan_penggantian')
+                                ->label('Alasan Penggantian')
+                                ->rows(3),
+                            TextInput::make('biaya_ganti_meter')
+                                ->label('Biaya Ganti Meter')
+                                ->numeric()
+                                ->prefix('Rp')
+                                ->required(),
+                            DateTimePicker::make('tanggal')
+                                ->label('Tanggal')
+                                ->default(now())
+                                ->required(),
+                            TextInput::make('nama_pegawai')
+                                ->hidden()
+                                ->dehydrated(),
+                        ];
+                    })
+                    ->action(function ($record, array $data) {
+                        MeterReplacement::create([
+                            'complaint_id' => $record->id,
+                            'pegawai_id' => $data['pegawai_id'],
+                            'nama_pegawai' => $data['nama_pegawai'],
+                            'no_sambungan' => $record->no_sambungan,
+                            'nama' => $data['nama'],
+                            'alamat' => $data['alamat'],
+                            'latitude' => $data['latitude'],
+                            'longitude' => $data['longitude'],
+                            'alasan_penggantian' => $data['alasan_penggantian'],
+                            'biaya_ganti_meter' => $data['biaya_ganti_meter'],
+                            'tanggal' => $data['tanggal'],
+                        ]);
+
+                        Notification::make()
+                            ->title('SPGM Berhasil Dibuat')
+                            ->success()
+                            ->send();
+                    })
+                    ->modalHeading('Buat Surat Perintah Ganti Meter')
+                    ->modalWidth('2xl'),
+                // ViewAction::make()
+                //     ->url(fn ($record) => route('filament.admin.resources.complaints.view', ['record' => $record])),
             ])
             ->defaultSort('tanggal', 'desc');
     }
