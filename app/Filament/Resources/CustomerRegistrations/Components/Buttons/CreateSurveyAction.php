@@ -2,6 +2,7 @@
 namespace App\Filament\Resources\CustomerRegistrations\Components\Buttons;
 
 use App\Models\ClampSaddle;
+use App\Models\KlasifikasiSr;
 use Dotswan\MapPicker\Fields\Map;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
@@ -68,6 +69,31 @@ class CreateSurveyAction extends Action
                                         }
                                         return $result;
                                     }),
+                                Map::make('lokasi_sr')
+                                    ->label('Lokasi SR')
+                                    ->defaultLocation(
+                                        latitude: $record->latitude ?? (float) env('DEFAULT_LATITUDE'),
+                                        longitude: $record->longitude ?? (float) env('DEFAULT_LONGITUDE')
+                                    )
+                                    ->afterStateUpdated(function (Set $set, ?array $state): void {
+                                        $set('lokasi_sr_lat', $state['lat']);
+                                        $set('lokasi_sr_lng', $state['lng']);
+                                    })
+                                    ->columnSpanFull(),
+                                TextInput::make('lokasi_sr_lat')
+                                    ->label('Latitude')
+                                    ->default($record->latitude)
+                                    ->required()
+                                    ->readOnly(),
+                                TextInput::make('lokasi_sr_lng')
+                                    ->label('Longitude')
+                                    ->required()
+                                    ->default($record->longitude)
+                                    ->readOnly(),
+                                Select::make('klasifikasi_sr_id')
+                                    ->label('Klasifikasi SR')
+                                    ->options(fn () => KlasifikasiSr::all()->pluck('name', 'id'))
+                                    ->required(),
                             ])
                             ->columns(2)
                             ->columnSpanFull(),
