@@ -30,4 +30,9 @@ class Survey extends Model
     {
         return $this->belongsTo(CustomerRegistration::class);
     }
+
+    public function clampSaddle()
+    {
+        return $this->belongsTo(ClampSaddle::class);
+    }
 }
