@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Crossing extends Model
 {
-    //
+    protected $guarded = [];
 }
