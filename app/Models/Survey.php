@@ -35,4 +35,9 @@ class Survey extends Model
     {
         return $this->belongsTo(ClampSaddle::class);
     }
+
+    public function klasifikasiSr()
+    {
+        return $this->belongsTo(KlasifikasiSr::class);
+    }
 }
