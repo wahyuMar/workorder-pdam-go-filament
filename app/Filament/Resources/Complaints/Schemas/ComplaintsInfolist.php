@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Complaints\Schemas;
 
 use Filament\Schemas\Components\Section;
 use Filament\Infolists\Components\ImageEntry;
+use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 
@@ -22,6 +23,24 @@ class ComplaintsInfolist
                             ->dateTime(),
                         TextEntry::make('no_sambungan')
                             ->label('No. Sambungan'),
+                        TextEntry::make('status')
+                            ->badge()
+                            ->color(fn (string $state): string => match ($state) {
+                                'pending' => 'gray',
+                                'in_progress' => 'warning',
+                                'resolved' => 'success',
+                                'closed' => 'danger',
+                                default => 'gray',
+                            }),
+                        TextEntry::make('priority')
+                            ->badge()
+                            ->color(fn (string $state): string => match ($state) {
+                                'low' => 'gray',
+                                'medium' => 'info',
+                                'high' => 'warning',
+                                'urgent' => 'danger',
+                                default => 'gray',
+                            }),
                     ])
                     ->columns(3),
                 Section::make('Data Pelanggan')
@@ -55,29 +74,7 @@ class ComplaintsInfolist
                             ->label('Foto')
                             ->columnSpanFull(),
                     ])
-                    ->columns(2),
-                Section::make('Status')
-                    ->schema([
-                        TextEntry::make('status')
-                            ->badge()
-                            ->color(fn (string $state): string => match ($state) {
-                                'pending' => 'gray',
-                                'in_progress' => 'warning',
-                                'resolved' => 'success',
-                                'closed' => 'danger',
-                                default => 'gray',
-                            }),
-                        TextEntry::make('priority')
-                            ->badge()
-                            ->color(fn (string $state): string => match ($state) {
-                                'low' => 'gray',
-                                'medium' => 'info',
-                                'high' => 'warning',
-                                'urgent' => 'danger',
-                                default => 'gray',
-                            }),
-                    ])
-                    ->columns(2),
+                    ->columns(3),
                 Section::make('Timestamps')
                     ->schema([
                         TextEntry::make('created_at')
@@ -87,7 +84,7 @@ class ComplaintsInfolist
                             ->label('Diupdate')
                             ->dateTime(),
                     ])
-                    ->columns(2),
+                    ->columns(3),
             ]);
     }
 }
