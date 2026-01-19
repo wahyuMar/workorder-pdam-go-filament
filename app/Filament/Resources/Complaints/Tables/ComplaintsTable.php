@@ -56,16 +56,21 @@ class ComplaintsTable
                         default => 'gray',
                     })
                     ->sortable(),
-                TextColumn::make('priority')
+                TextColumn::make('follow_up_status')
+                    ->label('Tindak Lanjut')
                     ->badge()
+                    ->state(function ($record) {
+                        return $record->followUps()->exists() ? 'Sudah' : 'Belum';
+                    })
                     ->color(fn (string $state): string => match ($state) {
-                        'low' => 'gray',
-                        'medium' => 'info',
-                        'high' => 'warning',
-                        'urgent' => 'danger',
+                        'Sudah' => 'success',
+                        'Belum' => 'warning',
                         default => 'gray',
                     })
-                    ->sortable(),
+                    ->sortable(query: function ($query, string $direction) {
+                        return $query->withCount('followUps')
+                            ->orderBy('follow_ups_count', $direction);
+                    }),
                 TextColumn::make('email')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -95,13 +100,20 @@ class ComplaintsTable
                         'resolved' => 'Resolved',
                         'closed' => 'Closed',
                     ]),
-                SelectFilter::make('priority')
+                SelectFilter::make('has_follow_up')
+                    ->label('Status Tindak Lanjut')
                     ->options([
-                        'low' => 'Low',
-                        'medium' => 'Medium',
-                        'high' => 'High',
-                        'urgent' => 'Urgent',
-                    ]),
+                        'yes' => 'Sudah Ditindak Lanjuti',
+                        'no' => 'Belum Ditindak Lanjuti',
+                    ])
+                    ->query(function ($query, $state) {
+                        if ($state['value'] === 'yes') {
+                            return $query->has('followUps');
+                        } elseif ($state['value'] === 'no') {
+                            return $query->doesntHave('followUps');
+                        }
+                        return $query;
+                    }),
                 SelectFilter::make('sumber')
                     ->options([
                         'website' => 'Website',
@@ -113,14 +125,14 @@ class ComplaintsTable
             ])
             ->actions([
                 ViewAction::make(),
-                EditAction::make(),
-                DeleteAction::make(),
+                // EditAction::make(),
+                // DeleteAction::make(),
             ])
-            ->bulkActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
-            ])
+            // ->bulkActions([
+            //     BulkActionGroup::make([
+            //         DeleteBulkAction::make(),
+            //     ]),
+            // ])
             ->defaultSort('tanggal', 'desc');
     }
 }
