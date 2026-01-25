@@ -96,6 +96,8 @@ class MeterReplacementTable
                     ]),
             ])
             ->actions([
+                ViewAction::make()
+                    ->url(fn ($record) => route('filament.admin.resources.complaints.view', ['record' => $record])),
                 // Create SPGM (only when none exists)
                 Action::make('create_spgm')
                     ->label('Create SPGM')
