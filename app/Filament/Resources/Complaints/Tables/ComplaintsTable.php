@@ -124,7 +124,10 @@ class ComplaintsTable
                     ]),
             ])
             ->actions([
-                ViewAction::make(),
+                ViewAction::make()
+                    ->label('Detail')
+                    ->icon('heroicon-o-eye')
+                    ->color('info'),
                 // EditAction::make(),
                 // DeleteAction::make(),
             ])

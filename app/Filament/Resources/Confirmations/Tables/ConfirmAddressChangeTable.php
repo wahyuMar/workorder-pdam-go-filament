@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Confirmations\Tables;
 
 use App\Models\MeterAddressChange;
 use Filament\Actions\Action;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Components\Toggle;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -51,6 +52,11 @@ class ConfirmAddressChangeTable
                     ->placeholder('Semua Status'),
             ])
             ->actions([
+                ViewAction::make()
+                    ->label('Detail')
+                    ->icon('heroicon-o-eye')
+                    ->color('info')
+                    ->url(fn ($record) => route('filament.admin.resources.complaints.view', ['record' => $record->complaint_id])),
                 Action::make('confirm')
                     ->label('Konfirmasi')
                     ->icon('heroicon-o-check')
