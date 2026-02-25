@@ -125,4 +125,40 @@ class Complaint extends Model
     {
         return $this->hasMany(ComplaintFollowUp::class);
     }
+
+    // Surat Perintah Relationships (for Berita Acara filtering)
+    public function meterReplacement()
+    {
+        return $this->hasOne(MeterReplacement::class);
+    }
+
+    public function meterClosed()
+    {
+        return $this->hasOne(MeterClosed::class);
+    }
+
+    public function meterReopening()
+    {
+        return $this->hasOne(MeterReopening::class);
+    }
+
+    public function meterDisconnection()
+    {
+        return $this->hasOne(MeterDisconnection::class);
+    }
+
+    public function meterAddressChange()
+    {
+        return $this->hasOne(MeterAddressChange::class);
+    }
+
+    public function meterNameChange()
+    {
+        return $this->hasOne(MeterNameChange::class);
+    }
+
+    public function meterRateChange()
+    {
+        return $this->hasOne(MeterRateChange::class);
+    }
 }
