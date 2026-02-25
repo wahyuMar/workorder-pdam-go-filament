@@ -43,6 +43,51 @@ class SubscriptionCancellationTable
                     ->sortable(),
             ])
             ->actions([
+                Action::make('view_bacl')
+                    ->label('View')
+                    ->icon('heroicon-o-eye')
+                    ->color('info')
+                    ->visible(fn ($record) => SubscriptionCancellation::where('complaint_id', $record->id)->exists())
+                    ->form(function ($record) {
+                        $bacl = SubscriptionCancellation::where('complaint_id', $record->id)->first();
+
+                        return [
+                            TextInput::make('no_bacl')
+                                ->label('No. BACL')
+                                ->default($bacl?->no_bacl)
+                                ->disabled(),
+                            TextInput::make('no_sambungan')
+                                ->label('No. Sambungan')
+                                ->default($bacl?->no_sambungan)
+                                ->disabled(),
+                            TextInput::make('nama')
+                                ->label('Nama')
+                                ->default($bacl?->nama)
+                                ->disabled(),
+                            Textarea::make('alamat')
+                                ->label('Alamat')
+                                ->default($bacl?->alamat)
+                                ->disabled()
+                                ->rows(2),
+                            TextInput::make('lokasi')
+                                ->label('Lokasi')
+                                ->default($bacl?->lokasi)
+                                ->disabled(),
+                            Textarea::make('catatan')
+                                ->label('Catatan')
+                                ->default($bacl?->catatan)
+                                ->disabled()
+                                ->rows(2),
+                            DateTimePicker::make('tanggal')
+                                ->label('Tanggal')
+                                ->default($bacl?->tanggal)
+                                ->disabled(),
+                        ];
+                    })
+                    ->modalHeading('Detail BACL')
+                    ->modalWidth('2xl')
+                    ->modalDescription('Berita Acara Cabut Langganan')
+                    ->closeModalByClickingAway(false),
                 Action::make('create_bacl')
                     ->label('Create BACL')
                     ->icon('heroicon-o-document-plus')
@@ -78,11 +123,9 @@ class SubscriptionCancellationTable
                                 ->required(),
                             FileUpload::make('foto_sebelum')
                                 ->label('Foto Sebelum')
-                                ->image()
                                 ->directory('berita-acara/subscription-cancellation'),
                             FileUpload::make('foto_sesudah')
                                 ->label('Foto Sesudah')
-                                ->image()
                                 ->directory('berita-acara/subscription-cancellation'),
                             Textarea::make('catatan')
                                 ->label('Catatan')
@@ -146,11 +189,9 @@ class SubscriptionCancellationTable
                 ->required(),
             FileUpload::make('foto_sebelum')
                 ->label('Foto Sebelum')
-                ->image()
                 ->directory('berita-acara/subscription-cancellation'),
             FileUpload::make('foto_sesudah')
                 ->label('Foto Sesudah')
-                ->image()
                 ->directory('berita-acara/subscription-cancellation'),
             Textarea::make('catatan')
                 ->label('Catatan')

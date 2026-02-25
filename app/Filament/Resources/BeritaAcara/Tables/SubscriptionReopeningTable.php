@@ -43,6 +43,51 @@ class SubscriptionReopeningTable
                     ->sortable(),
             ])
             ->actions([
+                Action::make('view_bast_bk')
+                    ->label('View')
+                    ->icon('heroicon-o-eye')
+                    ->color('info')
+                    ->visible(fn ($record) => SubscriptionReopening::where('complaint_id', $record->id)->exists())
+                    ->form(function ($record) {
+                        $bastBk = SubscriptionReopening::where('complaint_id', $record->id)->first();
+
+                        return [
+                            TextInput::make('no_bast_bk')
+                                ->label('No. BAST BK')
+                                ->default($bastBk?->no_bast_bk)
+                                ->disabled(),
+                            TextInput::make('no_sambungan')
+                                ->label('No. Sambungan')
+                                ->default($bastBk?->no_sambungan)
+                                ->disabled(),
+                            TextInput::make('nama')
+                                ->label('Nama')
+                                ->default($bastBk?->nama)
+                                ->disabled(),
+                            Textarea::make('alamat')
+                                ->label('Alamat')
+                                ->default($bastBk?->alamat)
+                                ->disabled()
+                                ->rows(2),
+                            TextInput::make('lokasi')
+                                ->label('Lokasi')
+                                ->default($bastBk?->lokasi)
+                                ->disabled(),
+                            Textarea::make('catatan')
+                                ->label('Catatan')
+                                ->default($bastBk?->catatan)
+                                ->disabled()
+                                ->rows(2),
+                            DateTimePicker::make('tanggal')
+                                ->label('Tanggal')
+                                ->default($bastBk?->tanggal)
+                                ->disabled(),
+                        ];
+                    })
+                    ->modalHeading('Detail BAST BK')
+                    ->modalWidth('2xl')
+                    ->modalDescription('Berita Acara Serah Terima Buka Kembali')
+                    ->closeModalByClickingAway(false),
                 Action::make('create_bast_bk')
                     ->label('Create BAST BK')
                     ->icon('heroicon-o-document-plus')
@@ -78,11 +123,9 @@ class SubscriptionReopeningTable
                                 ->required(),
                             FileUpload::make('foto_sebelum')
                                 ->label('Foto Sebelum')
-                                ->image()
                                 ->directory('berita-acara/subscription-reopening'),
                             FileUpload::make('foto_sesudah')
                                 ->label('Foto Sesudah')
-                                ->image()
                                 ->directory('berita-acara/subscription-reopening'),
                             Textarea::make('catatan')
                                 ->label('Catatan')
@@ -146,11 +189,9 @@ class SubscriptionReopeningTable
                 ->required(),
             FileUpload::make('foto_sebelum')
                 ->label('Foto Sebelum')
-                ->image()
                 ->directory('berita-acara/subscription-reopening'),
             FileUpload::make('foto_sesudah')
                 ->label('Foto Sesudah')
-                ->image()
                 ->directory('berita-acara/subscription-reopening'),
             Textarea::make('catatan')
                 ->label('Catatan')

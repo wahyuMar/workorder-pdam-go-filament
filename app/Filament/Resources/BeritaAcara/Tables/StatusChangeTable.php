@@ -43,6 +43,51 @@ class StatusChangeTable
                     ->sortable(),
             ])
             ->actions([
+                Action::make('view_baus')
+                    ->label('View')
+                    ->icon('heroicon-o-eye')
+                    ->color('info')
+                    ->visible(fn ($record) => StatusChange::where('complaint_id', $record->id)->exists())
+                    ->form(function ($record) {
+                        $baus = StatusChange::where('complaint_id', $record->id)->first();
+
+                        return [
+                            TextInput::make('no_baus')
+                                ->label('No. BAUS')
+                                ->default($baus?->no_baus)
+                                ->disabled(),
+                            TextInput::make('no_sambungan')
+                                ->label('No. Sambungan')
+                                ->default($baus?->no_sambungan)
+                                ->disabled(),
+                            TextInput::make('nama')
+                                ->label('Nama')
+                                ->default($baus?->nama)
+                                ->disabled(),
+                            Textarea::make('alamat')
+                                ->label('Alamat')
+                                ->default($baus?->alamat)
+                                ->disabled()
+                                ->rows(2),
+                            TextInput::make('lokasi')
+                                ->label('Lokasi')
+                                ->default($baus?->lokasi)
+                                ->disabled(),
+                            Textarea::make('catatan')
+                                ->label('Catatan')
+                                ->default($baus?->catatan)
+                                ->disabled()
+                                ->rows(2),
+                            DateTimePicker::make('tanggal')
+                                ->label('Tanggal')
+                                ->default($baus?->tanggal)
+                                ->disabled(),
+                        ];
+                    })
+                    ->modalHeading('Detail BAUS')
+                    ->modalWidth('2xl')
+                    ->modalDescription('Berita Acara Ubah Status (SPUT Ganti Tarif)')
+                    ->closeModalByClickingAway(false),
                 Action::make('create_baus')
                     ->label('Create BAUS')
                     ->icon('heroicon-o-document-plus')
@@ -76,11 +121,9 @@ class StatusChangeTable
                                 ->required(),
                             FileUpload::make('foto_sebelum')
                                 ->label('Foto Sebelum')
-                                ->image()
                                 ->directory('berita-acara/status-change'),
                             FileUpload::make('foto_sesudah')
                                 ->label('Foto Sesudah')
-                                ->image()
                                 ->directory('berita-acara/status-change'),
                             Textarea::make('catatan')
                                 ->label('Catatan')

@@ -43,6 +43,51 @@ class SubscriptionClosureTable
                     ->sortable(),
             ])
             ->actions([
+                Action::make('view_batl')
+                    ->label('View')
+                    ->icon('heroicon-o-eye')
+                    ->color('info')
+                    ->visible(fn ($record) => SubscriptionClosure::where('complaint_id', $record->id)->exists())
+                    ->form(function ($record) {
+                        $batl = SubscriptionClosure::where('complaint_id', $record->id)->first();
+
+                        return [
+                            TextInput::make('no_batl')
+                                ->label('No. BATL')
+                                ->default($batl?->no_batl)
+                                ->disabled(),
+                            TextInput::make('no_sambungan')
+                                ->label('No. Sambungan')
+                                ->default($batl?->no_sambungan)
+                                ->disabled(),
+                            TextInput::make('nama')
+                                ->label('Nama')
+                                ->default($batl?->nama)
+                                ->disabled(),
+                            Textarea::make('alamat')
+                                ->label('Alamat')
+                                ->default($batl?->alamat)
+                                ->disabled()
+                                ->rows(2),
+                            TextInput::make('lokasi')
+                                ->label('Lokasi')
+                                ->default($batl?->lokasi)
+                                ->disabled(),
+                            Textarea::make('catatan')
+                                ->label('Catatan')
+                                ->default($batl?->catatan)
+                                ->disabled()
+                                ->rows(2),
+                            DateTimePicker::make('tanggal')
+                                ->label('Tanggal')
+                                ->default($batl?->tanggal)
+                                ->disabled(),
+                        ];
+                    })
+                    ->modalHeading('Detail BATL')
+                    ->modalWidth('2xl')
+                    ->modalDescription('Berita Acara Tutup Langganan')
+                    ->closeModalByClickingAway(false),
                 Action::make('create_batl')
                     ->label('Create BATL')
                     ->icon('heroicon-o-document-plus')
@@ -78,11 +123,9 @@ class SubscriptionClosureTable
                                 ->required(),
                             FileUpload::make('foto_sebelum')
                                 ->label('Foto Sebelum')
-                                ->image()
                                 ->directory('berita-acara/subscription-closure'),
                             FileUpload::make('foto_sesudah')
                                 ->label('Foto Sesudah')
-                                ->image()
                                 ->directory('berita-acara/subscription-closure'),
                             Textarea::make('catatan')
                                 ->label('Catatan')
@@ -146,11 +189,9 @@ class SubscriptionClosureTable
                 ->required(),
             FileUpload::make('foto_sebelum')
                 ->label('Foto Sebelum')
-                ->image()
                 ->directory('berita-acara/subscription-closure'),
             FileUpload::make('foto_sesudah')
                 ->label('Foto Sesudah')
-                ->image()
                 ->directory('berita-acara/subscription-closure'),
             Textarea::make('catatan')
                 ->label('Catatan')
