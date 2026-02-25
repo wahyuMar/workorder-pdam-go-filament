@@ -28,14 +28,11 @@ class ConfirmRateChangeTable
                 TextColumn::make('nama')
                     ->label('Nama')
                     ->searchable(),
-                TextColumn::make('tarif_lama')
-                    ->label('Tarif Lama')
+                TextColumn::make('alamat')
+                    ->label('Alamat')
                     ->searchable(),
-                TextColumn::make('tarif_baru')
-                    ->label('Tarif Baru')
-                    ->searchable(),
-                TextColumn::make('nama_pegawai')
-                    ->label('Pegawai')
+                TextColumn::make('no_hp')
+                    ->label('No. HP')
                     ->searchable(),
                 TextColumn::make('tanggal')
                     ->label('Tanggal')

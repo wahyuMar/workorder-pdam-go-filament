@@ -4,6 +4,7 @@ namespace App\Filament\Resources\WorkOrders\Tables;
 
 use App\Models\MeterRateChange;
 use App\Services\EmployeeLookupService;
+use App\Services\CustomerLookupService;
 use Filament\Actions\ViewAction;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DateTimePicker;
@@ -16,6 +17,8 @@ use Filament\Notifications\Notification;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class MeterRateChangeTable
 {
@@ -89,16 +92,22 @@ class MeterRateChangeTable
                     ->color('success')
                     ->visible(fn ($record) => ! MeterRateChange::where('complaint_id', $record->id)->exists())
                     ->form(function ($record) {
-                        $employeeService = app(EmployeeLookupService::class);
-                        $employeesData = $employeeService->fetchEmployees();
-                        
-                        $employees = collect($employeesData['data'] ?? []);
-
-                        $employeeOptions = $employees
-                            ->mapWithKeys(fn ($employee) => [
-                                $employee['id'] => $employee['nama_pegawai'] ?? $employee['nama'] ?? $employee['name'] ?? 'Unknown',
-                            ])
-                            ->all();
+                        // Fetch customer data from API
+                        $customer = null;
+                        try {
+                            $client = new \GuzzleHttp\Client();
+                            $response = $client->request('GET', 
+                                config('services.billing_api.base_uri') . '/external/customers/' . $record->no_sambungan,
+                                [
+                                    'headers' => ['X-App-Key' => config('services.billing_api.key')],
+                                    'timeout' => 10,
+                                ]
+                            );
+                            $responseData = json_decode($response->getBody(), true);
+                            $customer = $responseData['data'] ?? null;
+                        } catch (\Exception $e) {
+                            Log::error('Customer API Error: ' . $e->getMessage());
+                        }
 
                         return [
                             TextInput::make('no_sput')
@@ -106,24 +115,8 @@ class MeterRateChangeTable
                                 ->disabled()
                                 ->default(MeterRateChange::peekNextNoSPUT())
                                 ->dehydrated(false),
-                            Select::make('pegawai_id')
-                                ->label('Pegawai')
-                                ->options($employeeOptions)
-                                ->searchable()
-                                ->required()
-                                ->reactive()
-                                ->afterStateUpdated(function ($state, callable $set) use ($employees) {
-                                    $employee = $employees->firstWhere('id', $state);
-                                    if ($employee) {
-                                        $set('nama_pegawai', $employee['nama_pegawai'] ?? $employee['nama'] ?? $employee['name'] ?? null);
-                                    }
-                                }),
-                            TextInput::make('nama_pegawai')
-                                ->label('Nama Pegawai')
-                                ->disabled()
-                                ->dehydrated()
-                                ->default(fn (callable $get) => $get('nama_pegawai')),
 
+                            // Auto-populated fields from customer API
                             TextInput::make('no_sambungan')
                                 ->label('No. Sambungan')
                                 ->default(fn () => $record->no_sambungan)
@@ -132,43 +125,38 @@ class MeterRateChangeTable
                             
                             TextInput::make('nama')
                                 ->label('Nama')
-                                ->default(fn () => $record->nama)
+                                ->default(fn () => $customer ? $customer['nama_pelanggan'] ?? $record->nama : $record->nama)
                                 ->disabled()
                                 ->dehydrated(),
                             
-                            TextInput::make('tarif_lama')
-                                ->label('Tarif Lama')
-                                ->required(),
-                            TextInput::make('tarif_baru')
-                                ->label('Tarif Baru')
-                                ->required(),
-                            
-                            TextInput::make('latitude')
-                                ->label('Latitude')
-                                ->numeric()
-                                ->default(fn () => $record->latitude)
+                            TextInput::make('alamat')
+                                ->label('Alamat')
+                                ->default(fn () => $customer ? ($customer['alamat_berinvestasi'] ?? $customer['alamat'] ?? '') : '')
                                 ->disabled()
                                 ->dehydrated(),
-                            TextInput::make('longitude')
-                                ->label('Longitude')
-                                ->numeric()
-                                ->disabled()
-                                ->dehydrated()
-                                ->default(fn () => $record->longitude),
                             
-                            Textarea::make('alasan_ganti_tarif')
-                                ->label('Alasan Ganti Tarif')
+                            TextInput::make('email')
+                                ->label('Email')
+                                ->default(fn () => $customer ? ($customer['email'] ?? '') : '')
+                                ->disabled()
+                                ->dehydrated(),
+                            
+                            TextInput::make('no_hp')
+                                ->label('No. HP')
+                                ->default(fn () => $customer ? ($customer['no_hp'] ?? '') : '')
+                                ->disabled()
+                                ->dehydrated(),
+                            
+                            TextInput::make('no_ktp')
+                                ->label('No. KTP')
+                                ->default(fn () => $customer ? ($customer['no_identitas'] ?? '') : '')
+                                ->disabled()
+                                ->dehydrated(),
+                            
+                            Textarea::make('alasan_ubah_status')
+                                ->label('Alasan Ubah Status')
                                 ->rows(3)
                                 ->required(),
-                            
-                            FileUpload::make('upload_ktp')
-                                ->label('Upload KTP')
-                                ->image()
-                                ->directory('meter-rate-change/ktp'),
-                            FileUpload::make('upload_kk')
-                                ->label('Upload KK')
-                                ->image()
-                                ->directory('meter-rate-change/kk'),
                             
                             Toggle::make('is_confirmed')
                                 ->label('Konfirmasi')
@@ -183,20 +171,13 @@ class MeterRateChangeTable
                     ->action(function ($record, array $data) {
                         MeterRateChange::create([
                             'complaint_id' => $record->id,
-                            'pegawai_id' => $data['pegawai_id'],
-                            'nama_pegawai' => $data['nama_pegawai'] ?? null,
-                            'no_sambungan' => $record->no_sambungan,
-                            'nama' => $record->nama,
-                            'tarif_lama' => $data['tarif_lama'],
-                            'tarif_baru' => $data['tarif_baru'],
-                            'alamat' => $record->alamat,
-                            'email' => $record->email,
-                            'no_hp' => $record->no_hp,
-                            'latitude' => $data['latitude'],
-                            'longitude' => $data['longitude'],
-                            'alasan_ganti_tarif' => $data['alasan_ganti_tarif'],
-                            'upload_ktp' => $data['upload_ktp'] ?? null,
-                            'upload_kk' => $data['upload_kk'] ?? null,
+                            'no_sambungan' => $data['no_sambungan'],
+                            'nama' => $data['nama'],
+                            'alamat' => $data['alamat'] ?? null,
+                            'email' => $data['email'] ?? null,
+                            'no_hp' => $data['no_hp'] ?? null,
+                            'no_ktp' => $data['no_ktp'] ?? null,
+                            'alasan_ganti_tarif' => $data['alasan_ubah_status'] ?? null,
                             'is_confirmed' => $data['is_confirmed'] ?? false,
                             'tanggal' => $data['tanggal'],
                         ]);
@@ -222,10 +203,6 @@ class MeterRateChangeTable
                                 ->label('No. SPUT')
                                 ->default($sput?->no_sput)
                                 ->disabled(),
-                            TextInput::make('nama_pegawai')
-                                ->label('Nama Pegawai')
-                                ->default($sput?->nama_pegawai)
-                                ->disabled(),
                             TextInput::make('no_sambungan')
                                 ->label('No. Sambungan')
                                 ->default($sput?->no_sambungan)
@@ -234,46 +211,30 @@ class MeterRateChangeTable
                                 ->label('Nama')
                                 ->default($sput?->nama)
                                 ->disabled(),
-                            TextInput::make('tarif_lama')
-                                ->label('Tarif Lama')
-                                ->default($sput?->tarif_lama)
+                            TextInput::make('alamat')
+                                ->label('Alamat')
+                                ->default($sput?->alamat)
                                 ->disabled(),
-                            TextInput::make('tarif_baru')
-                                ->label('Tarif Baru')
-                                ->default($sput?->tarif_baru)
+                            TextInput::make('email')
+                                ->label('Email')
+                                ->default($sput?->email)
                                 ->disabled(),
-                            TextInput::make('latitude')
-                                ->label('Latitude')
-                                ->default($sput?->latitude)
+                            TextInput::make('no_hp')
+                                ->label('No. HP')
+                                ->default($sput?->no_hp)
                                 ->disabled(),
-                            TextInput::make('longitude')
-                                ->label('Longitude')
-                                ->default($sput?->longitude)
+                            TextInput::make('no_ktp')
+                                ->label('No. KTP')
+                                ->default($sput?->no_ktp)
                                 ->disabled(),
                             DateTimePicker::make('tanggal')
                                 ->label('Tanggal')
                                 ->default($sput?->tanggal)
                                 ->disabled(),
                             Textarea::make('alasan_ganti_tarif')
-                                ->label('Alasan Ganti Tarif')
+                                ->label('Alasan Ubah Status')
                                 ->default($sput?->alasan_ganti_tarif)
                                 ->rows(3)
-                                ->disabled(),
-                            FileUpload::make('upload_ktp')
-                                ->label('Upload KTP')
-                                ->image()
-                                ->downloadable()
-                                ->openable()
-                                ->imagePreviewHeight('250')
-                                ->panelLayout('grid')
-                                ->disabled(),
-                            FileUpload::make('upload_kk')
-                                ->label('Upload KK')
-                                ->image()
-                                ->downloadable()
-                                ->openable()
-                                ->imagePreviewHeight('250')
-                                ->panelLayout('grid')
                                 ->disabled(),
                             
                             Toggle::make('is_confirmed')
