@@ -112,4 +112,14 @@ class MeterRateChange extends Model
 
         return $row->prefix . '-' . $tomorrow . '-' . $formattedNumber;
     }
+
+    public function complaint()
+    {
+        return $this->belongsTo(Complaint::class);
+    }
+
+    public function statusChange()
+    {
+        return $this->hasOne(StatusChange::class, 'complaint_id', 'complaint_id');
+    }
 }

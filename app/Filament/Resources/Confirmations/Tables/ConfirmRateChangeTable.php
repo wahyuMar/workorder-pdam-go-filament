@@ -38,6 +38,10 @@ class ConfirmRateChangeTable
                     ->label('Tanggal')
                     ->dateTime()
                     ->sortable(),
+                TextColumn::make('statusChange.no_baus')
+                    ->label('No. BAUS')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('is_confirmed')
                     ->label('Status')
                     ->badge()

@@ -17,14 +17,14 @@ class ConfirmRateChangeResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::CheckCircle;
 
-    protected static ?string $navigationLabel = 'Ganti Tarif';
+    protected static ?string $navigationLabel = 'Ganti Status';
     protected static string|UnitEnum|null $navigationGroup = 'Confirmation';
     protected static ?int $navigationSort = 3;
 
-    protected static ?string $slug = 'confirmations/rate-change';
-    protected static ?string $modelLabel = 'Ganti Tarif';
-    protected static ?string $pluralModelLabel = 'Ganti Tarif';
-    protected static ?string $breadcrumb = 'Ganti Tarif';
+    protected static ?string $slug = 'confirmations/status-change';
+    protected static ?string $modelLabel = 'Ganti Status';
+    protected static ?string $pluralModelLabel = 'Ganti Status';
+    protected static ?string $breadcrumb = 'Ganti Status';
 
     public static function table(Table $table): Table
     {
@@ -34,7 +34,8 @@ class ConfirmRateChangeResource extends Resource
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
         return parent::getEloquentQuery()
-            ->where('is_confirmed', false);
+            ->where('is_confirmed', false)
+            ->whereHas('statusChange'); // Only show SPUT that have BAUS (Berita Acara Ubah Status)
     }
 
     public static function getPages(): array
