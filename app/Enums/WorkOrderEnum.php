@@ -8,7 +8,7 @@ enum WorkOrderEnum: string
     case TUTUP = 'Tutup';
     case BUKA_KEMBALI = 'Buka Kembali';
     case CABUT = 'Cabut';
-    case GANTI_NAMA = 'Ganti Nama';
+    case UBAH_NAMA = 'Ubah Nama';
     case GANTI_ALAMAT = 'Ganti Alamat';
     case GANTI_TARIF = 'Ganti Tarif';
 
