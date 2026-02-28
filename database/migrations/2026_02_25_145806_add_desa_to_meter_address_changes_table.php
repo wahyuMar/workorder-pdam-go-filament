@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('meter_address_changes', function (Blueprint $table) {
-            $table->unsignedBigInteger('id_desa_lama')->nullable()->after('id_unit_lama');
-            $table->unsignedBigInteger('id_desa_baru')->nullable()->after('id_unit_baru');
+            $table->unsignedBigInteger('id_desa_lama')->nullable()->after('id_unit_lama')->change();
+            $table->unsignedBigInteger('id_desa_baru')->nullable()->after('id_unit_baru')->change();
         });
     }
 
@@ -23,7 +23,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('meter_address_changes', function (Blueprint $table) {
-            $table->dropColumn(['id_desa_lama', 'id_desa_baru']);
+            $table->unsignedBigInteger('id_desa_lama')->nullable()->after('id_unit_lama')->change();
+            $table->unsignedBigInteger('id_desa_baru')->nullable()->after('id_unit_baru')->change();
         });
     }
 };
