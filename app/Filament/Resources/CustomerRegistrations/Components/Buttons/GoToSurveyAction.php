@@ -2,20 +2,8 @@
 
 namespace App\Filament\Resources\CustomerRegistrations\Components\Buttons;
 
-use App\Helper\SurveyHelper;
-use App\Models\ClampSaddle;
-use App\Models\KlasifikasiSr;
-use App\Models\Survey;
-use Dotswan\MapPicker\Fields\Map;
 use Filament\Actions\Action;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Notifications\Notification;
-use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Utilities\Set;
 use Filament\Support\Colors\Color;
-use Filament\Support\Enums\Width;
 use Filament\Support\Icons\Heroicon;
 
 class GoToSurveyAction extends Action
