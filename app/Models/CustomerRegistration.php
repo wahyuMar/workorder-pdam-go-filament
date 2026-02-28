@@ -22,6 +22,10 @@ class CustomerRegistration extends Model
         'kel_desa_ktp',
         'kecamatan_ktp',
         'kab_kota_ktp',
+        'province_id_ktp',
+        'regency_id_ktp',
+        'district_id_ktp',
+        'village_id_ktp',
         'pekerjaan',
         'email',
         'no_telp',
@@ -33,6 +37,10 @@ class CustomerRegistration extends Model
         'kel_desa_pasang',
         'kecamatan_pasang',
         'kab_kota_pasang',
+        'province_id_pasang',
+        'regency_id_pasang',
+        'district_id_pasang',
+        'village_id_pasang',
         'jumlah_penghuni_tetap',
         'jumlah_penghuni_tidak_tetap',
         'jumlah_kran_air_minum',
@@ -43,8 +51,8 @@ class CustomerRegistration extends Model
         'upload_kk',
         'upload_tagihan_listrik',
         'upload_foto_rumah',
-        'lang',
-        'lat',
+        'longitude',
+        'latitude',
         'tanggal',
     ];
 
@@ -64,5 +72,47 @@ class CustomerRegistration extends Model
     public function program()
     {
         return $this->belongsTo(Program::class);
+    }
+
+    // Relationships untuk alamat KTP
+    public function provinceKtp()
+    {
+        return $this->belongsTo(Province::class, 'province_id_ktp');
+    }
+
+    public function regencyKtp()
+    {
+        return $this->belongsTo(Regency::class, 'regency_id_ktp');
+    }
+
+    public function districtKtp()
+    {
+        return $this->belongsTo(District::class, 'district_id_ktp');
+    }
+
+    public function villageKtp()
+    {
+        return $this->belongsTo(Village::class, 'village_id_ktp');
+    }
+
+    // Relationships untuk alamat pasang
+    public function provincePasang()
+    {
+        return $this->belongsTo(Province::class, 'province_id_pasang');
+    }
+
+    public function regencyPasang()
+    {
+        return $this->belongsTo(Regency::class, 'regency_id_pasang');
+    }
+
+    public function districtPasang()
+    {
+        return $this->belongsTo(District::class, 'district_id_pasang');
+    }
+
+    public function villagePasang()
+    {
+        return $this->belongsTo(Village::class, 'village_id_pasang');
     }
 }

@@ -2,10 +2,12 @@
 
 namespace App\Filament\Resources\CustomerRegistrations\Schemas;
 
-use Filament\Schemas\Components\ImageEntry;
+use Filament\Forms\Components\Placeholder;
+use Filament\Infolists\Components\ImageEntry;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\TextEntry;
 use Filament\Schemas\Schema;
+use Illuminate\Support\HtmlString;
 
 class CustomerRegistrationInfolist
 {
@@ -21,13 +23,14 @@ class CustomerRegistrationInfolist
                             ->label('Tanggal')
                             ->dateTime('d M Y H:i'),
                     ])
-                    ->columns(2),
+                    ->columns(2)
+                    ->columnSpanFull(),
 
                 Section::make('Data Pribadi')
                     ->schema([
                         TextEntry::make('nama_lengkap')
                             ->label('Nama Lengkap'),
-                        TextEntry::make('program')
+                        TextEntry::make('program.name')
                             ->label('Program')
                             ->badge(),
                         TextEntry::make('no_ktp')
@@ -60,11 +63,11 @@ class CustomerRegistrationInfolist
                             ->label('RT KTP'),
                         TextEntry::make('rw_ktp')
                             ->label('RW KTP'),
-                        TextEntry::make('kel_desa_ktp')
+                        TextEntry::make('villageKtp.name')
                             ->label('Kel/Desa KTP'),
-                        TextEntry::make('kecamatan_ktp')
+                        TextEntry::make('districtKtp.name')
                             ->label('Kecamatan KTP'),
-                        TextEntry::make('kab_kota_ktp')
+                        TextEntry::make('regencyKtp.name')
                             ->label('Kab/Kota KTP'),
                     ])
                     ->columns(3),
@@ -80,11 +83,11 @@ class CustomerRegistrationInfolist
                             ->label('RT Pasang'),
                         TextEntry::make('rw_pasang')
                             ->label('RW Pasang'),
-                        TextEntry::make('kel_desa_pasang')
+                        TextEntry::make('villagePasang.name')
                             ->label('Kel/Desa Pasang'),
-                        TextEntry::make('kecamatan_pasang')
+                        TextEntry::make('districtPasang.name')
                             ->label('Kecamatan Pasang'),
-                        TextEntry::make('kab_kota_pasang')
+                        TextEntry::make('regencyPasang.name')
                             ->label('Kab/Kota Pasang'),
                     ])
                     ->columns(3),
@@ -128,18 +131,32 @@ class CustomerRegistrationInfolist
                             ->label('Upload Foto Rumah')
                             ->disk('public'),
                     ])
-                    ->columns(2),
+                    ->columns(4)
+                    ->columnSpanFull(),
 
                 Section::make('Koordinat Lokasi')
                     ->schema([
-                        TextEntry::make('lat')
+                        Placeholder::make('location')
+                            ->label('Location')
+                            ->content(
+                                fn ($record) => new HtmlString("
+                                <embed
+                                    src='https://maps.google.com/maps?q={$record->latitude},{$record->longitude}&hl=en&z=16&output=embed'
+                                    type='application/pdf'
+                                    width='100%'
+                                    height='500px'
+                                />
+                            "))
+                            ->columnSpanFull(),
+                        TextEntry::make('latitude')
                             ->label('Latitude')
                             ->copyable(),
-                        TextEntry::make('lang')
+                        TextEntry::make('longitude')
                             ->label('Longitude')
                             ->copyable(),
                     ])
-                    ->columns(2),
+                    ->columns(2)
+                    ->columnSpanFull(),
             ]);
     }
 }

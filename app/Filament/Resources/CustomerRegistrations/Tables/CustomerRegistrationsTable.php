@@ -25,7 +25,7 @@ class CustomerRegistrationsTable
                     ->label('Nama Lengkap')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('program')
+                TextColumn::make('program.name')
                     ->label('Program')
                     ->searchable()
                     ->sortable()
