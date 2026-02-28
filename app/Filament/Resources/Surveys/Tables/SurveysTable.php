@@ -22,6 +22,9 @@ class SurveysTable
                 TextColumn::make('customerRegistration.no_surat')
                     ->label('No Registrasi')
                     ->searchable(),
+                TextColumn::make('klasifikasiSr.name')
+                    ->label('Klasifikasi SR')
+                    ->searchable(),
                 IconColumn::make('lokasi_pipa_distribusi_lat')
                     ->label('Lokasi Pipa Dist.')
                     ->icon(Heroicon::MapPin)
