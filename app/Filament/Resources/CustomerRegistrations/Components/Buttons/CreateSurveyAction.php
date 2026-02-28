@@ -4,6 +4,7 @@ namespace App\Filament\Resources\CustomerRegistrations\Components\Buttons;
 
 use App\Helper\SurveyHelper;
 use App\Models\ClampSaddle;
+use App\Models\Crossing;
 use App\Models\KlasifikasiSr;
 use App\Models\Survey;
 use Dotswan\MapPicker\Fields\Map;
@@ -167,6 +168,11 @@ class CreateSurveyAction extends Action
                                 ->numeric()
                                 ->suffix('meter')
                                 ->columnSpanFull(),
+                            Select::make('crossing_id')
+                                ->label('Jenis Crossing')
+                                ->options(fn() => Crossing::all()->pluck('name', 'id'))
+                                ->required()
+                                ->columnSpanFull(),
                         ])
                         ->columns(2)
                         ->columnSpanFull(),
@@ -219,6 +225,7 @@ class CreateSurveyAction extends Action
                     'lokasi_crossing_lat' => $data['lokasi_crossing_lat'],
                     'lokasi_crossing_long' => $data['lokasi_crossing_lng'],
                     'panjang_crossing' => $data['panjang_crossing'],
+                    'crossing_id' => $data['crossing_id'],
                     'tanggal_survey' => now()->format('Y-m-d'),
                     'customer_registration_id' => $record->id,
                     'clamp_saddle_id' => $data['clamp_saddle_id'],
