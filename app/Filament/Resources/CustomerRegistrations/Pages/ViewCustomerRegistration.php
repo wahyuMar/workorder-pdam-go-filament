@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\CustomerRegistrations\Pages;
 
 use App\Filament\Resources\CustomerRegistrations\Components\Buttons\CreateSurveyAction;
+use App\Filament\Resources\CustomerRegistrations\Components\Buttons\GoToSurveyAction;
 use App\Filament\Resources\CustomerRegistrations\CustomerRegistrationResource;
 use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
@@ -17,6 +18,7 @@ class ViewCustomerRegistration extends ViewRecord
         return [
             EditAction::make()->visible(!$surveyExists),
             CreateSurveyAction::make()->visible(!$surveyExists),
+            GoToSurveyAction::make()->visible($surveyExists),
         ];
     }
 }
