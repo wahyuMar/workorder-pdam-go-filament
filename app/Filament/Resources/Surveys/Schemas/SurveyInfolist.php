@@ -2,8 +2,12 @@
 
 namespace App\Filament\Resources\Surveys\Schemas;
 
+use Filament\Forms\Components\Placeholder;
+use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Illuminate\Support\HtmlString;
 
 class SurveyInfolist
 {
@@ -11,64 +15,200 @@ class SurveyInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('no_survey')
-                    ->placeholder('-'),
-                TextEntry::make('lokasi_pipa_distribusi_lat')
-                    ->numeric()
-                    ->placeholder('-'),
-                TextEntry::make('lokasi_pipa_distribusi_long')
-                    ->numeric()
-                    ->placeholder('-'),
-                TextEntry::make('panjang_pipa_sr')
-                    ->numeric()
-                    ->placeholder('-'),
-                TextEntry::make('ukuran_clamp_sadel')
-                    ->placeholder('-'),
-                TextEntry::make('lokasi_sr_lat')
-                    ->numeric()
-                    ->placeholder('-'),
-                TextEntry::make('lokasi_sr_long')
-                    ->numeric()
-                    ->placeholder('-'),
-                TextEntry::make('foto_rumah')
-                    ->placeholder('-'),
-                TextEntry::make('foto_penghuni')
-                    ->placeholder('-'),
-                TextEntry::make('foto_lokasi_wm')
-                    ->placeholder('-'),
-                TextEntry::make('lokasi_rabatan_lat')
-                    ->numeric()
-                    ->placeholder('-'),
-                TextEntry::make('lokasi_rabatan_long')
-                    ->numeric()
-                    ->placeholder('-'),
-                TextEntry::make('panjang_rabatan')
-                    ->numeric()
-                    ->placeholder('-'),
-                TextEntry::make('lokasi_crossing_lat')
-                    ->numeric()
-                    ->placeholder('-'),
-                TextEntry::make('lokasi_crossing_long')
-                    ->numeric()
-                    ->placeholder('-'),
-                TextEntry::make('panjang_crossing')
-                    ->numeric()
-                    ->placeholder('-'),
-                TextEntry::make('jenis_crossing')
-                    ->placeholder('-'),
-                TextEntry::make('klasifikasi_sr')
-                    ->placeholder('-'),
-                TextEntry::make('tanggal_survey')
-                    ->dateTime()
-                    ->placeholder('-'),
-                TextEntry::make('customer_registration_id')
-                    ->numeric(),
-                TextEntry::make('created_at')
-                    ->dateTime()
-                    ->placeholder('-'),
-                TextEntry::make('updated_at')
-                    ->dateTime()
-                    ->placeholder('-'),
+                // Info Umum
+                Section::make('Info Umum')
+                    ->schema([
+                        TextEntry::make('no_survey')
+                            ->label('No. Survey')
+                            ->placeholder('-'),
+                        TextEntry::make('tanggal_survey')
+                            ->label('Tanggal Survey')
+                            ->dateTime()
+                            ->placeholder('-'),
+                        TextEntry::make('klasifikasi_sr')
+                            ->label('Klasifikasi SR')
+                            ->placeholder('-'),
+                    ])
+                    ->columns(3)
+                    ->columnSpanFull(),
+
+                // Pipa Distribusi
+                Section::make('Pipa Distribusi')
+                    ->schema([
+                        Placeholder::make('map_pipa_distribusi')
+                            ->label('Lokasi Pipa Distribusi')
+                            ->content(
+                                fn($record) => new HtmlString("
+                                <embed
+                                    src='https://maps.google.com/maps?q={$record->lokasi_pipa_distribusi_lat},{$record->lokasi_pipa_distribusi_long}&hl=en&z=16&output=embed'
+                                    type='application/pdf'
+                                    width='100%'
+                                    height='500px'
+                                />
+                            ")
+                            )
+                            ->columnSpanFull(),
+                        TextEntry::make('lokasi_pipa_distribusi_lat')
+                            ->label('Latitude')
+                            ->numeric()
+                            ->copyable()
+                            ->placeholder('-'),
+                        TextEntry::make('lokasi_pipa_distribusi_long')
+                            ->label('Longitude')
+                            ->numeric()
+                            ->copyable()
+                            ->placeholder('-'),
+                    ])
+                    ->columns(2)
+                    ->columnSpanFull(),
+
+                // Pipa SR dan Clamp Saddle
+                Section::make('Pipa SR dan Clamp Saddle')
+                    ->schema([
+                        TextEntry::make('panjang_pipa_sr')
+                            ->label('Panjang Pipa (SR)')
+                            ->numeric()
+                            ->suffix(' meter')
+                            ->placeholder('-'),
+                        TextEntry::make('ukuran_clamp_sadel')
+                            ->label('Clamp Saddle')
+                            ->placeholder('-'),
+                        Placeholder::make('map_lokasi_sr')
+                            ->label('Lokasi SR')
+                            ->content(
+                                fn($record) => new HtmlString("
+                                <embed
+                                    src='https://maps.google.com/maps?q={$record->lokasi_sr_lat},{$record->lokasi_sr_long}&hl=en&z=16&output=embed'
+                                    type='application/pdf'
+                                    width='100%'
+                                    height='500px'
+                                />
+                            ")
+                            )
+                            ->columnSpanFull(),
+                        TextEntry::make('lokasi_sr_lat')
+                            ->label('Latitude SR')
+                            ->numeric()
+                            ->copyable()
+                            ->placeholder('-'),
+                        TextEntry::make('lokasi_sr_long')
+                            ->label('Longitude SR')
+                            ->numeric()
+                            ->copyable()
+                            ->placeholder('-'),
+                    ])
+                    ->columns(2)
+                    ->columnSpanFull(),
+
+                // Rabatan
+                Section::make('Rabatan')
+                    ->schema([
+                        Placeholder::make('map_rabatan')
+                            ->label('Lokasi Rabatan')
+                            ->content(
+                                fn($record) => new HtmlString("
+                                <embed
+                                    src='https://maps.google.com/maps?q={$record->lokasi_rabatan_lat},{$record->lokasi_rabatan_long}&hl=en&z=16&output=embed'
+                                    type='application/pdf'
+                                    width='100%'
+                                    height='500px'
+                                />
+                            ")
+                            )
+                            ->columnSpanFull(),
+                        TextEntry::make('lokasi_rabatan_lat')
+                            ->label('Latitude')
+                            ->numeric()
+                            ->copyable()
+                            ->placeholder('-'),
+                        TextEntry::make('lokasi_rabatan_long')
+                            ->label('Longitude')
+                            ->numeric()
+                            ->copyable()
+                            ->placeholder('-'),
+                        TextEntry::make('panjang_rabatan')
+                            ->label('Panjang Rabatan')
+                            ->numeric()
+                            ->suffix(' meter')
+                            ->placeholder('-'),
+                    ])
+                    ->columns(2)
+                    ->columnSpanFull(),
+
+                // Crossing
+                Section::make('Crossing')
+                    ->schema([
+                        Placeholder::make('map_crossing')
+                            ->label('Lokasi Crossing')
+                            ->content(
+                                fn($record) => new HtmlString("
+                                <embed
+                                    src='https://maps.google.com/maps?q={$record->lokasi_crossing_lat},{$record->lokasi_crossing_long}&hl=en&z=16&output=embed'
+                                    type='application/pdf'
+                                    width='100%'
+                                    height='500px'
+                                />
+                            ")
+                            )
+                            ->columnSpanFull(),
+                        TextEntry::make('lokasi_crossing_lat')
+                            ->label('Latitude')
+                            ->numeric()
+                            ->copyable()
+                            ->placeholder('-'),
+                        TextEntry::make('lokasi_crossing_long')
+                            ->label('Longitude')
+                            ->numeric()
+                            ->copyable()
+                            ->placeholder('-'),
+                        TextEntry::make('panjang_crossing')
+                            ->label('Panjang Crossing')
+                            ->numeric()
+                            ->suffix(' meter')
+                            ->placeholder('-'),
+                        TextEntry::make('jenis_crossing')
+                            ->label('Jenis Crossing')
+                            ->placeholder('-'),
+                    ])
+                    ->columns(2)
+                    ->columnSpanFull(),
+
+                // Foto
+                Section::make('Foto')
+                    ->schema([
+                        ImageEntry::make('foto_rumah')
+                            ->label('Foto Rumah')
+                            ->disk('public')
+                            ->placeholder('-'),
+                        ImageEntry::make('foto_penghuni')
+                            ->label('Foto Penghuni')
+                            ->disk('public')
+                            ->placeholder('-'),
+                        ImageEntry::make('foto_lokasi_wm')
+                            ->label('Foto Lokasi Water Meter')
+                            ->disk('public')
+                            ->placeholder('-'),
+                    ])
+                    ->columns(3)
+                    ->columnSpanFull(),
+
+                // Metadata
+                Section::make('Metadata')
+                    ->schema([
+                        TextEntry::make('customer_registration_id')
+                            ->label('ID Registrasi Pelanggan')
+                            ->numeric(),
+                        TextEntry::make('created_at')
+                            ->label('Dibuat Pada')
+                            ->dateTime()
+                            ->placeholder('-'),
+                        TextEntry::make('updated_at')
+                            ->label('Diperbarui Pada')
+                            ->dateTime()
+                            ->placeholder('-'),
+                    ])
+                    ->columns(3)
+                    ->columnSpanFull(),
             ]);
     }
 }
