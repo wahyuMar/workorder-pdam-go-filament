@@ -2,11 +2,13 @@
 
 namespace App\Filament\Resources\Surveys\Schemas;
 
+use Filament\Actions\Action;
 use Filament\Forms\Components\Placeholder;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\HtmlString;
 
 class SurveyInfolist
@@ -21,15 +23,22 @@ class SurveyInfolist
                         TextEntry::make('no_survey')
                             ->label('No. Survey')
                             ->placeholder('-'),
+                        TextEntry::make('customerRegistration.no_surat')
+                            ->label('No. Registrasi')
+                            ->suffixAction(Action::make('edit')
+                                ->icon(Heroicon::ArrowUpRight)
+                                ->color('primary')
+                                ->url(fn($record) => route('filament.admin.resources.customer-registrations.view', $record->customerRegistration)))
+                            ->placeholder('-'),
                         TextEntry::make('tanggal_survey')
                             ->label('Tanggal Survey')
                             ->dateTime()
                             ->placeholder('-'),
-                        TextEntry::make('klasifikasi_sr')
+                        TextEntry::make('klasifikasiSr.name')
                             ->label('Klasifikasi SR')
                             ->placeholder('-'),
                     ])
-                    ->columns(3)
+                    ->columns(4)
                     ->columnSpanFull(),
 
                 // Pipa Distribusi
@@ -43,24 +52,14 @@ class SurveyInfolist
                                     src='https://maps.google.com/maps?q={$record->lokasi_pipa_distribusi_lat},{$record->lokasi_pipa_distribusi_long}&hl=en&z=16&output=embed'
                                     type='application/pdf'
                                     width='100%'
-                                    height='500px'
+                                    height='300px'
                                 />
                             ")
                             )
                             ->columnSpanFull(),
-                        TextEntry::make('lokasi_pipa_distribusi_lat')
-                            ->label('Latitude')
-                            ->numeric()
-                            ->copyable()
-                            ->placeholder('-'),
-                        TextEntry::make('lokasi_pipa_distribusi_long')
-                            ->label('Longitude')
-                            ->numeric()
-                            ->copyable()
-                            ->placeholder('-'),
                     ])
                     ->columns(2)
-                    ->columnSpanFull(),
+                    ->columnSpan(1),
 
                 // Pipa SR dan Clamp Saddle
                 Section::make('Pipa SR dan Clamp Saddle')
@@ -81,24 +80,14 @@ class SurveyInfolist
                                     src='https://maps.google.com/maps?q={$record->lokasi_sr_lat},{$record->lokasi_sr_long}&hl=en&z=16&output=embed'
                                     type='application/pdf'
                                     width='100%'
-                                    height='500px'
+                                    height='250'
                                 />
                             ")
                             )
                             ->columnSpanFull(),
-                        TextEntry::make('lokasi_sr_lat')
-                            ->label('Latitude SR')
-                            ->numeric()
-                            ->copyable()
-                            ->placeholder('-'),
-                        TextEntry::make('lokasi_sr_long')
-                            ->label('Longitude SR')
-                            ->numeric()
-                            ->copyable()
-                            ->placeholder('-'),
                     ])
                     ->columns(2)
-                    ->columnSpanFull(),
+                    ->columnSpan(1),
 
                 // Rabatan
                 Section::make('Rabatan')
@@ -111,21 +100,11 @@ class SurveyInfolist
                                     src='https://maps.google.com/maps?q={$record->lokasi_rabatan_lat},{$record->lokasi_rabatan_long}&hl=en&z=16&output=embed'
                                     type='application/pdf'
                                     width='100%'
-                                    height='500px'
+                                    height='250px'
                                 />
                             ")
                             )
                             ->columnSpanFull(),
-                        TextEntry::make('lokasi_rabatan_lat')
-                            ->label('Latitude')
-                            ->numeric()
-                            ->copyable()
-                            ->placeholder('-'),
-                        TextEntry::make('lokasi_rabatan_long')
-                            ->label('Longitude')
-                            ->numeric()
-                            ->copyable()
-                            ->placeholder('-'),
                         TextEntry::make('panjang_rabatan')
                             ->label('Panjang Rabatan')
                             ->numeric()
@@ -133,7 +112,7 @@ class SurveyInfolist
                             ->placeholder('-'),
                     ])
                     ->columns(2)
-                    ->columnSpanFull(),
+                    ->columnSpan(1),
 
                 // Crossing
                 Section::make('Crossing')
@@ -146,32 +125,22 @@ class SurveyInfolist
                                     src='https://maps.google.com/maps?q={$record->lokasi_crossing_lat},{$record->lokasi_crossing_long}&hl=en&z=16&output=embed'
                                     type='application/pdf'
                                     width='100%'
-                                    height='500px'
+                                    height='250px'
                                 />
                             ")
                             )
                             ->columnSpanFull(),
-                        TextEntry::make('lokasi_crossing_lat')
-                            ->label('Latitude')
-                            ->numeric()
-                            ->copyable()
-                            ->placeholder('-'),
-                        TextEntry::make('lokasi_crossing_long')
-                            ->label('Longitude')
-                            ->numeric()
-                            ->copyable()
-                            ->placeholder('-'),
                         TextEntry::make('panjang_crossing')
                             ->label('Panjang Crossing')
                             ->numeric()
                             ->suffix(' meter')
                             ->placeholder('-'),
-                        TextEntry::make('jenis_crossing')
+                        TextEntry::make('crossing.name')
                             ->label('Jenis Crossing')
                             ->placeholder('-'),
                     ])
                     ->columns(2)
-                    ->columnSpanFull(),
+                    ->columnSpan(1),
 
                 // Foto
                 Section::make('Foto')
@@ -195,8 +164,8 @@ class SurveyInfolist
                 // Metadata
                 Section::make('Metadata')
                     ->schema([
-                        TextEntry::make('customer_registration_id')
-                            ->label('ID Registrasi Pelanggan')
+                        TextEntry::make('createdBy.name')
+                            ->label('Dibuat Oleh')
                             ->numeric(),
                         TextEntry::make('created_at')
                             ->label('Dibuat Pada')
@@ -209,6 +178,6 @@ class SurveyInfolist
                     ])
                     ->columns(3)
                     ->columnSpanFull(),
-            ]);
+            ])->columns(2);
     }
 }
