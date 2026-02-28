@@ -231,6 +231,8 @@ class CreateSurveyAction extends Action
                     ->title('Survey berhasil dibuat')
                     ->success()
                     ->send();
+
+                $record->refesh();
             })
             ->modalWidth(Width::SevenExtraLarge);
     }
