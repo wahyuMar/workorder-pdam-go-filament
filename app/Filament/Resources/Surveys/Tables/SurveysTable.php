@@ -3,8 +3,6 @@
 namespace App\Filament\Resources\Surveys\Tables;
 
 use App\Helper\MapHelper;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Support\Colors\Color;
