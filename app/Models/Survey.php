@@ -45,4 +45,9 @@ class Survey extends Model
     {
         return $this->belongsTo(Crossing::class);
     }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 }
