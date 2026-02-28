@@ -40,4 +40,9 @@ class Survey extends Model
     {
         return $this->belongsTo(KlasifikasiSr::class);
     }
+
+    public function crossing()
+    {
+        return $this->belongsTo(Crossing::class);
+    }
 }
