@@ -64,6 +64,10 @@ class SurveysTable
                     ->color(Color::Red)
                     ->url(fn($record) => MapHelper::generateGoogleMapLink($record->lokasi_crossing_lat, $record->lokasi_crossing_long))
                     ->openUrlInNewTab(),
+                TextColumn::make('clampSaddle.name')
+                    ->label('Clamp Saddle')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('crossing.name')
                     ->label('Jenis Crossing')
                     ->searchable(),

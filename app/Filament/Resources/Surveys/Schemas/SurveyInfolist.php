@@ -69,7 +69,7 @@ class SurveyInfolist
                             ->numeric()
                             ->suffix(' meter')
                             ->placeholder('-'),
-                        TextEntry::make('ukuran_clamp_sadel')
+                        TextEntry::make('clampSaddle.name')
                             ->label('Clamp Saddle')
                             ->placeholder('-'),
                         Placeholder::make('map_lokasi_sr')

@@ -33,7 +33,7 @@ class Survey extends Model
 
     public function clampSaddle()
     {
-        return $this->belongsTo(ClampSaddle::class);
+        return $this->belongsTo(MaterialAndService::class, 'material_clamp_saddle_id');
     }
 
     public function klasifikasiSr()
@@ -43,7 +43,7 @@ class Survey extends Model
 
     public function crossing()
     {
-        return $this->belongsTo(Crossing::class);
+        return $this->belongsTo(MaterialAndService::class, 'material_crossing_id');
     }
 
     public function createdBy()

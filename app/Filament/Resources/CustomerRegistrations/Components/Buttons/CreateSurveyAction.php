@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources\CustomerRegistrations\Components\Buttons;
 
+use App\Enums\MaterialAndServiceCategory;
 use App\Helper\SurveyHelper;
-use App\Models\ClampSaddle;
-use App\Models\Crossing;
 use App\Models\KlasifikasiSr;
+use App\Models\MaterialAndService;
 use App\Models\Survey;
 use Dotswan\MapPicker\Fields\Map;
 use Filament\Actions\Action;
@@ -67,16 +67,11 @@ class CreateSurveyAction extends Action
                                 ->required()
                                 ->numeric()
                                 ->suffix('meter'),
-                            Select::make('clamp_saddle_id')
+                            Select::make('material_clamp_saddle_id')
                                 ->label('Clamp Saddle')
                                 ->required()
-                                ->options(function () {
-                                    $result = [];
-                                    foreach (ClampSaddle::all() as $item) {
-                                        $result[$item->id] = $item->name . ' (' . $item->brand . ')';
-                                    }
-                                    return $result;
-                                }),
+                                ->options(fn() => MaterialAndService::where('category', MaterialAndServiceCategory::ClampSaddle)
+                                    ->pluck('name', 'id')),
                             Map::make('lokasi_sr')
                                 ->label('Lokasi SR')
                                 ->defaultLocation(
@@ -168,9 +163,10 @@ class CreateSurveyAction extends Action
                                 ->numeric()
                                 ->suffix('meter')
                                 ->columnSpanFull(),
-                            Select::make('crossing_id')
+                            Select::make('material_crossing_id')
                                 ->label('Jenis Crossing')
-                                ->options(fn() => Crossing::all()->pluck('name', 'id'))
+                                ->options(fn() => MaterialAndService::where('category', MaterialAndServiceCategory::Crossing)
+                                    ->pluck('name', 'id'))
                                 ->required()
                                 ->columnSpanFull(),
                         ])
@@ -206,32 +202,31 @@ class CreateSurveyAction extends Action
                 ];
             })
             ->action(function (array $data, $record) {
-                $clampSaddle = ClampSaddle::findOrFail($data['clamp_saddle_id']);
+                $clampSaddle = MaterialAndService::findOrFail($data['material_clamp_saddle_id']);
 
                 Survey::create([
-                    'no_survey' => SurveyHelper::generateNoSurvey(),
-                    'lokasi_pipa_distribusi_lat' => $data['lokasi_pipa_distribusi_lat'],
+                    'no_survey'                  => SurveyHelper::generateNoSurvey(),
+                    'lokasi_pipa_distribusi_lat'  => $data['lokasi_pipa_distribusi_lat'],
                     'lokasi_pipa_distribusi_long' => $data['lokasi_pipa_distribusi_lng'],
-                    'panjang_pipa_sr' => $data['panjang_pipa_sr'],
-                    'ukuran_clamp_sadel' => $clampSaddle->name,
-                    'lokasi_sr_lat' => $data['lokasi_sr_lat'],
-                    'lokasi_sr_long' => $data['lokasi_sr_lng'],
-                    'foto_rumah' => $data['foto_rumah'],
-                    'foto_penghuni' => $data['foto_penghuni'],
-                    'foto_lokasi_wm' => $data['foto_lokasi_water_meter'],
-                    'lokasi_rabatan_lat' => $data['lokasi_rabatan_lat'],
-                    'lokasi_rabatan_long' => $data['lokasi_rabatan_lng'],
-                    'panjang_rabatan' => $data['panjang_rabatan'],
-                    'lokasi_crossing_lat' => $data['lokasi_crossing_lat'],
-                    'lokasi_crossing_long' => $data['lokasi_crossing_lng'],
-                    'panjang_crossing' => $data['panjang_crossing'],
-                    'crossing_id' => $data['crossing_id'],
-                    'tanggal_survey' => now()->format('Y-m-d'),
-                    'customer_registration_id' => $record->id,
-                    'clamp_saddle_id' => $data['clamp_saddle_id'],
-                    'clamp_saddle_price' => $clampSaddle->price,
-                    'klasifikasi_sr_id' => $data['klasifikasi_sr_id'],
-                    'created_by' => auth()->id(),
+                    'panjang_pipa_sr'             => $data['panjang_pipa_sr'],
+                    'ukuran_clamp_sadel'          => $clampSaddle->name,
+                    'lokasi_sr_lat'               => $data['lokasi_sr_lat'],
+                    'lokasi_sr_long'              => $data['lokasi_sr_lng'],
+                    'foto_rumah'                  => $data['foto_rumah'],
+                    'foto_penghuni'               => $data['foto_penghuni'],
+                    'foto_lokasi_wm'              => $data['foto_lokasi_water_meter'],
+                    'lokasi_rabatan_lat'          => $data['lokasi_rabatan_lat'],
+                    'lokasi_rabatan_long'         => $data['lokasi_rabatan_lng'],
+                    'panjang_rabatan'             => $data['panjang_rabatan'],
+                    'lokasi_crossing_lat'         => $data['lokasi_crossing_lat'],
+                    'lokasi_crossing_long'        => $data['lokasi_crossing_lng'],
+                    'panjang_crossing'            => $data['panjang_crossing'],
+                    'material_crossing_id'        => $data['material_crossing_id'],
+                    'tanggal_survey'              => now()->format('Y-m-d'),
+                    'customer_registration_id'    => $record->id,
+                    'material_clamp_saddle_id'    => $data['material_clamp_saddle_id'],
+                    'klasifikasi_sr_id'           => $data['klasifikasi_sr_id'],
+                    'created_by'                  => auth()->id(),
                 ]);
 
                 Notification::make()
@@ -239,7 +234,7 @@ class CreateSurveyAction extends Action
                     ->success()
                     ->send();
 
-                $record->refesh();
+                $record->refresh();
             })
             ->modalWidth(Width::SevenExtraLarge);
     }
