@@ -50,4 +50,9 @@ class Survey extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    public function budgeting()
+    {
+        return $this->hasOne(Budget::class);
+    }
 }

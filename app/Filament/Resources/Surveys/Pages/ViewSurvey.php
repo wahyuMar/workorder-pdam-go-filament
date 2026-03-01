@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\Surveys\Pages;
 
+use App\Filament\Resources\Surveys\Components\Buttons\CreateBudgetingAction;
 use App\Filament\Resources\Surveys\SurveyResource;
-use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
 
 class ViewSurvey extends ViewRecord
@@ -13,7 +13,8 @@ class ViewSurvey extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            EditAction::make(),
+            CreateBudgetingAction::make()
+                ->visible(fn() => $this->record->budgeting === null),
         ];
     }
 }
