@@ -27,6 +27,53 @@ class CreateBudgetingAction extends Action
         return parent::make($name)
             ->label('Create Budgeting')
             ->icon(Heroicon::DocumentText)
+            ->fillForm(function ($record): array {
+                $items = [];
+
+                // Pre-fill clamp saddle sebagai item awal
+                if ($record->clampSaddle) {
+                    $price = (float) $record->clampSaddle->price;
+                    $items[] = [
+                        'category'     => BudgetItemCategory::PekerjaanPipaDinas->value,
+                        'sub_category' => BudgetItemSubCategory::MaterialPipaDanAccDinas->value,
+                        'name'         => 'Clamp Saddle : ' . $record->clampSaddle->name . ' (' . $record->clampSaddle->brand . ')',
+                        'quantity'     => 1,
+                        'price'        => $price,
+                        'item_amount'  => $price,
+                    ];
+                }
+
+                // Pre-fill crossing
+                if ($record->crossing) {
+                    $quantity = (int) $record->panjang_crossing;
+                    $price    = (float) $record->crossing->price;
+                    $items[]  = [
+                        'category'     => BudgetItemCategory::PekerjaanPipaInstalasi->value,
+                        'sub_category' => BudgetItemSubCategory::PekerjaanTanahInstalasi->value,
+                        'name'         => 'Penggalian Crossing :' . $record->crossing->name,
+                        'quantity'     => $quantity,
+                        'price'        => $price,
+                        'item_amount'  => $quantity * $price,
+                    ];
+                }
+
+                // Pre-fill klasifikasi SR
+                if ($record->klasifikasiSr) {
+                    $price   = (float) $record->klasifikasiSr->price;
+                    $items[] = [
+                        'category'     => BudgetItemCategory::PekerjaanPipaInstalasi->value,
+                        'sub_category' => BudgetItemSubCategory::LainLainInstalasi->value,
+                        'name'         => 'Klasifikasi SR : ' . $record->klasifikasiSr->name,
+                        'quantity'     => 1,
+                        'price'        => $price,
+                        'item_amount'  => $price,
+                    ];
+                }
+
+                return [
+                    'items' => $items,
+                ];
+            })
             ->schema([
                 Section::make('Info Budgeting')
                     ->hiddenLabel()
@@ -92,7 +139,7 @@ class CreateBudgetingAction extends Action
                                     ->readOnly(),
                             ])
                             ->columns(6)
-                            ->defaultItems(1)
+                            ->defaultItems(0)
                             ->addActionLabel('Tambah Item')
                             ->columnSpanFull(),
                     ])
