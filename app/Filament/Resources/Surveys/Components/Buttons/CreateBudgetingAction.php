@@ -45,11 +45,11 @@ class CreateBudgetingAction extends Action
                     ->columns(2)
                     ->columnSpanFull(),
 
-                Section::make('Item Pekerjaan')
+                Section::make('Item RAB')
                     ->hiddenLabel()
                     ->schema([
                         Repeater::make('items')
-                            ->label('Item Pekerjaan')
+                            ->label('Item RAB')
                             ->schema([
                                 Select::make('category')
                                     ->label('Kategori')
@@ -66,25 +66,32 @@ class CreateBudgetingAction extends Action
                                     )
                                     ->required(),
                                 TextInput::make('name')
-                                    ->label('Nama Pekerjaan')
-                                    ->required()
-                                    ->columnSpanFull(),
+                                    ->label('Nama Item')
+                                    ->required(),
                                 TextInput::make('quantity')
                                     ->label('Quantity')
                                     ->numeric()
-                                    ->required(),
+                                    ->required()
+                                    ->live()
+                                    ->afterStateUpdated(function ($state, $get, $set) {
+                                        $set('item_amount', (float) $state * (float) $get('price'));
+                                    }),
                                 TextInput::make('price')
                                     ->label('Harga Satuan')
                                     ->numeric()
                                     ->prefix('Rp')
-                                    ->required(),
+                                    ->required()
+                                    ->live()
+                                    ->afterStateUpdated(function ($state, $get, $set) {
+                                        $set('item_amount', (float) $get('quantity') * (float) $state);
+                                    }),
                                 TextInput::make('item_amount')
                                     ->label('Total Harga')
                                     ->numeric()
                                     ->prefix('Rp')
-                                    ->required(),
+                                    ->readOnly(),
                             ])
-                            ->columns(2)
+                            ->columns(6)
                             ->defaultItems(1)
                             ->addActionLabel('Tambah Item')
                             ->columnSpanFull(),
@@ -117,6 +124,6 @@ class CreateBudgetingAction extends Action
                     ->success()
                     ->send();
             })
-            ->modalWidth(Width::SevenExtraLarge);
+            ->modalWidth(Width::Full);
     }
 }
