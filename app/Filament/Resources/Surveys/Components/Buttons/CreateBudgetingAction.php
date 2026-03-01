@@ -2,7 +2,8 @@
 
 namespace App\Filament\Resources\Surveys\Components\Buttons;
 
-use App\Enums\BudgetItemType;
+use App\Enums\BudgetItemCategory;
+use App\Enums\BudgetItemSubCategory;
 use App\Helper\BudgetHelper;
 use App\Models\Budget;
 use App\Models\BudgetItem;
@@ -50,16 +51,20 @@ class CreateBudgetingAction extends Action
                         Repeater::make('items')
                             ->label('Item Pekerjaan')
                             ->schema([
-                                Select::make('type')
-                                    ->label('Tipe')
+                                Select::make('category')
+                                    ->label('Kategori')
+                                    ->options(BudgetItemCategory::options())
+                                    ->live()
+                                    ->afterStateUpdated(fn($set) => $set('sub_category', null))
+                                    ->required(),
+                                Select::make('sub_category')
+                                    ->label('Sub Kategori')
                                     ->options(
-                                        collect(BudgetItemType::cases())
-                                            ->mapWithKeys(fn(BudgetItemType $type) => [
-                                                $type->value => $type->getLabel(),
-                                            ])
+                                        fn($get) => filled($get('category'))
+                                            ? BudgetItemSubCategory::forCategory($get('category'))
+                                            : BudgetItemSubCategory::options()
                                     )
-                                    ->required()
-                                    ->columnSpanFull(),
+                                    ->required(),
                                 TextInput::make('name')
                                     ->label('Nama Pekerjaan')
                                     ->required()
@@ -97,12 +102,13 @@ class CreateBudgetingAction extends Action
 
                 foreach ($data['items'] as $item) {
                     BudgetItem::create([
-                        'budget_id'   => $budget->id,
-                        'type'        => $item['type'],
-                        'name'        => $item['name'],
-                        'quantity'    => $item['quantity'],
-                        'price'       => $item['price'],
-                        'item_amount' => $item['item_amount'],
+                        'budget_id'    => $budget->id,
+                        'category'     => $item['category'],
+                        'sub_category' => $item['sub_category'],
+                        'name'         => $item['name'],
+                        'quantity'     => $item['quantity'],
+                        'price'        => $item['price'],
+                        'item_amount'  => $item['item_amount'],
                     ]);
                 }
 
