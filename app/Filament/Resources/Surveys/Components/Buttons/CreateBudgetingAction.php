@@ -38,7 +38,7 @@ class CreateBudgetingAction extends Action
                     $items[] = [
                         'category'     => BudgetItemCategory::PekerjaanPipaDinas->value,
                         'sub_category' => BudgetItemSubCategory::MaterialPipaDanAccDinas->value,
-                        'name'         => 'Clamp Saddle : ' . $record->clampSaddle->name . ' (' . $record->clampSaddle->brand . ')',
+                        'name'         => $record->clampSaddle->name . ' (' . $record->clampSaddle->brand . ')',
                         'quantity'     => 1,
                         'price'        => $price,
                         'item_amount'  => $price,
@@ -52,7 +52,7 @@ class CreateBudgetingAction extends Action
                     $items[]  = [
                         'category'     => BudgetItemCategory::PekerjaanPipaInstalasi->value,
                         'sub_category' => BudgetItemSubCategory::PekerjaanTanahInstalasi->value,
-                        'name'         => 'Penggalian Crossing :' . $record->crossing->name,
+                        'name'         => $record->crossing->name,
                         'quantity'     => $quantity,
                         'price'        => $price,
                         'item_amount'  => $quantity * $price,
@@ -65,7 +65,7 @@ class CreateBudgetingAction extends Action
                     $items[] = [
                         'category'     => BudgetItemCategory::PekerjaanPipaInstalasi->value,
                         'sub_category' => BudgetItemSubCategory::LainLainInstalasi->value,
-                        'name'         => 'Klasifikasi SR : ' . $record->klasifikasiSr->name,
+                        'name'         => $record->klasifikasiSr->name,
                         'quantity'     => 1,
                         'price'        => $price,
                         'item_amount'  => $price,
@@ -116,23 +116,23 @@ class CreateBudgetingAction extends Action
                                     ->required(),
                                 Select::make('name')
                                     ->label('Nama Item')
-                                    ->options(
-                                        fn($get) => MaterialAndService::when(
-                                            filled($get('category')),
-                                            fn($q) => $q->where('category', MaterialAndServiceCategory::tryFrom($get('category')))
-                                        )->pluck('name', 'name')
-                                    )
+                                    ->options(MaterialAndService::all()->pluck('name', 'name'))
                                     ->live()
                                     ->afterStateUpdated(function ($state, $get, $set) {
                                         $item = MaterialAndService::where('name', $state)->first();
                                         if ($item) {
                                             $qty = (float) $get('quantity') ?: 1;
+                                            $set('unit', $item->unit);
                                             $set('price', $item->price);
                                             $set('item_amount', $qty * (float) $item->price);
                                         }
                                     })
                                     ->searchable()
                                     ->required(),
+                                TextInput::make('unit')
+                                    ->label('Satuan')
+                                    ->readOnly()
+                                    ->placeholder('-'),
                                 TextInput::make('quantity')
                                     ->label('Quantity')
                                     ->numeric()
@@ -181,6 +181,7 @@ class CreateBudgetingAction extends Action
                         'category'     => $item['category'],
                         'sub_category' => $item['sub_category'],
                         'name'         => $item['name'],
+                        'unit'         => $item['unit'] ?? null,
                         'quantity'     => $item['quantity'],
                         'price'        => $item['price'],
                         'item_amount'  => $item['item_amount'],
