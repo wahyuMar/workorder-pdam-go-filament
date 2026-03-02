@@ -17,18 +17,16 @@ class MaterialAndServiceForm
                 TextInput::make('name')
                     ->required(),
                 Select::make('category')
-                    ->options(MaterialAndServiceCategory::class)
+                    ->options(MaterialAndServiceCategory::options())
                     ->required(),
                 TextInput::make('unit'),
-                Toggle::make('is_deletable')
-                    ->required(),
-                Toggle::make('is_service')
-                    ->required(),
                 TextInput::make('price')
                     ->required()
                     ->numeric()
                     ->default(0.0)
-                    ->prefix('$'),
+                    ->prefix('IDR '),
+                Toggle::make('is_service')
+                    ->required(),
             ]);
     }
 }

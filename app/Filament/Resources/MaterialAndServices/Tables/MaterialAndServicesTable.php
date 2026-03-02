@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\MaterialAndServices\Tables;
 
+use App\Enums\BudgetItemCategory;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -15,18 +16,17 @@ class MaterialAndServicesTable
     {
         return $table
             ->columns([
+                TextColumn::make('category')
+                    ->badge()
+                    ->formatStateUsing(fn($state) => $state->getLabel()),
                 TextColumn::make('name')
                     ->searchable(),
-                TextColumn::make('category')
-                    ->badge(),
                 TextColumn::make('unit')
                     ->searchable(),
-                IconColumn::make('is_deletable')
-                    ->boolean(),
                 IconColumn::make('is_service')
                     ->boolean(),
                 TextColumn::make('price')
-                    ->money()
+                    ->money('idr')
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
