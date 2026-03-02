@@ -38,10 +38,11 @@ class CreateBudgetingAction extends Action
                     $items[] = [
                         'category'     => BudgetItemCategory::PekerjaanPipaDinas->value,
                         'sub_category' => BudgetItemSubCategory::MaterialPipaDanAccDinas->value,
-                        'name'         => $record->clampSaddle->name . ' (' . $record->clampSaddle->brand . ')',
+                        'name'         => 'Clamp Saddle ' . $record->clampSaddle->name . ' (' . $record->clampSaddle->brand . ')',
                         'quantity'     => 1,
                         'price'        => $price,
                         'item_amount'  => $price,
+                        'unit'         => $record->clampSaddle->unit,
                     ];
                 }
 
@@ -52,10 +53,11 @@ class CreateBudgetingAction extends Action
                     $items[]  = [
                         'category'     => BudgetItemCategory::PekerjaanPipaInstalasi->value,
                         'sub_category' => BudgetItemSubCategory::PekerjaanTanahInstalasi->value,
-                        'name'         => $record->crossing->name,
+                        'name'         => 'Crossing ' . $record->crossing->name,
                         'quantity'     => $quantity,
                         'price'        => $price,
                         'item_amount'  => $quantity * $price,
+                        'unit'         => $record->crossing->unit,
                     ];
                 }
 
@@ -65,10 +67,25 @@ class CreateBudgetingAction extends Action
                     $items[] = [
                         'category'     => BudgetItemCategory::PekerjaanPipaInstalasi->value,
                         'sub_category' => BudgetItemSubCategory::LainLainInstalasi->value,
-                        'name'         => $record->klasifikasiSr->name,
+                        'name'         => 'Klasifikasi SR ' . $record->klasifikasiSr->name,
                         'quantity'     => 1,
                         'price'        => $price,
                         'item_amount'  => $price,
+                        'unit'         => '-',
+                    ];
+                }
+
+                // Rabatan
+                if ($record->panjang_rabatan > 0) {
+                    $rabatan = MaterialAndService::find(5);
+                    $items[] = [
+                        'category'     => BudgetItemCategory::PekerjaanPipaInstalasi->value,
+                        'sub_category' => BudgetItemSubCategory::PekerjaanTanahInstalasi->value,
+                        'name'         => $rabatan->name,
+                        'quantity'     => $record->panjang_rabatan,
+                        'price'        => $rabatan->price,
+                        'item_amount'  => $record->panjang_rabatan * $rabatan->price,
+                        'unit'         => $rabatan->unit,
                     ];
                 }
 
@@ -105,7 +122,8 @@ class CreateBudgetingAction extends Action
                                     ->options(BudgetItemCategory::options())
                                     ->live()
                                     ->afterStateUpdated(fn($set) => $set('sub_category', null))
-                                    ->required(),
+                                    ->required()
+                                    ->columnSpan(2),
                                 Select::make('sub_category')
                                     ->label('Sub Kategori')
                                     ->options(
@@ -113,11 +131,14 @@ class CreateBudgetingAction extends Action
                                             ? BudgetItemSubCategory::forCategory($get('category'))
                                             : BudgetItemSubCategory::options()
                                     )
-                                    ->required(),
-                                Select::make('name')
+                                    ->required()
+                                    ->columnSpan(2),
+                                TextInput::make('name')
                                     ->label('Nama Item')
-                                    ->options(MaterialAndService::all()->pluck('name', 'name'))
-                                    ->live()
+                                    ->datalist(
+                                        MaterialAndService::all()->pluck('name')->toArray()
+                                    )
+                                    ->live(onBlur: true)
                                     ->afterStateUpdated(function ($state, $get, $set) {
                                         $item = MaterialAndService::where('name', $state)->first();
                                         if ($item) {
@@ -127,8 +148,8 @@ class CreateBudgetingAction extends Action
                                             $set('item_amount', $qty * (float) $item->price);
                                         }
                                     })
-                                    ->searchable()
-                                    ->required(),
+                                    ->required()
+                                    ->columnSpan(2),
                                 TextInput::make('unit')
                                     ->label('Satuan')
                                     ->readOnly()
@@ -149,14 +170,16 @@ class CreateBudgetingAction extends Action
                                     ->live()
                                     ->afterStateUpdated(function ($state, $get, $set) {
                                         $set('item_amount', (float) $get('quantity') * (float) $state);
-                                    }),
+                                    })
+                                    ->columnSpan(2),
                                 TextInput::make('item_amount')
                                     ->label('Total Harga')
                                     ->numeric()
                                     ->prefix('Rp')
-                                    ->readOnly(),
+                                    ->readOnly()
+                                    ->columnSpan(2),
                             ])
-                            ->columns(6)
+                            ->columns(12)
                             ->defaultItems(0)
                             ->addActionLabel('Tambah Item')
                             ->columnSpanFull(),
