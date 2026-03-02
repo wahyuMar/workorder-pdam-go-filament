@@ -4,9 +4,11 @@ namespace App\Filament\Resources\Surveys\Components\Buttons;
 
 use App\Enums\BudgetItemCategory;
 use App\Enums\BudgetItemSubCategory;
+use App\Enums\MaterialAndServiceCategory;
 use App\Helper\BudgetHelper;
 use App\Models\Budget;
 use App\Models\BudgetItem;
+use App\Models\MaterialAndService;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
@@ -25,7 +27,7 @@ class CreateBudgetingAction extends Action
         $name ??= 'createBudgeting';
 
         return parent::make($name)
-            ->label('Create Budgeting')
+            ->label('Create RAB')
             ->icon(Heroicon::DocumentText)
             ->fillForm(function ($record): array {
                 $items = [];
@@ -112,8 +114,24 @@ class CreateBudgetingAction extends Action
                                             : BudgetItemSubCategory::options()
                                     )
                                     ->required(),
-                                TextInput::make('name')
+                                Select::make('name')
                                     ->label('Nama Item')
+                                    ->options(
+                                        fn($get) => MaterialAndService::when(
+                                            filled($get('category')),
+                                            fn($q) => $q->where('category', MaterialAndServiceCategory::tryFrom($get('category')))
+                                        )->pluck('name', 'name')
+                                    )
+                                    ->live()
+                                    ->afterStateUpdated(function ($state, $get, $set) {
+                                        $item = MaterialAndService::where('name', $state)->first();
+                                        if ($item) {
+                                            $qty = (float) $get('quantity') ?: 1;
+                                            $set('price', $item->price);
+                                            $set('item_amount', $qty * (float) $item->price);
+                                        }
+                                    })
+                                    ->searchable()
                                     ->required(),
                                 TextInput::make('quantity')
                                     ->label('Quantity')
@@ -146,10 +164,13 @@ class CreateBudgetingAction extends Action
                     ->columnSpanFull(),
             ])
             ->action(function (array $data, $record) {
+                $totalAmount = collect($data['items'])->sum(fn($item) => (float) ($item['item_amount'] ?? 0));
+
                 $budget = Budget::create([
                     'budgeting_number' => BudgetHelper::generateBudgetingNumber(),
                     'date'             => $data['date'],
                     'blueprint'        => $data['blueprint'],
+                    'total_amount'     => $totalAmount,
                     'survey_id'        => $record->id,
                     'created_by'       => auth()->id(),
                 ]);
