@@ -14,15 +14,16 @@ use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
-use UnitEnum;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class BudgetResource extends Resource
 {
     protected static ?string $model = Budget::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::DocumentCurrencyDollar;
 
+    protected static ?string $navigationLabel = 'RAB';
     protected static ?string $recordTitleAttribute = 'budgeting_number';
     protected static string|UnitEnum|null $navigationGroup = 'Customer Registrations';
     protected static ?int $navigationSort = 12;
