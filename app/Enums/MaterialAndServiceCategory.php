@@ -8,6 +8,7 @@ enum MaterialAndServiceCategory: string
     case Crossing     = 'crossing';
     case Material     = 'material';
     case MaterialDinas = 'material_dinas';
+    case PekerjaanTanah = 'pekerjaan_tanah';
 
     public function getLabel(): string
     {
@@ -16,6 +17,7 @@ enum MaterialAndServiceCategory: string
             self::Crossing      => 'Crossing',
             self::Material      => 'Material',
             self::MaterialDinas => 'Material Dinas',
+            self::PekerjaanTanah => 'Pekerjaan Tanah',
         };
     }
 
