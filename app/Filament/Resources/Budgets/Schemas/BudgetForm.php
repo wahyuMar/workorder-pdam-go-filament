@@ -34,6 +34,8 @@ class BudgetForm
                             ->disk('public')
                             ->directory('budgets')
                             ->visibility('public')
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'application/pdf'])
+                            ->helperText('Format yang diterima: JPG, PNG, WEBP, GIF, PDF')
                             ->required(),
                     ])
                     ->columns(2)
