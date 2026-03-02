@@ -4,9 +4,9 @@ namespace App\Filament\Resources\Budgets\Schemas;
 
 use App\Enums\BudgetItemCategory;
 use App\Enums\BudgetItemSubCategory;
-use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\ViewEntry;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
@@ -45,10 +45,9 @@ class BudgetInfolist
 
                 Section::make('Denah Persil')
                     ->schema([
-                        ImageEntry::make('blueprint')
+                        ViewEntry::make('blueprint')
                             ->label('Denah Persil')
-                            ->disk('public')
-                            ->hiddenLabel()
+                            ->view('filament.infolists.blueprint-entry')
                             ->columnSpanFull(),
                     ])
                     ->columnSpanFull(),
