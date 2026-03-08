@@ -446,3 +446,5 @@ Forms\Components\Select::make('user_id')
 - Table filters: `Tables/Filters/`
 - Actions: `Actions/`
 </laravel-boost-guidelines>
+
+See agents.md for domain logic, business process, and coding rules guidelines if necessary.
