@@ -1,10 +1,8 @@
 {
     "agents": [
-        "copilot",
-        "gemini"
+        "copilot"
     ],
     "editors": [
-        "gemini",
         "vscode"
     ],
     "guidelines": [
