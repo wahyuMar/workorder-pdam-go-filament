@@ -1,62 +1,44 @@
-# Copilot Instructions for workorder-pdam-go-filament
 
-> **Note:** This file is an auto-synced mirror of `AGENTS.md` (the canonical source).
-> Do **not** edit this file directly — edit `AGENTS.md` at the repository root instead.
-> The Git pre-commit hook at `.git/hooks/pre-commit` keeps both in sync automatically.
+# Copilot Instructions (workorder-pdam-go-filament)
 
-This is the canonical AI instruction file for this repository and should be IDE-agnostic.
-If instructions change, update this file first, then sync tool-specific files.
+> Edit AGENTS.md, mirror ke copilot-instructions.md otomatis.
 
-## Canonical Source and Mirrors
-- Canonical source: `AGENTS.md`
-- Copilot mirror: `.github/copilot-instructions.md`
-- Team rule: keep both files aligned for cross-IDE consistency.
+## Context
+- Laravel 12 + Filament 4, PDAM work order.
+- PHP 8.2+, Vite/Tailwind, SQLite default.
+- Domain campuran Indonesia/English, naming konsisten.
 
-## Project Context
-- This repository is a Laravel 12 + Filament 4 work order management system for PDAM workflows.
-- Primary language is PHP. Frontend assets use Vite/Tailwind through Laravel defaults.
-- Domain terms are mixed Indonesian/English. Preserve existing domain vocabulary and naming.
+## Aturan Utama
+- Ikuti style kode sekitar, minimal edit, jangan reformat kode lain.
+- snake_case untuk DB, PascalCase untuk class, camelCase untuk method.
+- Label UI tetap Indonesia jika UI sekitarnya Indonesia.
+- Reuse enum/helper/model sebelum bikin baru.
+- Migration baru untuk schema, jangan edit migration lama.
+- Eloquent: relasi, eager loading, update $fillable/$casts/relasi.
+- Validasi: dekatkan ke boundary (Filament form rules/FormRequest).
+- Filament: resource layout, schema/table/page class, upload ke public disk.
+- Jangan hardcode credential, gunakan .env.
 
-## Tech Stack
-- PHP: 8.2+
-- Laravel: 12.x
-- Filament: 4.x
-- Database: SQLite by default (keep code DB-agnostic unless asked otherwise)
+## Proses Bisnis (Master Data → Budgeting)
+- Master data: Program, regional, MaterialAndService, KlasifikasiSr.
+- Registrasi: CustomerRegistrationResource, auto no_surat/tanggal, satu survey per registrasi.
+- Survey: dari ViewCustomerRegistration, auto no_survey, relasi ke registrasi.
+- Budgeting: dari ViewSurvey, auto budgeting_number, prefill 4 item dari survey (clamp saddle, crossing, klasifikasi SR, rabatan), repeater bisa edit.
+- Guardrail: rabatan id=5, semua item conditional, enum kategori/subkategori, chain integrity.
 
-## High-Confidence Conventions
+## Verifikasi
+- composer test / php artisan test
+- ./vendor/bin/pint
+- php artisan migrate --pretend
+- npm run build (jika frontend berubah)
 
-### General
-- Follow existing code style in nearby files; do not reformat unrelated code.
-- Keep changes minimal and scoped to the request.
-- Never edit `vendor/`, generated build artifacts, or unrelated files.
-- Prefer readable, explicit code over clever shortcuts.
+## Strategi Perubahan
+- Baca file terkait dulu, mirror struktur/naming, minimal edit, update test jika perlu, update AGENTS.md jika ada pengetahuan baru.
 
-### Naming and Domain Language
-- Keep database columns and persisted attributes in existing snake_case style (for example: `nama_lengkap`, `no_ktp`).
-- Keep class names in PascalCase and method names in camelCase.
-- Keep user-facing labels in Indonesian when surrounding UI uses Indonesian.
-- Reuse existing enums/helpers/models before introducing new abstractions.
-
-### Laravel Patterns
-- For schema changes, create migrations. Do not modify old migrations unless explicitly requested.
-- Use Eloquent relationships and eager loading to avoid N+1 queries.
-- Add `$fillable`, `$casts`, and relationship methods consistently with existing models.
-- Keep validation close to form/request boundaries (Filament form rules or FormRequest where appropriate).
-
-### Filament v4 Patterns
-- Follow current resource layout:
-  - `app/Filament/Resources/<PluralResourceName>/`
-  - `Schemas/` for form/infolist schema classes
-  - `Tables/` for table config
-  - `Pages/` for page classes
-- For new resource features, prefer extending existing schema/table classes instead of putting everything in the Resource class.
-- Use searchable selects and dependent selects consistently for regional hierarchy data (province/regency/district/village).
-- Keep upload fields on `public` disk and directory naming aligned with existing patterns.
-
-### Data and Safety
-- Do not hardcode secrets or credentials.
-- Use `.env` for runtime configuration values.
-- Keep map/location logic compatible with existing `DEFAULT_LATITUDE` and `DEFAULT_LONGITUDE` env usage.
+## Hindari
+- Arsitektur baru jika sudah ada pattern lokal.
+- Rename field ke English-only.
+- Refactor besar tanpa permintaan.
 
 ## Business Process Guide (Master Data to Budgeting)
 
