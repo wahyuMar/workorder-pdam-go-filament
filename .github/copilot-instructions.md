@@ -131,6 +131,7 @@ When the "Create RAB" action is triggered, up to **4 budget items** are pre-fill
 - **Price / item_amount:** `MaterialAndService.price` (quantity × price = price)
 - **Unit:** `MaterialAndService.unit`
 
+
 #### Item 2 — Crossing
 - **Condition:** generated only if `$survey->crossing` relation is not null (i.e. survey has a selected crossing material)
 - **Source fields:** `survey.material_crossing_id` → `MaterialAndService`, `survey.panjang_crossing` (length in meters)
