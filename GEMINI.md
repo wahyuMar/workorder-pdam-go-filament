@@ -1,4 +1,4 @@
-# Copilot Instructions for workorder-pdam-go-filament
+# GEMINI Guide for workorder-pdam-go-filament
 
 > **Note:** This file is an auto-synced mirror of `AGENTS.md` (the canonical source).
 > Do **not** edit this file directly — edit `AGENTS.md` at the repository root instead.

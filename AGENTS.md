@@ -68,16 +68,3 @@ Alur data utama (**Chain Integrity**) tidak boleh terputus:
 2. **Smallest Complete Change**: Implementasikan perubahan terkecil yang tetap fungsional dan lengkap.
 3. **Continuous Knowledge Update**: Jika tugas baru memperkenalkan konvensi atau workflow baru, update `AGENTS.md` terlebih dahulu, baru kemudian sinkronkan ke file instruksi ini.
 4. **Avoid**: Jangan memperkenalkan pola arsitektur baru jika pola lokal yang ada sudah mencukupi. Jangan mengubah nama field domain ke Bahasa Inggris murni tanpa instruksi eksplisit.
-
-## 6. Verification Commands
-```bash
-composer test
-# atau
-php artisan test
-
-./vendor/bin/pint
-
-php artisan migrate --pretend
-
-# Jika ada perubahan UI/Tailwind:
-npm run build
