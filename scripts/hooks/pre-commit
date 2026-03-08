@@ -1,0 +1,29 @@
+#!/bin/sh
+# Pre-commit hook: auto-sync AGENTS.md -> .github/copilot-instructions.md
+#
+# This keeps GitHub Copilot (VS Code) and other IDE AI tools in sync with the
+# canonical AGENTS.md instruction file. When you commit a change to AGENTS.md,
+# this hook regenerates copilot-instructions.md automatically and stages it.
+
+AGENTS="AGENTS.md"
+COPILOT=".github/copilot-instructions.md"
+
+# Only run if AGENTS.md is being committed
+if git diff --cached --name-only | grep -q "^${AGENTS}$"; then
+    echo "[pre-commit] AGENTS.md changed — syncing to ${COPILOT}..."
+
+    # Write header + full AGENTS.md content into copilot-instructions.md
+    {
+        echo "# Copilot Instructions for workorder-pdam-go-filament"
+        echo ""
+        echo "> **Note:** This file is an auto-synced mirror of \`AGENTS.md\` (the canonical source)."
+        echo "> Do **not** edit this file directly — edit \`AGENTS.md\` at the repository root instead."
+        echo "> The Git pre-commit hook at \`.git/hooks/pre-commit\` keeps both in sync automatically."
+        echo ""
+        # Skip the first line of AGENTS.md (its own title) and append the rest
+        tail -n +2 "${AGENTS}"
+    } > "${COPILOT}"
+
+    git add "${COPILOT}"
+    echo "[pre-commit] ${COPILOT} updated and staged."
+fi
