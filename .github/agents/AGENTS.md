@@ -1,210 +1,83 @@
-# AGENTS Guide for workorder-pdam-go-filament
+# Copilot Instructions — workorder-pdam-go-filament
 
-This is the canonical AI instruction file for this repository and should be IDE-agnostic.
-If instructions change, update this file first, then sync tool-specific files.
+## 1. Project Foundation & Tech Stack
+- **Core**: Laravel 12 (Streamlined Structure), Filament 4, Livewire 3, Tailwind 4.
+- **Environment**: PHP 8.3+, Vite, SQLite (default).
+- **Standards**: PSR-12, Laravel Pint.
+- **Boost Tools**: Gunakan `search-docs` untuk verifikasi sintaks L12/F4 terbaru. Gunakan `tinker` untuk debug Eloquent models secara langsung.
+- **Naming**: `snake_case` (DB columns), `PascalCase` (Classes), `camelCase` (Methods).
+- **Language**: Domain campuran (Indo/English). **Label UI wajib Bahasa Indonesia** jika komponen sekitarnya menggunakan Bahasa Indonesia.
 
-## Canonical Source and Mirrors
-- Canonical source: `AGENTS.md`
-- Copilot mirror: `.github/copilot-instructions.md`
-- Team rule: keep both files aligned for cross-IDE consistency.
+## 2. Coding Rules & Architecture
+### General Guidelines
+- **Mirroring**: Selalu ikuti pola kode, struktur, dan naming di file sekitar. Lakukan minimal edit; hindari reformat masif pada kode yang tidak terkait.
+- **Reuse**: Cek folder `Enums/`, `Helpers/`, `Actions/`, dan `Models/` sebelum membuat komponen baru.
+- **Logic Placement**: Logika bisnis berat harus berada di **Action classes** atau **Helpers**. Jangan menulis logika bisnis yang kompleks secara inline di dalam Filament Resource.
 
-## Project Context
-- This repository is a Laravel 12 + Filament 4 work order management system for PDAM workflows.
-- Primary language is PHP. Frontend assets use Vite/Tailwind through Laravel defaults.
-- Domain terms are mixed Indonesian/English. Preserve existing domain vocabulary and naming.
+### Laravel & Database
+- **Migrations**: Dilarang mengedit file migration yang sudah ada. Selalu buat file migration baru untuk perubahan skema.
+- **Eloquent**: Gunakan relasi resmi Laravel (`hasOne`, `belongsTo`, dll.), hindari penggunaan `DB::` raw query. Cegah masalah N+1 dengan *eager loading*.
+- **Models**: Saat menambah field baru, pastikan memperbarui `$fillable`, method `casts()`, dan relasi terkait di model.
+- **L12 Structure**: Konfigurasi middleware dan exception dilakukan di `bootstrap/app.php`. Service Provider di `bootstrap/providers.php`. (File `app/Http/Kernel.php` tidak digunakan).
 
-## Tech Stack
-- PHP: 8.2+
-- Laravel: 12.x
-- Filament: 4.x
-- Database: SQLite by default (keep code DB-agnostic unless asked otherwise)
+### Filament & UI
+- **Structure**: Patuhi organisasi folder: `Schemas/Components/`, `Tables/Columns/`, `Tables/Filters/`, dan `Actions/`.
+- **Fields**: Gunakan method `->relationship()` untuk Select, Checkbox, atau Repeater options.
+- **Storage**: Upload file (foto survey/dokumen) harus diarahkan ke **public disk**.
 
-## High-Confidence Conventions
+## 3. Business Process & Domain Logic (End-to-End)
+Alur data utama (**Chain Integrity**) tidak boleh terputus:
+**Master Data → Registration → Survey → Budgeting (RAB) → Budget Item**
 
-### General
-- Follow existing code style in nearby files; do not reformat unrelated code.
-- Keep changes minimal and scoped to the request.
-- Never edit `vendor/`, generated build artifacts, or unrelated files.
-- Prefer readable, explicit code over clever shortcuts.
+### 3.1. Master Data (Prerequisites)
+- Tabel referensi: `Program`, `Province`, `Regency`, `District`, `Village`, `MaterialAndService`, `KlasifikasiSr`.
+- Gunakan flag `is_selectable` pada data regional untuk mengontrol opsi di UI. Jangan melakukan hardcode nilai master data di dalam kode.
 
-### Naming and Domain Language
-- Keep database columns and persisted attributes in existing snake_case style (for example: `nama_lengkap`, `no_ktp`).
-- Keep class names in PascalCase and method names in camelCase.
-- Keep user-facing labels in Indonesian when surrounding UI uses Indonesian.
-- Reuse existing enums/helpers/models before introducing new abstractions.
+### 3.2. Customer Registration (`SRPB-*`)
+- Resource: `CustomerRegistrationResource` (Grup navigasi: `Customer Registrations`).
+- Mencakup: Identitas pelanggan, alamat instalasi, program, dokumen pendukung, dan koordinat map.
+- Auto-generate `no_surat` (via `CustomerRegistrationHelper::generateNoSurat()`) dan `tanggal` saat proses pembuatan data.
+- **Constraint**: Satu registrasi maksimal hanya boleh memiliki satu survey (`hasOne` relationship).
 
-### Laravel Patterns
-- For schema changes, create migrations. Do not modify old migrations unless explicitly requested.
-- Use Eloquent relationships and eager loading to avoid N+1 queries.
-- Add `$fillable`, `$casts`, and relationship methods consistently with existing models.
-- Keep validation close to form/request boundaries (Filament form rules or FormRequest where appropriate).
+### 3.3. Survey (`SRV-*`)
+- Trigger: Action `Create Survey` di halaman `ViewCustomerRegistration`.
+- Mencakup: Data pipa distribusi, lokasi titik SR, panjang rabatan, panjang crossing, foto lapangan, dan koordinat.
+- Relasi: Wajib terhubung secara eksplisit melalui `customer_registration_id`.
+- Auto-generate `no_survey` via `SurveyHelper::generateNoSurvey()`.
 
-### Filament v4 Patterns
-- Follow current resource layout:
-  - `app/Filament/Resources/<PluralResourceName>/`
-  - `Schemas/` for form/infolist schema classes
-  - `Tables/` for table config
-  - `Pages/` for page classes
-- For new resource features, prefer extending existing schema/table classes instead of putting everything in the Resource class.
-- Use searchable selects and dependent selects consistently for regional hierarchy data (province/regency/district/village).
-- Keep upload fields on `public` disk and directory naming aligned with existing patterns.
+### 3.4. Budgeting / RAB (`BGT-*`)
+- Trigger: Action `Create RAB` (atau `CreateBudgetingAction`) di halaman `ViewSurvey`.
+- Header: `budgeting_number`, `date`, `survey_id`, `created_by`, `total_amount`.
+- **Auto-Prefill Items (Kritikal)**:
+    - **Clamp Saddle**: Generate jika `survey.material_clamp_saddle_id` terisi.
+    - **Crossing**: Generate jika `survey.material_crossing_id` terisi (Qty = `survey.panjang_crossing`).
+    - **Klasifikasi SR**: Generate berdasarkan `survey.klasifikasi_sr_id` (Qty = 1).
+    - **Rabatan**: Generate jika `survey.panjang_rabatan > 0`. **WAJIB menggunakan `MaterialAndService::find(5)`** (ID 5 adalah referensi tetap untuk Rabatan).
+- **Data Persistence**: Disimpan di tabel `budgets` dan `budget_items`.
+- **Enums**: Kategori dan Sub-kategori item harus menggunakan `BudgetItemCategory` dan `BudgetItemSubCategory`.
 
-### Data and Safety
-- Do not hardcode secrets or credentials.
-- Use `.env` for runtime configuration values.
-- Keep map/location logic compatible with existing `DEFAULT_LATITUDE` and `DEFAULT_LONGITUDE` env usage.
+## 4. Guardrails & Verification
+- **Prefixes**: Jangan mengubah format nomor otomatis: `SRPB-` (Reg), `SRV-` (Survey), `BGT-` (Budget).
+- **Rabatan Reference**: ID 5 di tabel `material_and_services` adalah referensi sakral; jangan dihapus atau diubah urutannya.
+- **Security**: Selalu gunakan `config()` untuk mengakses variabel `.env`. Jangan melakukan hardcode kredensial.
+- **Testing & Style**: Jalankan `php artisan test` dan `./vendor/bin/pint` secara rutin.
+- **Frontend**: Jalankan `npm run build` jika ada perubahan pada file CSS (Tailwind 4) atau aset Vite lainnya.
 
-## Business Process Guide (Master Data to Budgeting)
+## 5. Change Strategy for AI
+1. **Read & Analyze**: Baca file model, resource, schema, dan action yang berkaitan sebelum mulai menulis kode.
+2. **Smallest Complete Change**: Implementasikan perubahan terkecil yang tetap fungsional dan lengkap.
+3. **Continuous Knowledge Update**: Jika tugas baru memperkenalkan konvensi atau workflow baru, update `AGENTS.md` terlebih dahulu, baru kemudian sinkronkan ke file instruksi ini.
+4. **Avoid**: Jangan memperkenalkan pola arsitektur baru jika pola lokal yang ada sudah mencukupi. Jangan mengubah nama field domain ke Bahasa Inggris murni tanpa instruksi eksplisit.
 
-### Scope
-- This section documents only the flow from `Master Data` setup to `Customer Registration`, `Survey`, and `RAB/Budgeting`.
-- Work order execution flow after budgeting is intentionally out of scope for now.
-
-### Customer Registration Steps (End-to-End)
-1. Admin prepares required master data in `Master Data` menu: `Program`, regional hierarchy (`Province -> Regency -> District -> Village`), `MaterialAndService`, and `KlasifikasiSr`.
-2. Customer registration is submitted through `CustomerRegistrationResource` with identity, address, contact, house/utilities, document uploads, and location coordinates.
-3. System saves registration and auto-generates `no_surat` (`SRPB-...`) plus `tanggal` during create flow.
-4. Field staff opens the registration detail page (`ViewCustomerRegistration`) and runs `Create Survey` when no survey exists.
-5. Field staff fills survey data (distribution pipe, SR location, rabatan, crossing, photos, classifications) and submits; system generates `no_survey` (`SRV-...`) and links it to the registration.
-6. Field staff/reviewer opens survey detail (`ViewSurvey`) and runs `Create RAB` to create budgeting when no budget exists yet.
-7. System pre-fills budgeting items from survey references (clamp saddle, crossing, klasifikasi SR, rabatan), allows manual adjustment, then saves `Budget` and `BudgetItem` records.
-8. Final stage for this scope: budgeting is saved with generated `budgeting_number` (`BGT-...`) and aggregated `total_amount`.
-
-### 1) Master Data Preparation
-- Maintain reference data under `Master Data` resources before transactional input.
-- Core master data in this scope:
-  - `Program` (`ProgramsResource`)
-  - Regional hierarchy: `Province`, `Regency`, `District`, `Village`
-  - `MaterialAndService` (used by Survey and RAB item pricing)
-  - `KlasifikasiSr` (used by Survey and RAB prefill)
-- Regional master data uses dependent hierarchy and selectability flags (`is_selectable`) to control available options.
-- AI should preserve existing relationships and avoid bypassing master data with hardcoded values.
-
-### 2) Customer Registration Process
-- Entry point: `CustomerRegistrationResource` (`Customer Registrations` navigation group).
-- Registration captures:
-  - Identitas pelanggan (`nama_lengkap`, `no_ktp`, `no_kk`, contacts)
-  - Program assignment (`program_id`)
-  - KTP address and installation address (province -> regency -> district -> village)
-  - House/utilities data and supporting uploads
-  - Map coordinates (`latitude`, `longitude`)
-- System-generated values on create:
-  - `no_surat` generated by `CustomerRegistrationHelper::generateNoSurat()`
-  - `tanggal` set during create flow
-- One registration is expected to lead to at most one survey (`hasOne` survey relation in model).
-
-### 3) Survey Process (from Customer Registration)
-- Survey creation is triggered from `ViewCustomerRegistration` via `CreateSurveyAction`.
-- Behavior:
-  - If survey does not exist: show `Create Survey` action
-  - If survey exists: show `Go To Survey` action
-- Survey data includes distribution pipe, SR point, rabatan, crossing, photos, klasifikasi SR, and map coordinates.
-- Survey number is generated by `SurveyHelper::generateNoSurvey()`.
-- Survey persists linkage to registration via `customer_registration_id` and stores `created_by`.
-- In this repository flow, survey creation is controlled from registration detail, not from generic survey list create.
-
-### 4) Budgeting/RAB Process (from Survey)
-- Budgeting is triggered from `ViewSurvey` via `CreateBudgetingAction`.
-- Action is visible only when survey has no existing budgeting record.
-- Budgeting header includes:
-  - `budgeting_number` generated by `BudgetHelper::generateBudgetingNumber()`
-  - `date`, `blueprint`, `survey_id`, `created_by`, `total_amount`
-- Budget items are stored in related `BudgetItem` rows.
-- The repeater is pre-filled from survey data (see sub-section below) and can be manually adjusted before saving.
-- Total budgeting amount is aggregated from item totals (`item_amount`) before saving.
-
-### 4a) Default Budget Items Auto-Generated from Survey Data
-
-When the "Create RAB" action is triggered, up to **4 budget items** are pre-filled automatically based on the linked survey record. All items are generated inside `CreateBudgetingAction::fillForm()`.
-
-#### Item 1 — Clamp Saddle
-- **Condition:** generated only if `$survey->clampSaddle` relation is not null (i.e. survey has a selected clamp saddle material)
-- **Source field:** `survey.material_clamp_saddle_id` → `MaterialAndService` record
-- **Category:** `pekerjaan_pipa_dinas` (Pekerjaan Pipa Dinas)
-- **Sub-category:** `material_pipa_dan_acc_dinas` (Material Pipa & Acc Dinas)
-- **Name format:** `"Clamp Saddle {name} ({brand})"` — taken from the `MaterialAndService` record
-- **Quantity:** fixed at `1`
-- **Price / item_amount:** `MaterialAndService.price` (quantity × price = price)
-- **Unit:** `MaterialAndService.unit`
-
-#### Item 2 — Crossing
-- **Condition:** generated only if `$survey->crossing` relation is not null (i.e. survey has a selected crossing material)
-- **Source fields:** `survey.material_crossing_id` → `MaterialAndService`, `survey.panjang_crossing` (length in meters)
-- **Category:** `pekerjaan_pipa_instalasi` (Pekerjaan Pipa Instalasi)
-- **Sub-category:** `pekerjaan_tanah_instalasi` (Pekerjaan Tanah Instalasi)
-- **Name format:** `"Crossing {name}"` — taken from the `MaterialAndService` record
-- **Quantity:** `$survey->panjang_crossing` (integer, length of crossing in m)
-- **Price:** `MaterialAndService.price` (per-unit price)
-- **item_amount:** `panjang_crossing × price`
-- **Unit:** `MaterialAndService.unit`
-
-#### Item 3 — Klasifikasi SR
-- **Condition:** generated only if `$survey->klasifikasiSr` relation is not null
-- **Source field:** `survey.klasifikasi_sr_id` → `KlasifikasiSr` record
-- **Category:** `pekerjaan_pipa_instalasi` (Pekerjaan Pipa Instalasi)
-- **Sub-category:** `lain_lain_instalasi` (Lain-lain Instalasi)
-- **Name format:** `"Klasifikasi SR {name}"` — taken from the `KlasifikasiSr` record
-- **Quantity:** fixed at `1`
-- **Price / item_amount:** `KlasifikasiSr.price`
-- **Unit:** hardcoded as `"-"` (no unit for this type)
-
-#### Item 4 — Rabatan
-- **Condition:** generated only if `$survey->panjang_rabatan > 0`
-- **Source:** `MaterialAndService::find(5)` — **hardcoded ID 5** is the rabatan entry in `material_and_services` table. Do not delete or reorder this record.
-- **Category:** `pekerjaan_pipa_instalasi` (Pekerjaan Pipa Instalasi)
-- **Sub-category:** `pekerjaan_tanah_instalasi` (Pekerjaan Tanah Instalasi)
-- **Name:** taken directly from `MaterialAndService.name` (id=5)
-- **Quantity:** `$survey->panjang_rabatan` (length in meters)
-- **Price:** `MaterialAndService.price` (id=5)
-- **item_amount:** `panjang_rabatan × price`
-- **Unit:** `MaterialAndService.unit` (id=5)
-
-#### Guardrails for AI — Budget Item Prefill
-- Do **not** change the hardcoded `MaterialAndService::find(5)` for rabatan without also updating the seeder/migration that guarantees that record.
-- All 4 items are **conditional** — if the survey field is null/zero, no item is generated.
-- The repeater allows the user to add, edit, or remove items after prefill — prefill is a starting point, not a locked set.
-- Category and sub-category values must come from `BudgetItemCategory` and `BudgetItemSubCategory` enums respectively; do not use raw strings.
-
-### Process Guardrails for AI Changes
-- Preserve chain integrity: `CustomerRegistration -> Survey -> Budget -> BudgetItem`.
-- Do not change generated numbering format (`SRPB-`, `SRV-`, `BGT-`) unless explicitly requested.
-- Keep Survey and Budget creation actions contextual from parent records.
-- Keep upload disk as `public` and follow existing folder patterns (`customer-registrations/`, `surveys`, `budgets`).
-- When adding fields in this flow, update model fillable/casts, Filament schemas/infolists/tables, and relation loading consistently.
-
-## Verification
-Run relevant commands for touched areas:
-
+## 6. Verification Commands
 ```bash
 composer test
-# or
+# atau
 php artisan test
 
 ./vendor/bin/pint
 
 php artisan migrate --pretend
-```
 
-If frontend assets are changed:
-
-```bash
+# Jika ada perubahan UI/Tailwind:
 npm run build
-```
-
-## Change Strategy for AI
-1. Read related model/resource/schema/table files first.
-2. Mirror existing naming and structure.
-3. Implement the smallest complete change.
-4. Add or update tests for behavior changes when feasible.
-5. If the task introduces or clarifies conventions, workflow steps, or guardrails, update `AGENTS.md` first, then sync `.github/copilot-instructions.md`.
-6. Summarize changed files and any manual follow-up steps.
-
-## Instruction Maintenance
-- After completing a task, always check whether new project knowledge was introduced (patterns, constraints, process updates).
-- If yes, update `AGENTS.md` and sync `.github/copilot-instructions.md` in the same task.
-- Keep updates concise and scoped; do not rewrite unrelated sections.
-
-## Avoid
-- Introducing new architectural patterns when existing local patterns already solve the problem.
-- Renaming domain fields just to make them English-only.
-- Large cross-module refactors unless explicitly requested.
