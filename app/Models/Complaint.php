@@ -166,4 +166,9 @@ class Complaint extends Model
     {
         return $this->hasOne(MeterRepair::class);
     }
+
+    public function repairReport()
+    {
+        return $this->hasOne(RepairReport::class);
+    }
 }
