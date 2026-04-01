@@ -11,6 +11,8 @@ enum WorkOrderEnum: string
     case UBAH_NAMA = 'Ubah Nama';
     case GANTI_ALAMAT = 'Ganti Alamat';
     case GANTI_TARIF = 'Ganti Tarif';
+    case PERBAIKAN = 'Perbaikan';
+    case TERA_METER = 'Tera Meter';
 
     public static function toArray(): array
     {
