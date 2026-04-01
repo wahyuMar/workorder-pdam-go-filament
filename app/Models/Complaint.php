@@ -89,7 +89,7 @@ class Complaint extends Model
 
             $formattedNumber = str_pad($newNumber, 4, '0', STR_PAD_LEFT);
 
-            return $row->prefix . '-' . now()->format('Ymd') . '-' . $formattedNumber;
+            return $row->prefix.'-'.now()->format('Ymd').'-'.$formattedNumber;
         });
     }
 
@@ -113,7 +113,7 @@ class Complaint extends Model
 
         $nextNumber = ($row->last_date === $today) ? $row->last_number + 1 : 1;
 
-        return $row->prefix . '-' . now()->format('Ymd') . '-' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+        return $row->prefix.'-'.now()->format('Ymd').'-'.str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
     }
 
     public function complaintType()
@@ -160,5 +160,10 @@ class Complaint extends Model
     public function meterRateChange()
     {
         return $this->hasOne(MeterRateChange::class);
+    }
+
+    public function meterRepair()
+    {
+        return $this->hasOne(MeterRepair::class);
     }
 }
