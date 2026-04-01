@@ -167,8 +167,18 @@ class Complaint extends Model
         return $this->hasOne(MeterRepair::class);
     }
 
+    public function meterTera()
+    {
+        return $this->hasOne(MeterTera::class);
+    }
+
     public function repairReport()
     {
         return $this->hasOne(RepairReport::class);
+    }
+
+    public function teraMeterReport()
+    {
+        return $this->hasOne(TeraMeterReport::class);
     }
 }
