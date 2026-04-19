@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('nama_jalan_lama')->nullable()->after('id_jalan_lama');
             $table->string('nama_rt_rw_lama')->nullable()->after('id_rt_rw_lama');
             $table->string('nama_kolektor_lama')->nullable()->after('id_kolektor_lama');
-            
+
             // New address names
             $table->string('nama_unit_baru')->nullable()->after('id_unit_baru');
             $table->string('nama_desa_baru')->nullable()->after('id_desa_baru');

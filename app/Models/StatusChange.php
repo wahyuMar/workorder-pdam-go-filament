@@ -39,7 +39,7 @@ class StatusChange extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            if (!$model->no_baus) {
+            if (! $model->no_baus) {
                 $model->no_baus = self::generateNoBAUS();
             }
         });
@@ -50,6 +50,7 @@ class StatusChange extends Model
         return DB::transaction(function () {
             $counter = DB::table('status_changes')->lockForUpdate()->count();
             $date = now()->format('Ymd');
+
             return sprintf('BAUS-%s-%04d', $date, $counter + 1);
         });
     }
@@ -58,6 +59,7 @@ class StatusChange extends Model
     {
         $counter = StatusChange::count();
         $date = now()->format('Ymd');
+
         return sprintf('BAUS-%s-%04d', $date, $counter + 1);
     }
 

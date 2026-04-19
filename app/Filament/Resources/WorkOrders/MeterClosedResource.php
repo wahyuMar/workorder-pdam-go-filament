@@ -18,12 +18,17 @@ class MeterClosedResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::LockClosed;
 
     protected static ?string $navigationLabel = 'Meter Closed';
+
     protected static string|UnitEnum|null $navigationGroup = 'Work Order';
+
     protected static ?int $navigationSort = 2;
 
     protected static ?string $slug = 'work-orders/meter-closed';
+
     protected static ?string $modelLabel = 'Meter Closed';
+
     protected static ?string $pluralModelLabel = 'Meter Closed';
+
     protected static ?string $breadcrumb = 'Meter Closed';
 
     public static function table(Table $table): Table

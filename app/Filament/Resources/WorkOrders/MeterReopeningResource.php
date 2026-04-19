@@ -18,12 +18,17 @@ class MeterReopeningResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::LockOpen;
 
     protected static ?string $navigationLabel = 'Meter Reopening';
+
     protected static string|UnitEnum|null $navigationGroup = 'Work Order';
+
     protected static ?int $navigationSort = 3;
 
     protected static ?string $slug = 'work-orders/meter-reopening';
+
     protected static ?string $modelLabel = 'Meter Reopening';
+
     protected static ?string $pluralModelLabel = 'Meter Reopening';
+
     protected static ?string $breadcrumb = 'Meter Reopening';
 
     public static function table(Table $table): Table

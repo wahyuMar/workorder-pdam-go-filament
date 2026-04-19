@@ -22,7 +22,7 @@ class MeterDisconnectionFactory extends Factory
     public function definition(): array
     {
         return [
-            'no_spcl' => 'SPCL-' . now()->format('Ymd') . '-' . fake()->unique()->numerify('####'),
+            'no_spcl' => 'SPCL-'.now()->format('Ymd').'-'.fake()->unique()->numerify('####'),
             'complaint_id' => Complaint::factory(),
             'pegawai_id' => User::factory(),
             'nama_pegawai' => fake()->name(),

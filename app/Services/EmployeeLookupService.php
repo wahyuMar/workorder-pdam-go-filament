@@ -16,7 +16,7 @@ class EmployeeLookupService
         try {
             $response = Http::withHeaders([
                 'X-App-Key' => $appKey,
-            ])->get($baseUri . '/external/employees');
+            ])->get($baseUri.'/external/employees');
         } catch (\Throwable $e) {
             Log::warning('Employee lookup failed', [
                 'error' => $e->getMessage(),

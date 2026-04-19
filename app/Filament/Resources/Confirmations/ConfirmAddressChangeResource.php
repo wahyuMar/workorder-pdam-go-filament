@@ -18,12 +18,17 @@ class ConfirmAddressChangeResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::CheckCircle;
 
     protected static ?string $navigationLabel = 'Ubah Alamat';
+
     protected static string|UnitEnum|null $navigationGroup = 'Confirmation';
+
     protected static ?int $navigationSort = 2;
 
     protected static ?string $slug = 'confirmations/address-change';
+
     protected static ?string $modelLabel = 'Ubah Alamat';
+
     protected static ?string $pluralModelLabel = 'Ubah Alamat';
+
     protected static ?string $breadcrumb = 'Ubah Alamat';
 
     public static function table(Table $table): Table

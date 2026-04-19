@@ -26,27 +26,29 @@ class DatabaseSeeder extends Seeder
     {
         try {
             DB::beginTransaction();
-            // User::factory()
-            //     ->count(2)
-            //     ->state(
-            //         new Sequence(
-            //             [
-            //                 'name' => 'Admin User',
-            //                 'email' => 'admin@example.com',
-            //                 'role' => UserRoleEnum::ADMIN->value
-            //             ],
-            //             [
-            //                 'name' => 'Regular User',
-            //                 'email' => 'user@example.com',
-            //                 'role' => UserRoleEnum::USER->value
-            //             ],
-            //         )
-            //     )
-            //     ->create([
-            //         'password' => Hash::make('password'),
-            //     ]);
 
-            // Program::factory(10)->create(['is_active' => true]);
+            $this->call(CustomerRoleSeeder::class);
+            User::factory()
+                ->count(2)
+                ->state(
+                    new Sequence(
+                        [
+                            'name' => 'Admin User',
+                            'email' => 'admin@example.com',
+                            'role' => UserRoleEnum::ADMIN->value
+                        ],
+                        [
+                            'name' => 'Regular User',
+                            'email' => 'user@example.com',
+                            'role' => UserRoleEnum::USER->value
+                        ],
+                    )
+                )
+                ->create([
+                    'password' => Hash::make('password'),
+                ]);
+
+            Program::factory(10)->create(['is_active' => true]);
 
             Province::factory()
                 ->has(
@@ -54,10 +56,10 @@ class DatabaseSeeder extends Seeder
                         ->state(
                             new Sequence(
                                 [
-                                    'is_selectable' => true
+                                    'is_selectable' => true,
                                 ],
                                 [
-                                    'is_selectable' => false
+                                    'is_selectable' => false,
                                 ],
                             )
                         )
@@ -74,10 +76,10 @@ class DatabaseSeeder extends Seeder
                 ->state(
                     new Sequence(
                         [
-                            'is_selectable' => true
+                            'is_selectable' => true,
                         ],
                         [
-                            'is_selectable' => false
+                            'is_selectable' => false,
                         ],
                     )
                 )->create();

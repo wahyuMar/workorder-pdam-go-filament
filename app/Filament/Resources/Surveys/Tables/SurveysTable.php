@@ -29,7 +29,7 @@ class SurveysTable
                     ->label('Lokasi Pipa Dist.')
                     ->icon(Heroicon::MapPin)
                     ->color(Color::Red)
-                    ->url(fn($record) => MapHelper::generateGoogleMapLink($record->lokasi_pipa_distribusi_lat, $record->lokasi_pipa_distribusi_long))
+                    ->url(fn ($record) => MapHelper::generateGoogleMapLink($record->lokasi_pipa_distribusi_lat, $record->lokasi_pipa_distribusi_long))
                     ->openUrlInNewTab(),
                 TextColumn::make('panjang_pipa_sr')
                     ->label('Panjang Pipa SR')
@@ -40,7 +40,7 @@ class SurveysTable
                     ->label('Lokasi SR')
                     ->icon(Heroicon::MapPin)
                     ->color(Color::Red)
-                    ->url(fn($record) => MapHelper::generateGoogleMapLink($record->lokasi_sr_lat, $record->lokasi_sr_long))
+                    ->url(fn ($record) => MapHelper::generateGoogleMapLink($record->lokasi_sr_lat, $record->lokasi_sr_long))
                     ->openUrlInNewTab(),
                 TextColumn::make('panjang_rabatan')
                     ->label('Panjang Rabatan')
@@ -51,7 +51,7 @@ class SurveysTable
                     ->label('Lokasi Rabatan')
                     ->icon(Heroicon::MapPin)
                     ->color(Color::Red)
-                    ->url(fn($record) => MapHelper::generateGoogleMapLink($record->lokasi_rabatan_lat, $record->lokasi_rabatan_long))
+                    ->url(fn ($record) => MapHelper::generateGoogleMapLink($record->lokasi_rabatan_lat, $record->lokasi_rabatan_long))
                     ->openUrlInNewTab(),
                 TextColumn::make('panjang_crossing')
                     ->label('Panjang Crossing')
@@ -62,7 +62,7 @@ class SurveysTable
                     ->label('Lokasi Crossing')
                     ->icon(Heroicon::MapPin)
                     ->color(Color::Red)
-                    ->url(fn($record) => MapHelper::generateGoogleMapLink($record->lokasi_crossing_lat, $record->lokasi_crossing_long))
+                    ->url(fn ($record) => MapHelper::generateGoogleMapLink($record->lokasi_crossing_lat, $record->lokasi_crossing_long))
                     ->openUrlInNewTab(),
                 TextColumn::make('clampSaddle.name')
                     ->label('Clamp Saddle')

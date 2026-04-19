@@ -10,9 +10,9 @@ class MaterialAndService extends Model
     protected $guarded = [];
 
     protected $casts = [
-        'category'     => MaterialAndServiceCategory::class,
-        'price'        => 'decimal:2',
+        'category' => MaterialAndServiceCategory::class,
+        'price' => 'decimal:2',
         'is_deletable' => 'boolean',
-        'is_service'   => 'boolean',
+        'is_service' => 'boolean',
     ];
 }

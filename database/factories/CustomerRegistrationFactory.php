@@ -69,6 +69,7 @@ class CustomerRegistrationFactory extends Factory
             'longitude' => fake()->longitude(106.0, 112.0),
             'latitude' => fake()->latitude(-8.5, -6.5),
             'tanggal' => fake()->dateTimeBetween('-3 months', 'now'),
+            'source' => 'manual',
         ];
     }
 }

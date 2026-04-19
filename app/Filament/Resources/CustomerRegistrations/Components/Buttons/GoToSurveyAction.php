@@ -16,6 +16,6 @@ class GoToSurveyAction extends Action
             ->label('Go To Survey')
             ->icon(Heroicon::ClipboardDocumentCheck)
             ->color(Color::Emerald)
-            ->url(fn($record) => route('filament.admin.resources.surveys.view', $record->survey));
+            ->url(fn ($record) => route('filament.admin.resources.surveys.view', $record->survey));
     }
 }

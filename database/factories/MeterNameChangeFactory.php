@@ -21,7 +21,7 @@ class MeterNameChangeFactory extends Factory
     public function definition(): array
     {
         return [
-            'no_spun' => 'SPUN-' . now()->format('Ymd') . '-' . fake()->unique()->numerify('####'),
+            'no_spun' => 'SPUN-'.now()->format('Ymd').'-'.fake()->unique()->numerify('####'),
             'complaint_id' => Complaint::factory(),
             'pegawai_id' => null,
             'nama_pegawai' => fake()->name(),
@@ -51,7 +51,7 @@ class MeterNameChangeFactory extends Factory
      */
     public function confirmed(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'is_confirmed' => true,
         ]);
     }

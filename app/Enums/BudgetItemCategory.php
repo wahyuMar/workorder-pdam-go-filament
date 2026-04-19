@@ -10,7 +10,7 @@ enum BudgetItemCategory: string
     public function getLabel(): string
     {
         return match ($this) {
-            self::PekerjaanPipaDinas    => 'Pekerjaan Pipa Dinas',
+            self::PekerjaanPipaDinas => 'Pekerjaan Pipa Dinas',
             self::PekerjaanPipaInstalasi => 'Pekerjaan Pipa Instalasi',
         };
     }
@@ -20,7 +20,7 @@ enum BudgetItemCategory: string
     {
         return array_filter(
             BudgetItemSubCategory::cases(),
-            fn(BudgetItemSubCategory $sub) => $sub->getCategory() === $this,
+            fn (BudgetItemSubCategory $sub) => $sub->getCategory() === $this,
         );
     }
 
@@ -28,7 +28,7 @@ enum BudgetItemCategory: string
     public function subCategoryOptions(): array
     {
         return collect($this->getSubCategories())
-            ->mapWithKeys(fn(BudgetItemSubCategory $sub) => [
+            ->mapWithKeys(fn (BudgetItemSubCategory $sub) => [
                 $sub->value => $sub->getLabel(),
             ])
             ->all();
@@ -38,7 +38,7 @@ enum BudgetItemCategory: string
     public static function options(): array
     {
         return collect(self::cases())
-            ->mapWithKeys(fn(self $c) => [$c->value => $c->getLabel()])
+            ->mapWithKeys(fn (self $c) => [$c->value => $c->getLabel()])
             ->all();
     }
 }

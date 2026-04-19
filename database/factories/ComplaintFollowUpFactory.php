@@ -23,7 +23,7 @@ class ComplaintFollowUpFactory extends Factory
     {
         return [
             'complaint_id' => Complaint::factory(),
-            'complaint_number' => 'PGD-' . now()->format('Ymd') . '-' . fake()->unique()->numerify('####'),
+            'complaint_number' => 'PGD-'.now()->format('Ymd').'-'.fake()->unique()->numerify('####'),
             'carbon_copies' => [fake()->name(), fake()->name()],
             'work_order' => fake()->randomElement(WorkOrderEnum::cases()),
             'notes' => fake()->paragraph(),

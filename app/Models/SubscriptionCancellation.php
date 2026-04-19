@@ -31,7 +31,7 @@ class SubscriptionCancellation extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            if (!$model->no_bacl) {
+            if (! $model->no_bacl) {
                 $model->no_bacl = self::generateNoBACL();
             }
         });
@@ -42,6 +42,7 @@ class SubscriptionCancellation extends Model
         return DB::transaction(function () {
             $counter = DB::table('subscription_cancellations')->lockForUpdate()->count();
             $date = now()->format('Ymd');
+
             return sprintf('BACL-%s-%04d', $date, $counter + 1);
         });
     }
@@ -50,6 +51,7 @@ class SubscriptionCancellation extends Model
     {
         $counter = SubscriptionCancellation::count();
         $date = now()->format('Ymd');
+
         return sprintf('BACL-%s-%04d', $date, $counter + 1);
     }
 

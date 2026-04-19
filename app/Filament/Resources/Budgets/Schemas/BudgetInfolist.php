@@ -59,11 +59,11 @@ class BudgetInfolist
                             ->schema([
                                 TextEntry::make('category')
                                     ->label('Kategori')
-                                    ->formatStateUsing(fn($state) => $state instanceof BudgetItemCategory ? $state->getLabel() : $state)
+                                    ->formatStateUsing(fn ($state) => $state instanceof BudgetItemCategory ? $state->getLabel() : $state)
                                     ->columnSpan(2),
                                 TextEntry::make('sub_category')
                                     ->label('Sub Kategori')
-                                    ->formatStateUsing(fn($state) => $state instanceof BudgetItemSubCategory ? $state->getLabel() : $state)
+                                    ->formatStateUsing(fn ($state) => $state instanceof BudgetItemSubCategory ? $state->getLabel() : $state)
                                     ->columnSpan(2),
                                 TextEntry::make('name')
                                     ->label('Nama Item')

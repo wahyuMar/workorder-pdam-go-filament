@@ -34,7 +34,7 @@ class MeterReplacementHandover extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            if (!$model->no_bast_gm) {
+            if (! $model->no_bast_gm) {
                 $model->no_bast_gm = self::generateNoBASTGM();
             }
         });
@@ -45,6 +45,7 @@ class MeterReplacementHandover extends Model
         return DB::transaction(function () {
             $counter = DB::table('meter_replacement_handovers')->lockForUpdate()->count();
             $date = now()->format('Ymd');
+
             return sprintf('BAST-GM-%s-%04d', $date, $counter + 1);
         });
     }
@@ -53,6 +54,7 @@ class MeterReplacementHandover extends Model
     {
         $counter = MeterReplacementHandover::count();
         $date = now()->format('Ymd');
+
         return sprintf('BAST-GM-%s-%04d', $date, $counter + 1);
     }
 

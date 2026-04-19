@@ -52,13 +52,13 @@ class BudgetForm
                                     ->label('Kategori')
                                     ->options(BudgetItemCategory::options())
                                     ->live()
-                                    ->afterStateUpdated(fn($set) => $set('sub_category', null))
+                                    ->afterStateUpdated(fn ($set) => $set('sub_category', null))
                                     ->required()
                                     ->columnSpan(2),
                                 Select::make('sub_category')
                                     ->label('Sub Kategori')
                                     ->options(
-                                        fn($get) => filled($get('category'))
+                                        fn ($get) => filled($get('category'))
                                             ? BudgetItemSubCategory::forCategory($get('category'))
                                             : BudgetItemSubCategory::options()
                                     )

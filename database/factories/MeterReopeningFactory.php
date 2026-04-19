@@ -22,7 +22,7 @@ class MeterReopeningFactory extends Factory
     public function definition(): array
     {
         return [
-            'no_spbk' => 'SPBK-' . now()->format('Ymd') . '-' . fake()->unique()->numerify('####'),
+            'no_spbk' => 'SPBK-'.now()->format('Ymd').'-'.fake()->unique()->numerify('####'),
             'complaint_id' => Complaint::factory(),
             'pegawai_id' => User::factory(),
             'nama_pegawai' => fake()->name(),

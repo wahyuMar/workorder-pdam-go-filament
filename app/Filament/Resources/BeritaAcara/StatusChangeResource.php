@@ -19,12 +19,17 @@ class StatusChangeResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::DocumentMagnifyingGlass;
 
     protected static ?string $navigationLabel = 'Ubah Status';
+
     protected static string|UnitEnum|null $navigationGroup = 'Trandist Mobile - Berita Acara';
+
     protected static ?int $navigationSort = 5;
 
     protected static ?string $slug = 'berita-acara/status-change';
+
     protected static ?string $modelLabel = 'Ubah Status';
+
     protected static ?string $pluralModelLabel = 'Ubah Status';
+
     protected static ?string $breadcrumb = 'Ubah Status';
 
     public static function form(Schema $schema): Schema

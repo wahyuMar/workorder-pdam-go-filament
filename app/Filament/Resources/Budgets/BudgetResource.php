@@ -24,10 +24,12 @@ class BudgetResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::DocumentCurrencyDollar;
 
     protected static ?string $navigationLabel = 'RAB';
-    protected static ?string $recordTitleAttribute = 'budgeting_number';
-    protected static string|UnitEnum|null $navigationGroup = 'Customer Registrations';
-    protected static ?int $navigationSort = 12;
 
+    protected static ?string $recordTitleAttribute = 'budgeting_number';
+
+    protected static string|UnitEnum|null $navigationGroup = 'Customer Registrations';
+
+    protected static ?int $navigationSort = 12;
 
     public static function form(Schema $schema): Schema
     {

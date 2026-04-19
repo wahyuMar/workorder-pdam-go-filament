@@ -4,8 +4,8 @@ namespace App\Filament\Resources\WorkOrders\Tables;
 
 use App\Models\MeterNameChange;
 use App\Services\EmployeeLookupService;
-use Filament\Actions\ViewAction;
 use Filament\Actions\Action;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
@@ -108,7 +108,7 @@ class MeterNameChangeTable
                     ->form(function ($record) {
                         $employeeService = app(EmployeeLookupService::class);
                         $employeesData = $employeeService->fetchEmployees();
-                        
+
                         $employees = collect($employeesData['data'] ?? []);
 
                         $employeeOptions = $employees
@@ -146,7 +146,7 @@ class MeterNameChangeTable
                                 ->default(fn () => $record->no_sambungan)
                                 ->disabled()
                                 ->dehydrated(),
-                            
+
                             // Data Lama (Old Data)
                             TextInput::make('nama_lama')
                                 ->label('Nama Lama')
@@ -173,7 +173,7 @@ class MeterNameChangeTable
                                 ->default(fn () => $record->no_ktp)
                                 ->disabled()
                                 ->dehydrated(),
-                            
+
                             // Data Baru (New Data)
                             TextInput::make('nama_baru')
                                 ->label('Nama Baru')
@@ -187,7 +187,7 @@ class MeterNameChangeTable
                                 ->label('No. HP Baru'),
                             TextInput::make('no_ktp_baru')
                                 ->label('No. KTP Baru'),
-                            
+
                             TextInput::make('latitude')
                                 ->label('Latitude')
                                 ->numeric()
@@ -200,12 +200,12 @@ class MeterNameChangeTable
                                 ->disabled()
                                 ->dehydrated()
                                 ->default(fn () => $record->longitude),
-                            
+
                             Textarea::make('alasan_ubah_nama')
                                 ->label('Alasan Ubah Nama')
                                 ->rows(3)
                                 ->required(),
-                            
+
                             FileUpload::make('upload_ktp')
                                 ->label('Upload KTP')
                                 ->image()
@@ -214,11 +214,11 @@ class MeterNameChangeTable
                                 ->label('Upload KK')
                                 ->image()
                                 ->directory('meter-name-change/kk'),
-                            
+
                             Toggle::make('is_confirmed')
                                 ->label('Konfirmasi')
                                 ->default(false),
-                            
+
                             DateTimePicker::make('tanggal')
                                 ->label('Tanggal')
                                 ->default(now())
@@ -279,7 +279,7 @@ class MeterNameChangeTable
                                 ->label('No. Sambungan')
                                 ->default($spun?->no_sambungan)
                                 ->disabled(),
-                            
+
                             // Data Lama (Old Data)
                             TextInput::make('nama_lama')
                                 ->label('Nama Lama')
@@ -301,7 +301,7 @@ class MeterNameChangeTable
                                 ->label('No. KTP Lama')
                                 ->default($spun?->no_ktp_lama)
                                 ->disabled(),
-                            
+
                             // Data Baru (New Data)
                             TextInput::make('nama_baru')
                                 ->label('Nama Baru')
@@ -323,7 +323,7 @@ class MeterNameChangeTable
                                 ->label('No. KTP Baru')
                                 ->default($spun?->no_ktp_baru)
                                 ->disabled(),
-                            
+
                             TextInput::make('latitude')
                                 ->label('Latitude')
                                 ->default($spun?->latitude)
@@ -357,7 +357,7 @@ class MeterNameChangeTable
                                 ->imagePreviewHeight('250')
                                 ->panelLayout('grid')
                                 ->disabled(),
-                            
+
                             Toggle::make('is_confirmed')
                                 ->label('Konfirmasi')
                                 ->disabled(),

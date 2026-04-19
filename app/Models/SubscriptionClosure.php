@@ -31,7 +31,7 @@ class SubscriptionClosure extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            if (!$model->no_batl) {
+            if (! $model->no_batl) {
                 $model->no_batl = self::generateNoBATL();
             }
         });
@@ -42,6 +42,7 @@ class SubscriptionClosure extends Model
         return DB::transaction(function () {
             $counter = DB::table('subscription_closures')->lockForUpdate()->count();
             $date = now()->format('Ymd');
+
             return sprintf('BATL-%s-%04d', $date, $counter + 1);
         });
     }
@@ -50,6 +51,7 @@ class SubscriptionClosure extends Model
     {
         $counter = SubscriptionClosure::count();
         $date = now()->format('Ymd');
+
         return sprintf('BATL-%s-%04d', $date, $counter + 1);
     }
 

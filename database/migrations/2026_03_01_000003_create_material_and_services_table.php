@@ -29,15 +29,15 @@ return new class extends Migration
         if (Schema::hasTable('clamp_saddles')) {
             DB::table('clamp_saddles')->orderBy('id')->each(function ($row) {
                 DB::table('material_and_services')->insert([
-                    'id'           => null,
-                    'name'         => $row->name . (isset($row->brand) ? ' (' . $row->brand . ')' : ''),
-                    'category'     => 'clamp_saddle',
-                    'unit'         => 'pcs',
+                    'id' => null,
+                    'name' => $row->name.(isset($row->brand) ? ' ('.$row->brand.')' : ''),
+                    'category' => 'clamp_saddle',
+                    'unit' => 'pcs',
                     'is_deletable' => true,
-                    'is_service'   => false,
-                    'price'        => $row->price,
-                    'created_at'   => now(),
-                    'updated_at'   => now(),
+                    'is_service' => false,
+                    'price' => $row->price,
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ]);
             });
         }
@@ -46,15 +46,15 @@ return new class extends Migration
         if (Schema::hasTable('crossings')) {
             DB::table('crossings')->orderBy('id')->each(function ($row) {
                 DB::table('material_and_services')->insert([
-                    'id'           => null,
-                    'name'         => $row->name,
-                    'category'     => 'crossing',
-                    'unit'         => 'meter',
+                    'id' => null,
+                    'name' => $row->name,
+                    'category' => 'crossing',
+                    'unit' => 'meter',
                     'is_deletable' => true,
-                    'is_service'   => true,
-                    'price'        => $row->price,
-                    'created_at'   => now(),
-                    'updated_at'   => now(),
+                    'is_service' => true,
+                    'price' => $row->price,
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ]);
             });
         }

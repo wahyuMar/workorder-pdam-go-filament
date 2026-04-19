@@ -18,12 +18,17 @@ class MeterAddressChangeResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::MapPin;
 
     protected static ?string $navigationLabel = 'Meter Address Change';
+
     protected static string|UnitEnum|null $navigationGroup = 'Work Order';
+
     protected static ?int $navigationSort = 6;
 
     protected static ?string $slug = 'work-orders/meter-address-change';
+
     protected static ?string $modelLabel = 'Meter Address Change';
+
     protected static ?string $pluralModelLabel = 'Meter Address Change';
+
     protected static ?string $breadcrumb = 'Meter Address Change';
 
     public static function table(Table $table): Table

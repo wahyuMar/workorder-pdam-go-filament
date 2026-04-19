@@ -23,7 +23,7 @@ return new class extends Migration
                 'upload_ktp',
                 'upload_kk',
             ]);
-            
+
             // Add no_ktp column
             $table->string('no_ktp')->nullable()->after('no_hp');
         });
@@ -44,7 +44,7 @@ return new class extends Migration
             $table->string('longitude')->nullable();
             $table->json('upload_ktp')->nullable();
             $table->json('upload_kk')->nullable();
-            
+
             // Drop no_ktp
             $table->dropColumn('no_ktp');
         });

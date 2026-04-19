@@ -24,8 +24,11 @@ class ComplaintsResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::ChatBubbleBottomCenterText;
 
     protected static ?string $recordTitleAttribute = 'title';
+
     protected static ?string $navigationLabel = 'Complaints';
+
     protected static string|UnitEnum|null $navigationGroup = 'Customer Service';
+
     protected static ?int $navigationSort = 1;
 
     public static function form(Schema $schema): Schema

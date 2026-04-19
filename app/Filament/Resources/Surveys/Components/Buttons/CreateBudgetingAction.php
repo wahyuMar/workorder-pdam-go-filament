@@ -4,7 +4,6 @@ namespace App\Filament\Resources\Surveys\Components\Buttons;
 
 use App\Enums\BudgetItemCategory;
 use App\Enums\BudgetItemSubCategory;
-use App\Enums\MaterialAndServiceCategory;
 use App\Helper\BudgetHelper;
 use App\Models\Budget;
 use App\Models\BudgetItem;
@@ -36,42 +35,42 @@ class CreateBudgetingAction extends Action
                 if ($record->clampSaddle) {
                     $price = (float) $record->clampSaddle->price;
                     $items[] = [
-                        'category'     => BudgetItemCategory::PekerjaanPipaDinas->value,
+                        'category' => BudgetItemCategory::PekerjaanPipaDinas->value,
                         'sub_category' => BudgetItemSubCategory::MaterialPipaDanAccDinas->value,
-                        'name'         => 'Clamp Saddle ' . $record->clampSaddle->name . ' (' . $record->clampSaddle->brand . ')',
-                        'quantity'     => 1,
-                        'price'        => $price,
-                        'item_amount'  => $price,
-                        'unit'         => $record->clampSaddle->unit,
+                        'name' => 'Clamp Saddle '.$record->clampSaddle->name.' ('.$record->clampSaddle->brand.')',
+                        'quantity' => 1,
+                        'price' => $price,
+                        'item_amount' => $price,
+                        'unit' => $record->clampSaddle->unit,
                     ];
                 }
 
                 // Pre-fill crossing
                 if ($record->crossing) {
                     $quantity = (int) $record->panjang_crossing;
-                    $price    = (float) $record->crossing->price;
-                    $items[]  = [
-                        'category'     => BudgetItemCategory::PekerjaanPipaInstalasi->value,
+                    $price = (float) $record->crossing->price;
+                    $items[] = [
+                        'category' => BudgetItemCategory::PekerjaanPipaInstalasi->value,
                         'sub_category' => BudgetItemSubCategory::PekerjaanTanahInstalasi->value,
-                        'name'         => 'Crossing ' . $record->crossing->name,
-                        'quantity'     => $quantity,
-                        'price'        => $price,
-                        'item_amount'  => $quantity * $price,
-                        'unit'         => $record->crossing->unit,
+                        'name' => 'Crossing '.$record->crossing->name,
+                        'quantity' => $quantity,
+                        'price' => $price,
+                        'item_amount' => $quantity * $price,
+                        'unit' => $record->crossing->unit,
                     ];
                 }
 
                 // Pre-fill klasifikasi SR
                 if ($record->klasifikasiSr) {
-                    $price   = (float) $record->klasifikasiSr->price;
+                    $price = (float) $record->klasifikasiSr->price;
                     $items[] = [
-                        'category'     => BudgetItemCategory::PekerjaanPipaInstalasi->value,
+                        'category' => BudgetItemCategory::PekerjaanPipaInstalasi->value,
                         'sub_category' => BudgetItemSubCategory::LainLainInstalasi->value,
-                        'name'         => 'Klasifikasi SR ' . $record->klasifikasiSr->name,
-                        'quantity'     => 1,
-                        'price'        => $price,
-                        'item_amount'  => $price,
-                        'unit'         => '-',
+                        'name' => 'Klasifikasi SR '.$record->klasifikasiSr->name,
+                        'quantity' => 1,
+                        'price' => $price,
+                        'item_amount' => $price,
+                        'unit' => '-',
                     ];
                 }
 
@@ -79,13 +78,13 @@ class CreateBudgetingAction extends Action
                 if ($record->panjang_rabatan > 0) {
                     $rabatan = MaterialAndService::find(5);
                     $items[] = [
-                        'category'     => BudgetItemCategory::PekerjaanPipaInstalasi->value,
+                        'category' => BudgetItemCategory::PekerjaanPipaInstalasi->value,
                         'sub_category' => BudgetItemSubCategory::PekerjaanTanahInstalasi->value,
-                        'name'         => $rabatan->name,
-                        'quantity'     => $record->panjang_rabatan,
-                        'price'        => $rabatan->price,
-                        'item_amount'  => $record->panjang_rabatan * $rabatan->price,
-                        'unit'         => $rabatan->unit,
+                        'name' => $rabatan->name,
+                        'quantity' => $record->panjang_rabatan,
+                        'price' => $rabatan->price,
+                        'item_amount' => $record->panjang_rabatan * $rabatan->price,
+                        'unit' => $rabatan->unit,
                     ];
                 }
 
@@ -123,13 +122,13 @@ class CreateBudgetingAction extends Action
                                     ->label('Kategori')
                                     ->options(BudgetItemCategory::options())
                                     ->live()
-                                    ->afterStateUpdated(fn($set) => $set('sub_category', null))
+                                    ->afterStateUpdated(fn ($set) => $set('sub_category', null))
                                     ->required()
                                     ->columnSpan(2),
                                 Select::make('sub_category')
                                     ->label('Sub Kategori')
                                     ->options(
-                                        fn($get) => filled($get('category'))
+                                        fn ($get) => filled($get('category'))
                                             ? BudgetItemSubCategory::forCategory($get('category'))
                                             : BudgetItemSubCategory::options()
                                     )
@@ -189,27 +188,27 @@ class CreateBudgetingAction extends Action
                     ->columnSpanFull(),
             ])
             ->action(function (array $data, $record) {
-                $totalAmount = collect($data['items'])->sum(fn($item) => (float) ($item['item_amount'] ?? 0));
+                $totalAmount = collect($data['items'])->sum(fn ($item) => (float) ($item['item_amount'] ?? 0));
 
                 $budget = Budget::create([
                     'budgeting_number' => BudgetHelper::generateBudgetingNumber(),
-                    'date'             => $data['date'],
-                    'blueprint'        => $data['blueprint'],
-                    'total_amount'     => $totalAmount,
-                    'survey_id'        => $record->id,
-                    'created_by'       => auth()->id(),
+                    'date' => $data['date'],
+                    'blueprint' => $data['blueprint'],
+                    'total_amount' => $totalAmount,
+                    'survey_id' => $record->id,
+                    'created_by' => auth()->id(),
                 ]);
 
                 foreach ($data['items'] as $item) {
                     BudgetItem::create([
-                        'budget_id'    => $budget->id,
-                        'category'     => $item['category'],
+                        'budget_id' => $budget->id,
+                        'category' => $item['category'],
                         'sub_category' => $item['sub_category'],
-                        'name'         => $item['name'],
-                        'unit'         => $item['unit'] ?? null,
-                        'quantity'     => $item['quantity'],
-                        'price'        => $item['price'],
-                        'item_amount'  => $item['item_amount'],
+                        'name' => $item['name'],
+                        'unit' => $item['unit'] ?? null,
+                        'quantity' => $item['quantity'],
+                        'price' => $item['price'],
+                        'item_amount' => $item['item_amount'],
                     ]);
                 }
 

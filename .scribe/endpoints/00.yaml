@@ -1,0 +1,1519 @@
+name: Endpoints
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/auth/register
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        custom: []
+        name: name
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      email:
+        custom: []
+        name: email
+        description: 'Must be a valid email address. Must not be greater than 255 characters.'
+        required: true
+        example: zbailey@example.net
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      password:
+        custom: []
+        name: password
+        description: 'Must be at least 8 characters.'
+        required: true
+        example: '-0pBNvYgxw'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      name: b
+      email: zbailey@example.net
+      password: '-0pBNvYgxw'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/auth/login
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        custom: []
+        name: email
+        description: 'Must be a valid email address. Must not be greater than 255 characters.'
+        required: true
+        example: gbailey@example.net
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      password:
+        custom: []
+        name: password
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: '+-0pBNvYgxwmi/#iw'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      email: gbailey@example.net
+      password: '+-0pBNvYgxwmi/#iw'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/auth/logout
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/profile
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+          set-cookie: 'XSRF-TOKEN=eyJpdiI6IkhraGI3VDQzVEVSSGMxWDE3OXBIbFE9PSIsInZhbHVlIjoiczlwNlVxQjdlYnJTME9NYTlBNmdQanV2MVJQTHpLT2pTa2lqRHkwWkN1TksvdHdZTXh4KzJmV1MrTU1pOXlEZlVKNFBDYjArcDRkNllZd0ZmSG90NlRlWkJIZGJ3RzNnbDM1VWx4V2hzMTBUUmRmM0IwZDlmZC9tdDNKNmtvc1QiLCJtYWMiOiI4ZjYzNzAwN2Y1ZTQ5M2MxMDhjNWI5ZDQ3MmU4MWM5NWRmNDdmMjUwNGU5NjIzMGRkODA2MTE0OTAyN2ZiYjBjIiwidGFnIjoiIn0%3D; expires=Wed, 13 May 2026 06:06:28 GMT; Max-Age=2592000; path=/; domain=localhost; samesite=lax; laravel-session=eyJpdiI6IkVQVG1yU0hYVytmOXYvNE00YTI4Snc9PSIsInZhbHVlIjoiQjNRVzJUMU5iblp3Wk5KenUrVXVkK1NuSG0wZ2xxTjZSbGNtT1IzNmRWb0hlWEk4eERBUjk0ekFaeTdoN29jR3NPYk1zK2RVZmJGbENHK01YY0RRWi8rZ0twSVA5UWJaY3ZIZUhobnkwTTdqejFyR2RxVWF4amcvbFZHa2lvMVEiLCJtYWMiOiJiOTg2ZmM3ZGU2YWI0M2RjNGQyMWIxMmM3YWNjOWRiOGYwODEyY2RiMDEyYmZkYjY0MDJhNWQ0NTRkMWNhZTlmIiwidGFnIjoiIn0%3D; expires=Wed, 13 May 2026 06:06:28 GMT; Max-Age=2592000; path=/; domain=localhost; httponly; samesite=lax'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: api/v1/profile/password
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      current_password:
+        custom: []
+        name: current_password
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      password:
+        custom: []
+        name: password
+        description: 'Must be at least 8 characters.'
+        required: true
+        example: ']|{+-0pBNvYg'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      current_password: architecto
+      password: ']|{+-0pBNvYg'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/master/programs
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+          set-cookie: 'XSRF-TOKEN=eyJpdiI6IjVWeTFvc1J4Z1FJYUo2QTR5MDcxdHc9PSIsInZhbHVlIjoiWGRWZGIzUUlaalhyZXNjV1B1bGxYZUR2R25oa3h4Rm94ZkdPejh0MHdMdkJObFVISFh4c0Zidjc0b2o2dlJmWlh0WkpvbDZCWDc5V0Y5aTlPK0VpaFduWklrTWZIdkRhUGdrWVZnbVhlRGt2cXNCMDZLTjNhU2loSG8wRVZWQ3AiLCJtYWMiOiIyZDMyYzlmYzY0NWUwMzY1NGJkYTcyOGI3NDA2NTI1NmJjZjNjNzY2YzczYmQ1NmM1OWVlMmNlNjE5YjUyZmUxIiwidGFnIjoiIn0%3D; expires=Wed, 13 May 2026 06:06:28 GMT; Max-Age=2592000; path=/; domain=localhost; samesite=lax; laravel-session=eyJpdiI6Ii9sVmVMZVREQVdnQXVUYjI4ZGYzMVE9PSIsInZhbHVlIjoiQ2lzQmRRSzQvTmVweHdoN2pnQ3hMdnZKUGl4VGl0b0dVSXR2VTcvUitnUkExTnh5cXd4OWR2bGloZ09ONGMveTFuNm8zaDV3QmxVdCtpVHVBcmk5Z21Ec0hDcDkxMkZxNDdZbW9yWFVUajZkT3ppY2IxbEJjVE5HdTlCSXY1T3kiLCJtYWMiOiI0MWZmZjk3ZTA0OGM5NDI1YzI4MDg3YmU5ODYwODlkYjcxOTlhOTJkYjZhOWNmY2FiOGM1ZjEwZmU3NzgxZWJjIiwidGFnIjoiIn0%3D; expires=Wed, 13 May 2026 06:06:28 GMT; Max-Age=2592000; path=/; domain=localhost; httponly; samesite=lax'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/master/provinces
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+          set-cookie: 'XSRF-TOKEN=eyJpdiI6IkNoSWRGL3ZCaGpGUmdadnZEL2xzUFE9PSIsInZhbHVlIjoibFUrOGxHTHVCM0M2RUpsMjl0aWx4Mk8xanZkMHhDQnl4OTd4VjFKdEQyYzZET3ZKNGVzMVJMaVlZWFUvQ0FQbE9oSmVFRmJ4RDg2VU4wMEwxekt6TCtGNXcvWWxyM2NxMi9CSlp3dWpWMFB5aFcrYmZTNndKS04rMzVRSTBCRU4iLCJtYWMiOiI1Mzk4NzM4YWY5OWQ3MmY3MzE1NWE3YjJiOGFhZGQxZDA4Y2ZhNTUzODQ4NjZmMmNhNWFhZmI5NTA0ZWM2ZDM1IiwidGFnIjoiIn0%3D; expires=Wed, 13 May 2026 06:06:28 GMT; Max-Age=2592000; path=/; domain=localhost; samesite=lax; laravel-session=eyJpdiI6InpUZkJBeUVzQ1kxY1RaWGpJQlhXTnc9PSIsInZhbHVlIjoiTEQ2eHdMZXl1VWtibkpkT2R3b0JIbDNBNmQvRE85UlR4MTFDYXgyZnpVc3J2dXpkcFNpY1k1UitvblFmL2FxeEpDV1ZBUmtka1RhNHNNVEx5T0tlc1NKVnRFWnIrR1BvL25iNjZTNDlaZXVUQm9hZkRxb21OSVBTQlZtcmRlQ3IiLCJtYWMiOiI0NWE5YjQwODRjZTc0MTVkN2E0ZjY0ZjFlZjZkNGNjMmY5M2RiYmVjNmI3NmExM2Y3MzE5YWI1NTYzZGZmMGJiIiwidGFnIjoiIn0%3D; expires=Wed, 13 May 2026 06:06:28 GMT; Max-Age=2592000; path=/; domain=localhost; httponly; samesite=lax'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/master/regencies/{province}'
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      province:
+        custom: []
+        name: province
+        description: ''
+        required: true
+        example: '564'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      province: '564'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+          set-cookie: 'XSRF-TOKEN=eyJpdiI6ImhGMGJVVXBhN0p3Y2ZyNXF0a01iMEE9PSIsInZhbHVlIjoieVFUWnN6TzdLclZOTk5LMTVBTGJYWHJWSTJmTi9LdGhva0VGQ25GV3hpaUlZUE9Xc1FnWFdpVkFXaldEbWR1YngraVRsaVBRSko4ODZLZzZvTmg4N202Nlp5UUtNcDBLVkIyVXhOUE5POVEydVNYVzJMdVpRbERkcjl3TFhFOXUiLCJtYWMiOiJhMTVjYTBmYzEzZGI3MGU0MzM2OGU1YzYzOTc4ZjExNzMzMjBiNmVmNGE3ZmY0ZWVmMmQ3MzQwYjE5NThlYTU3IiwidGFnIjoiIn0%3D; expires=Wed, 13 May 2026 06:06:28 GMT; Max-Age=2592000; path=/; domain=localhost; samesite=lax; laravel-session=eyJpdiI6InB5TUZ2dGZvdnZIWjRPS1BWaGp5WlE9PSIsInZhbHVlIjoiSm5UZ2RDZzZEZ04zcFJZOXJkakpaOCtPQ2MzWFQ2bm5YelpiNGNvTEUxVHU2eW5wU0lxNzFrVlBxZ1h4MldDWHF1ekVlK01MMmtpWlNOaDAyOEZYUUVsMS95VFk5U0NUc2dzRnRjRGk3ejFadFk0Q1FUb1FEVk1uUmhZWk50aEQiLCJtYWMiOiIyZWU0ZjY3NWJjMGRmMTUwZDQzYTNhOTAzNTBhNmYwZTI3NDZjNDIyYThjNjI3YzhhY2UzYTBiMzcwZDUyYTU3IiwidGFnIjoiIn0%3D; expires=Wed, 13 May 2026 06:06:28 GMT; Max-Age=2592000; path=/; domain=localhost; httponly; samesite=lax'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/master/districts/{regency}'
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      regency:
+        custom: []
+        name: regency
+        description: ''
+        required: true
+        example: '564'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      regency: '564'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+          set-cookie: 'XSRF-TOKEN=eyJpdiI6IlZZSWlqK3MxUThsZEJVMmxPU2xKRmc9PSIsInZhbHVlIjoiZ3hvVThVNExCWHRUbE5McnVMbWQxb1RZN09YUG1DRHJtcFdaNm5wZ2xocGlHTzhOL202WSs0bWNlZjdGeFd2QzIyajZUcXJlRStoTzIrUHV2N1ErRnNyMGxWS3ZiUXVLaXNFS2FlMERqTnpIeGJma1JyU1JrVW9JZ3Njbm4vZWIiLCJtYWMiOiI5ZWM1NWZjZjI4NzAxYTYyOWVmNDIxM2M2ZDlkMDMzY2Y1NjY4NDc4NDQyNTc3MjIzOTM0NjhkMzNiMDNkYjJkIiwidGFnIjoiIn0%3D; expires=Wed, 13 May 2026 06:06:28 GMT; Max-Age=2592000; path=/; domain=localhost; samesite=lax; laravel-session=eyJpdiI6ImRiREJORmNsSFhYR0ZwaTVFWmlNT1E9PSIsInZhbHVlIjoiQUZjcXVYQ0xoMjlBVmRUUUVocnMyY29Pd29Nd2hrOVpxNHB1QkpmS25KYUt6SnVOdDdmU1ZyUVdYWGtOalQvY1NIWEVmYzd1Sm9tbG1kS2NlZ1Brcko1K2JYWWhBZkJsb1UvSlEzU2k5MjJyM2ROY1VURnByWm1LYWdxbWtOYlgiLCJtYWMiOiJkZmNmNGQzY2NlZjczMWFiZTIwYTg3ZjZhZWZmN2YyYzYwMzU0OTFmNjM3NGYyZDQ2ODQxOGY3N2QyMjgxYzkwIiwidGFnIjoiIn0%3D; expires=Wed, 13 May 2026 06:06:28 GMT; Max-Age=2592000; path=/; domain=localhost; httponly; samesite=lax'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/master/villages/{district}'
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      district:
+        custom: []
+        name: district
+        description: ''
+        required: true
+        example: '564'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      district: '564'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+          set-cookie: 'XSRF-TOKEN=eyJpdiI6Ii8vUkxRYXVxUmhLVlJFUjl3VWlOY1E9PSIsInZhbHVlIjoiWjZobmJmSkxhNHFWVVVxRndLdUJVT0ZzdG0zNmhJaXUvaHFiOGV5WEY4VVkydDl1a1FIZCtNUTl5MWxIQjNML2FjMXkyMHhMVVBKbnYremYveTZkQ2h2K3Q3Q09RNFNxNEVVcHZTN3R5dTYzcDJDUDF0U3RWOUJ3TEFSUHpqRkMiLCJtYWMiOiIyOGY3OGJhY2Q0ODY1OTI0Y2MzOTc4MjU1YTQzNGQ1OTJkYjMyZjA4ZDI0MTkzMDg2MGUyZDhiYTAzNjBiNmVjIiwidGFnIjoiIn0%3D; expires=Wed, 13 May 2026 06:06:28 GMT; Max-Age=2592000; path=/; domain=localhost; samesite=lax; laravel-session=eyJpdiI6Ik85dFdxSktpYmczMldDUi9NZFRvRFE9PSIsInZhbHVlIjoiUURuazYyVEZMTHJ6TnBGZVphSnBEbVVUTTV2RHA2K1F2TFFqNldydXh6OUswWmIvZklwWDFGWU83RDFQa09tMkx6Z2hHN3o1OVF4QkRjTGhxSllpbnZvdFp3eWMzMnFtWXNGcE1zWUJCMjhvZVZUZzlXZmJYRk9BNVRtU3lLV1giLCJtYWMiOiI0ZjAxOTkxZWY0NTk3OTRkYzg5MzBhOTEzODcyYzMwNWYwYTFlZTcxZjliYjk0ZjFiMzc2NjkxMmE1MjNiYTBhIiwidGFnIjoiIn0%3D; expires=Wed, 13 May 2026 06:06:28 GMT; Max-Age=2592000; path=/; domain=localhost; httponly; samesite=lax'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/master/complaint-types
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+          set-cookie: 'XSRF-TOKEN=eyJpdiI6ImVzblh1cHhRUW9LcnVlMFRXMm9PMHc9PSIsInZhbHVlIjoiZ1VQTEt0cHJHZEVtUlVrbXQwQy9sRDlmZVB2ZWIrWUNIcHNraS9DWC9ET3VpWFJrWStBSDhFTlZ0WDNyc3hUZkxEak93bzYyWjN4NjZwVGtkMVhjNXBheXFzTmdrTmZjTVErKzBlYlVZYU9qVFlhb2RlT2hFeDM0dzhvYUtFbWQiLCJtYWMiOiIyZjAzNWJhMzYzNDQ5ODhkNjUyZmRlYjM2ZjM1NjZmYTkzNDA1OTEwMmM0ZDc2NTUxYzQ5NmZiODJlMmJjY2E0IiwidGFnIjoiIn0%3D; expires=Wed, 13 May 2026 06:06:28 GMT; Max-Age=2592000; path=/; domain=localhost; samesite=lax; laravel-session=eyJpdiI6IlloN0ZDYXZrQjNpWDROampFOWZRZ3c9PSIsInZhbHVlIjoibzZ2L1BXZitnbmhJTldTdWpneDJsbzNFTEN1NklxMStrbVQ2Y0l1eFFUUW5UVUtaMy91MHpHRnJLRDRVTStGRkRjWGVEN2d4M3JLbG9jeTJ5MWlpb3RFWWE4VU4xVGZwK0R6R2Z6LzJZZ09MSmdIalMzSiswWG55Y3BsbURkaEEiLCJtYWMiOiJkMWY0MWYxYjc3NzU0Zjk3NWM5MGQxMDY1MTU0ODdiNzQ4ODlmM2FmMTJlZDRiNTg2MDI1YzMwNTZkMjdkMTgyIiwidGFnIjoiIn0%3D; expires=Wed, 13 May 2026 06:06:28 GMT; Max-Age=2592000; path=/; domain=localhost; httponly; samesite=lax'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/customer-numbers/verify
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      no_sambungan:
+        custom: []
+        name: no_sambungan
+        description: 'Must match the regex /^[A-Za-z0-9]+$/. Must not be greater than 20 characters.'
+        required: true
+        example: bngzmiyvdljnikhw
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      no_sambungan: bngzmiyvdljnikhw
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/customer-numbers/confirm
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      no_sambungan:
+        custom: []
+        name: no_sambungan
+        description: 'Must match the regex /^[A-Za-z0-9]+$/. Must not be greater than 20 characters.'
+        required: true
+        example: bngzmiyvdljnikhw
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      nik:
+        custom: []
+        name: nik
+        description: 'Must match the regex /^\d+$/. Must not be greater than 20 characters.'
+        required: true
+        example: aykcmyuwpwlvqwrs
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      no_sambungan: bngzmiyvdljnikhw
+      nik: aykcmyuwpwlvqwrs
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/customer-numbers
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+          set-cookie: 'XSRF-TOKEN=eyJpdiI6IlZMbUlhMkxnM1BkZjdGbWFFOHlQSkE9PSIsInZhbHVlIjoiRTRQbnZuYzBqMWUvRWthRVltUlR1UlQyeVZLSFZ1UjZBQ0VOZkN0Zzl3bG4waFlCZU5Hd3lOYmdKdk9qMTk0cUlHTmdqWnJCL1lDUlR3RU9FUUU2azZDUTd6RDhxMmdBbEcrOGpnWmQxVVBxSzkyU3dWcnhQaVRzMExYeXhvTWwiLCJtYWMiOiIyNzM4ZWFiOGNhNTFkYjIyNzZiMjZhODc1ZDhhODkzMjE1NzU2NjhhNmEyOTdiYjA1ODU0ODc3NjM1NTZkZTU3IiwidGFnIjoiIn0%3D; expires=Wed, 13 May 2026 06:06:28 GMT; Max-Age=2592000; path=/; domain=localhost; samesite=lax; laravel-session=eyJpdiI6ImFtUzE3MWV5SmlFRS9qUHU2MTVtSlE9PSIsInZhbHVlIjoidjRQK05SZm8vbzVwVGlJeCtOdFlWMWE0UHprUUsrdEZibm1ISi83NEI1blM4SldDMkwxZDc2VFkrMFVDVVp5T0Y1MStlUG10TlgvQkppOWdUOXI3RkgvVUJaTExDRS9ZMEVTdXJ1VndPTUdYckVTSWMvQWcwcUlyeWlyaEgzRlUiLCJtYWMiOiIxNzIxM2I1YTY4ZDE0MjgyNzE1ZTJhOWEwYThkMDY3MzA0Njc2Mzg1NDI5NjMzN2RmZmQzNTU3N2VjNzgwMTIwIiwidGFnIjoiIn0%3D; expires=Wed, 13 May 2026 06:06:28 GMT; Max-Age=2592000; path=/; domain=localhost; httponly; samesite=lax'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/customer-numbers/{no}/billing'
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      'no':
+        custom: []
+        name: 'no'
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      'no': architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+          set-cookie: 'XSRF-TOKEN=eyJpdiI6IlhTQ3ltUHE4TE9pMVREcjNwNEJlUUE9PSIsInZhbHVlIjoiQlpLdGhaTnQ5WDVOSE15YUUwN1lEem0yWUs0MS9PMFlZUGxCUFlUSzk4aTJlYjJCSlV0bEh2azlzNjVQbHdZRDFFam9wVWpPMnVMdDVLRzNzdk83ZUFqMmt0RGp3QTIyV1F4WUp1Qm85Ty83VHRFVUUrd0pqQVI1Z0VkcHRiTisiLCJtYWMiOiJkZDZhZGFlMjQzYjkxZDIwN2I2ODJkNWEzMzcwMzQzMDBjZDk3MTc4YzYzODY4YTE5NjhkOTJlMmRiMmZiMzA5IiwidGFnIjoiIn0%3D; expires=Wed, 13 May 2026 06:06:28 GMT; Max-Age=2592000; path=/; domain=localhost; samesite=lax; laravel-session=eyJpdiI6ImlSeDZaTzJYY0t4ZENpckdMV2tWU3c9PSIsInZhbHVlIjoiazlUd1NlWTErVU1LRXVUOFVZTGhZTFgzSGpLQkZFVFRXZ3haMjdBRnljWkJkeFdMRUhQTmNlUlg3V2tnUEdOeVhjYmpEU1ZScUoweEpjdkZsaW9xTnVrc1d0N0RidmdENnJDNEVKREVIWm1IOERvVnQ5dXMrU1VkRDlGd1Zla1AiLCJtYWMiOiJjZmJkNDllNmM3NzExZWYwZTY2MDViNjY1MTJiYzlhOThjYmE1NGJlMWVlN2MxMDI3ZTdkNmRlOGZkMzY2ZTMyIiwidGFnIjoiIn0%3D; expires=Wed, 13 May 2026 06:06:28 GMT; Max-Age=2592000; path=/; domain=localhost; httponly; samesite=lax'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/customer-numbers/{no}'
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      'no':
+        custom: []
+        name: 'no'
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      'no': architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/registrations
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      nama_lengkap:
+        custom: []
+        name: nama_lengkap
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      program_id:
+        custom: []
+        name: program_id
+        description: 'The <code>id</code> of an existing record in the programs table.'
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      no_ktp:
+        custom: []
+        name: no_ktp
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      no_kk:
+        custom: []
+        name: no_kk
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: g
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      pekerjaan:
+        custom: []
+        name: pekerjaan
+        description: ''
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      email:
+        custom: []
+        name: email
+        description: 'Must be a valid email address. Must not be greater than 255 characters.'
+        required: false
+        example: zbailey@example.net
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      no_telp:
+        custom: []
+        name: no_telp
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: i
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      no_hp:
+        custom: []
+        name: no_hp
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: 'y'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      alamat_ktp:
+        custom: []
+        name: alamat_ktp
+        description: ''
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      dusun_kampung_ktp:
+        custom: []
+        name: dusun_kampung_ktp
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      rt_ktp:
+        custom: []
+        name: rt_ktp
+        description: 'Must be at least 0.'
+        required: false
+        example: 84
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      rw_ktp:
+        custom: []
+        name: rw_ktp
+        description: 'Must be at least 0.'
+        required: false
+        example: 12
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      province_id_ktp:
+        custom: []
+        name: province_id_ktp
+        description: 'The <code>id</code> of an existing record in the provinces table.'
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      regency_id_ktp:
+        custom: []
+        name: regency_id_ktp
+        description: 'The <code>id</code> of an existing record in the regencies table.'
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      district_id_ktp:
+        custom: []
+        name: district_id_ktp
+        description: 'The <code>id</code> of an existing record in the districts table.'
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      village_id_ktp:
+        custom: []
+        name: village_id_ktp
+        description: 'The <code>id</code> of an existing record in the villages table.'
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      alamat_pasang:
+        custom: []
+        name: alamat_pasang
+        description: ''
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      dusun_kampung_pasang:
+        custom: []
+        name: dusun_kampung_pasang
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      rt_pasang:
+        custom: []
+        name: rt_pasang
+        description: 'Must be at least 0.'
+        required: false
+        example: 84
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      rw_pasang:
+        custom: []
+        name: rw_pasang
+        description: 'Must be at least 0.'
+        required: false
+        example: 12
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      province_id_pasang:
+        custom: []
+        name: province_id_pasang
+        description: 'The <code>id</code> of an existing record in the provinces table.'
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      regency_id_pasang:
+        custom: []
+        name: regency_id_pasang
+        description: 'The <code>id</code> of an existing record in the regencies table.'
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      district_id_pasang:
+        custom: []
+        name: district_id_pasang
+        description: 'The <code>id</code> of an existing record in the districts table.'
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      village_id_pasang:
+        custom: []
+        name: village_id_pasang
+        description: 'The <code>id</code> of an existing record in the villages table.'
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      jumlah_penghuni_tetap:
+        custom: []
+        name: jumlah_penghuni_tetap
+        description: 'Must be at least 0.'
+        required: false
+        example: 39
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      jumlah_penghuni_tidak_tetap:
+        custom: []
+        name: jumlah_penghuni_tidak_tetap
+        description: 'Must be at least 0.'
+        required: false
+        example: 84
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      jumlah_kran_air_minum:
+        custom: []
+        name: jumlah_kran_air_minum
+        description: 'Must be at least 0.'
+        required: false
+        example: 12
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      jenis_rumah:
+        custom: []
+        name: jenis_rumah
+        description: ''
+        required: false
+        example: 'Non Permanen'
+        type: string
+        enumValues:
+          - Permanen
+          - 'Semi Permanen'
+          - 'Non Permanen'
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      jumlah_kran:
+        custom: []
+        name: jumlah_kran
+        description: 'Must be at least 0.'
+        required: false
+        example: 77
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      daya_listrik:
+        custom: []
+        name: daya_listrik
+        description: 'Must be at least 0.'
+        required: false
+        example: 8
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      upload_ktp:
+        custom: []
+        name: upload_ktp
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: 'y'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      upload_kk:
+        custom: []
+        name: upload_kk
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: v
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      upload_tagihan_listrik:
+        custom: []
+        name: upload_tagihan_listrik
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: d
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      upload_foto_rumah:
+        custom: []
+        name: upload_foto_rumah
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: l
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      latitude:
+        custom: []
+        name: latitude
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: j
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      longitude:
+        custom: []
+        name: longitude
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      nama_lengkap: b
+      program_id: 16
+      no_ktp: 'n'
+      no_kk: g
+      pekerjaan: architecto
+      email: zbailey@example.net
+      no_telp: i
+      no_hp: 'y'
+      alamat_ktp: architecto
+      dusun_kampung_ktp: 'n'
+      rt_ktp: 84
+      rw_ktp: 12
+      province_id_ktp: 16
+      regency_id_ktp: 16
+      district_id_ktp: 16
+      village_id_ktp: 16
+      alamat_pasang: architecto
+      dusun_kampung_pasang: 'n'
+      rt_pasang: 84
+      rw_pasang: 12
+      province_id_pasang: 16
+      regency_id_pasang: 16
+      district_id_pasang: 16
+      village_id_pasang: 16
+      jumlah_penghuni_tetap: 39
+      jumlah_penghuni_tidak_tetap: 84
+      jumlah_kran_air_minum: 12
+      jenis_rumah: 'Non Permanen'
+      jumlah_kran: 77
+      daya_listrik: 8
+      upload_ktp: 'y'
+      upload_kk: v
+      upload_tagihan_listrik: d
+      upload_foto_rumah: l
+      latitude: j
+      longitude: 'n'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/registrations
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+          set-cookie: 'XSRF-TOKEN=eyJpdiI6InZ0Z3FlRWxwUWZNRVVQclRYY0RkNXc9PSIsInZhbHVlIjoiYTVqblVGWmpmY1pVR2tlVU5iZ3lHM1hwR0hucm1BVE9vZkpXM0hmdXVPWm9HbXBLOTlFS1hQQitQZDd0K29qQjFRckRmM3EyOVlYb0lJWXB3cmxxNmhWeGVsSElMUGdlRmN3Sk1VR2dNWkRXcXFnVEV0bXE1MlZzSXhCUmZCMWkiLCJtYWMiOiI4NDZiY2FhNWFkNGE1OTYyMTk2YTY4MjAyYmQ1MWM3ZjRiNWQwZjg4MjIxZjIzNDE3YzgxZjk0YWI1NDdlNjcwIiwidGFnIjoiIn0%3D; expires=Wed, 13 May 2026 06:06:29 GMT; Max-Age=2592000; path=/; domain=localhost; samesite=lax; laravel-session=eyJpdiI6IlE2Q2xQc1JabHZVeDJUR1NWMC85K1E9PSIsInZhbHVlIjoiTlpBMlovN002Z2tlVFFlWUh0UmpTOGlGUCtGOU1jbDM0QzcrRC9kYVZGN0RBNmdxeWZaM1RjckFLb01KRG9qd1JYTTVEUk5FNUFOVEVETWEyc1F0K0c4THRQb1JBZWhBSGdlNXBoQWZOZWhweWJEc0E3Nm9SRGdrUHptdUNQQWwiLCJtYWMiOiJiNmM3NjYwNjViZWE5NDY5M2JmYTA5NDNhNDg4NmZiYjZhMDgxZTYzMWIwZmRjZDg1OTdmOTMyNjE3OTMxYWRlIiwidGFnIjoiIn0%3D; expires=Wed, 13 May 2026 06:06:29 GMT; Max-Age=2592000; path=/; domain=localhost; httponly; samesite=lax'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/registrations/{id}'
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the registration.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+          set-cookie: 'XSRF-TOKEN=eyJpdiI6IjBHemFVSHZ0ZHJVS3A1S2VXN0V4S3c9PSIsInZhbHVlIjoiQi9ZLy9iMGFtdWNQL1RnR1ZBeG9ydmRSNGhCMU45SmV6dHQ1dVdBcFpDVllZeGg5K0d2NXdjdStCYjlacE5Cc2dEbTNlKzJGN3FkNlA0Z21tU2loWkhWUW5FS2phdmdON0VNZTZGZDJWRmw2dmQvUWtOZzQwYThqUWZsbkVieXkiLCJtYWMiOiIyNjA2OTZkMzY2OGQyYWI4YWFhMDgxMzBjOTViZWI5ZGRkODA0NDNjYzljZDBiMzliNDBmMmQ5ZTMzOTY2Mjk4IiwidGFnIjoiIn0%3D; expires=Wed, 13 May 2026 06:06:29 GMT; Max-Age=2592000; path=/; domain=localhost; samesite=lax; laravel-session=eyJpdiI6IkdSZWlwdGhmdG1pb3Yydy9Uc0MvZ3c9PSIsInZhbHVlIjoiQ29pYWh0cEMxb3h2RThFT2VVdi90ZlR3SmVMK2ZQZjBIRXRlR1RNUHhQaUp2U2haWHh3RXIzQitCdjNuK1VaZkNwMzR5K2NOaDMxOTZueDdHZEM1cEpHSFpuRFpVUHprSjlKclpCdHgvQzRqT0lYRWZ2Mkx1UUM2WEhremZwaloiLCJtYWMiOiJmMjFhNzJiMjI2NThlN2I3YTVlM2FhODU4ZmVhNGY1MDBhOTRmOGY2ZDQ3MTI3MTBiMThhMjBhNDQ3ZTk4NDhmIiwidGFnIjoiIn0%3D; expires=Wed, 13 May 2026 06:06:29 GMT; Max-Age=2592000; path=/; domain=localhost; httponly; samesite=lax'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/complaints
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+          set-cookie: 'XSRF-TOKEN=eyJpdiI6IjFod2RsQjFWTjVDWnpNbEVhZy9kL1E9PSIsInZhbHVlIjoiZGorL0tRdlZ2NG1qRndhdHd2SDMwSjNqWjR4TDI1YktxdDRIRlRiZFQzcFpidGo5Z2JCSDQxOGZCNG14Qks3WE1rbmJLQnpmaitWVVVTM0RJd3pvT0duUC9neWRhZzUvcnhjSVN4c0FrZ0xsTW53bm55YkNxTE5YSzZIT21OZzIiLCJtYWMiOiI1Y2Q5ZDk5ZjY4OGMyYWFkNzljMjVlYjk5MTk3ZWNlZWYyZWZkZTI4YTc4MDgzOGNmMDA1MzI1ZGU0ODIxZTFlIiwidGFnIjoiIn0%3D; expires=Wed, 13 May 2026 06:06:29 GMT; Max-Age=2592000; path=/; domain=localhost; samesite=lax; laravel-session=eyJpdiI6IjJKZE5lVHVxWnJGd0JrZ28zOTViMlE9PSIsInZhbHVlIjoiS1JIZnlWU2tqRFByV3RSYWFmQXFCUHYvRnpOdlJBN2Nqc3BtM3ZDUEpoNUVZSTkrZ05idVlkbks1ZVJYcmJsc3dSZEVvSndnQS8rTXZWeTJEMFBnUkpLcjR2RmY3Z2ljZG83M3ZORE5Tc05XWS9aNjdsT3d4QlBwSEFIbjdTQzYiLCJtYWMiOiI2OTlhNjIzMTg2OTA0ZWJiZmVkNzcxMzdiYmQxOTk1YjM2NjVmYTZhN2ZkY2RiZWYxZDM5NzQwZTNhMjdmMGYyIiwidGFnIjoiIn0%3D; expires=Wed, 13 May 2026 06:06:29 GMT; Max-Age=2592000; path=/; domain=localhost; httponly; samesite=lax'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/complaints/{id}'
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the complaint.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+          set-cookie: 'XSRF-TOKEN=eyJpdiI6IjBiQkRjb3NBMDFuWFhnMW04bDh3QXc9PSIsInZhbHVlIjoiWEZNTnR4VG85dzh5UGJMSWF4aHN1aHQwT1BzbTRKTkI5WU82NUErTEprUEZhZVE1VW11c3R5RnNZdStwUWJkOXNITFZyL08xMXcwSzR0WHJqMTBiY2pzRGt6K1ZYYlF6RXg2Sis5L1BRUWNPS1ZpVnNkQVBUYXJMRzBPU2E3QTciLCJtYWMiOiI3MDE2MThjMDVlMzNiZGQxYzJkNjBkNDI3OGU1YzI2OTNjMzk3ZTNmZGMxYWQ4MTMxZTZmZTgyMGE2ZTg1MWU3IiwidGFnIjoiIn0%3D; expires=Wed, 13 May 2026 06:06:29 GMT; Max-Age=2592000; path=/; domain=localhost; samesite=lax; laravel-session=eyJpdiI6ImFpUnZwMmRJQVV1SUs2Y2NJM0dMMHc9PSIsInZhbHVlIjoiaU9xQnFwWjRTMGFPSElTcnpnVXJ4SG1SSU5VbEMrUUlKb3IzUVM4MkRBTWd5N0dvZEdwVXgrR0ZBN0lXVTg0TGY2c2dkU2F2QlJvOWFnd2o4K01zU0NZUWExMGxaSlZkRXZIRVlxZU9ZcWZpY2lyTUtzMEZMSkZWRlZiNWw2NzMiLCJtYWMiOiJkNzQyMjhjM2YzNGIxZThlZmQ3ZjE0MzUyMDFiNTdkMGU1ZDgxN2I2Yzg3ZWI1ODhjNTdiZTg4Nzk3NzllNzIwIiwidGFnIjoiIn0%3D; expires=Wed, 13 May 2026 06:06:29 GMT; Max-Age=2592000; path=/; domain=localhost; httponly; samesite=lax'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/complaints/{complaint}/timeline'
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      complaint:
+        custom: []
+        name: complaint
+        description: 'The complaint.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      complaint: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+          set-cookie: 'XSRF-TOKEN=eyJpdiI6IlM5VHNvNmllcS94bzRlamVMZ3VQblE9PSIsInZhbHVlIjoiV1YvWS9jclVjczlNcnZZN1FYSzBBZTUwT1NPYTJETUxwYWh4bFhBVUUreUROQzV0ZFJFdWJKZkpraW44Rlp0aWlpcGhpQlhBckMzOVlsQklLN1IzZFdqYytja1libDVGOEhIV2pzeFdaUmFBV0RBTWh1VktDa1VzZXBjWjlVVUYiLCJtYWMiOiI2YzNiMDFmMGZiZjA3Zjg3YzgxN2NiMmE0YTBiNmM4OGZjMGQ0NGZiNGMzZDM0MzYwZjBmNzdlNzgyYjE3MzUwIiwidGFnIjoiIn0%3D; expires=Wed, 13 May 2026 06:06:29 GMT; Max-Age=2592000; path=/; domain=localhost; samesite=lax; laravel-session=eyJpdiI6Im5VZUpYVXY4bWp0aHJNMW1KTjd3NUE9PSIsInZhbHVlIjoiMHd6VnJCRFpnRXhxNnFxRStNWkNrUEUvQ2p1RnFqeG9PQU9wS2dZWVY5ZTdXenZ0MnJGdXZHdGZZelNhZ012Y0dBZ2VBQTNTbkhPY0NIS251WUN4cDZKRXNBVWgvUDg3aWJUU1hhT0hmSmZzWFRua0pwKzFqTkNVNEpOZ2NvL04iLCJtYWMiOiJiNGEzYzkzZTRhNjU5MTM0NzYzYTllMTViZGU4OTJhZmQ1NTNmODcxZDZmYTRkOGVlYWUyMDkyNWQwNTZlODFmIiwidGFnIjoiIn0%3D; expires=Wed, 13 May 2026 06:06:29 GMT; Max-Age=2592000; path=/; domain=localhost; httponly; samesite=lax'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/uploads
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: multipart/form-data
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      file:
+        custom: []
+        name: file
+        description: 'Must be a file. Must not be greater than 2048 kilobytes.'
+        required: true
+        example: null
+        type: file
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters: []
+    fileParameters:
+      file: null
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

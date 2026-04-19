@@ -23,7 +23,7 @@ class ProvincesForm
                             ->label('Is Selectable')
                             ->default(true),
                     ])
-                    ->columns(1)
+                    ->columns(1),
             ]);
     }
 }

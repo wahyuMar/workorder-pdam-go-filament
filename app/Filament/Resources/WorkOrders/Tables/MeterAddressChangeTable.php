@@ -4,8 +4,8 @@ namespace App\Filament\Resources\WorkOrders\Tables;
 
 use App\Models\MeterAddressChange;
 use App\Services\EmployeeLookupService;
-use Filament\Actions\ViewAction;
 use Filament\Actions\Action;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
@@ -91,7 +91,7 @@ class MeterAddressChangeTable
                     ->form(function ($record) {
                         $employeeService = app(EmployeeLookupService::class);
                         $employeesData = $employeeService->fetchEmployees();
-                        
+
                         $employees = collect($employeesData['data'] ?? []);
 
                         $employeeOptions = $employees
@@ -134,44 +134,45 @@ class MeterAddressChangeTable
                                 ->default(fn () => $record->no_sambungan)
                                 ->disabled()
                                 ->dehydrated(),
-                            
+
                             // Data Lama (Old Data) - Auto-populated from API
                             TextInput::make('id_unit_lama')
                                 ->label('Unit Lama')
-                                ->default(fn () => $customer ? ($customer['collector']['rt_rw']['desa']['unit']['id_unit'] . ' - ' . $customer['collector']['rt_rw']['desa']['unit']['nama_unit']) : null)
+                                ->default(fn () => $customer ? ($customer['collector']['rt_rw']['desa']['unit']['id_unit'].' - '.$customer['collector']['rt_rw']['desa']['unit']['nama_unit']) : null)
                                 ->disabled()
                                 ->dehydrated(),
                             TextInput::make('id_desa_lama')
                                 ->label('Desa/Kelurahan Lama')
-                                ->default(fn () => $customer ? ($customer['collector']['rt_rw']['desa']['id_desa'] . ' - ' . $customer['collector']['rt_rw']['desa']['desa']) : null)
+                                ->default(fn () => $customer ? ($customer['collector']['rt_rw']['desa']['id_desa'].' - '.$customer['collector']['rt_rw']['desa']['desa']) : null)
                                 ->disabled()
                                 ->dehydrated(),
                             TextInput::make('id_rt_rw_lama')
                                 ->label('RT/RW Lama')
-                                ->default(fn () => $customer ? ($customer['collector']['rt_rw']['id_rt_rw'] . ' - RT.' . ($customer['collector']['rt_rw']['rt'] ?? '') . '/RW.' . ($customer['collector']['rt_rw']['rw'] ?? '')) : null)
+                                ->default(fn () => $customer ? ($customer['collector']['rt_rw']['id_rt_rw'].' - RT.'.($customer['collector']['rt_rw']['rt'] ?? '').'/RW.'.($customer['collector']['rt_rw']['rw'] ?? '')) : null)
                                 ->disabled()
                                 ->dehydrated(),
                             TextInput::make('id_wilayah_lama')
                                 ->label('Wilayah Lama')
-                                ->default(fn () => $customer ? ($customer['wilayah']['id_wilayah'] . ' - ' . $customer['wilayah']['wilayah']) : null)
+                                ->default(fn () => $customer ? ($customer['wilayah']['id_wilayah'].' - '.$customer['wilayah']['wilayah']) : null)
                                 ->disabled()
                                 ->dehydrated(),
                             TextInput::make('id_jalan_lama')
                                 ->label('Jalan Lama')
-                                ->default(fn () => $customer ? ($customer['jalan']['id_jalan'] . ' - ' . $customer['jalan']['nama_jalan']) : null)
+                                ->default(fn () => $customer ? ($customer['jalan']['id_jalan'].' - '.$customer['jalan']['nama_jalan']) : null)
                                 ->disabled()
                                 ->dehydrated(),
                             TextInput::make('id_kolektor_lama')
                                 ->label('Kolektor Lama')
-                                ->default(fn () => $customer ? ($customer['collector']['id_collector'] . ' - ' . $customer['collector']['nama_collector']) : null)
+                                ->default(fn () => $customer ? ($customer['collector']['id_collector'].' - '.$customer['collector']['nama_collector']) : null)
                                 ->disabled()
                                 ->dehydrated(),
-                            
+
                             // Data Baru (New Data) - Cascading selects via CustomerLookupService
                             Select::make('id_unit_baru')
                                 ->label('Unit Baru')
                                 ->options(function () use ($customerService) {
                                     $units = $customerService->fetchUnits();
+
                                     return collect($units)?->mapWithKeys(fn ($unit) => [
                                         "{$unit['id_unit']} - {$unit['nama_unit']}" => "{$unit['id_unit']} - {$unit['nama_unit']}",
                                     ])->toArray() ?? [];
@@ -180,16 +181,19 @@ class MeterAddressChangeTable
                                 ->required()
                                 ->live()
                                 ->afterStateUpdated(fn (callable $set) => $set('id_wilayah_baru', null)),
-                            
+
                             Select::make('id_desa_baru')
                                 ->label('Desa/Kelurahan Baru')
                                 ->options(function (callable $get) use ($customerService) {
                                     $unitId = $get('id_unit_baru');
-                                    if (!$unitId) return [];
-                                    
+                                    if (! $unitId) {
+                                        return [];
+                                    }
+
                                     // Extract just the ID from the full "ID - Name" format
-                                    $unitIdOnly = (int)explode(' - ', $unitId)[0];
+                                    $unitIdOnly = (int) explode(' - ', $unitId)[0];
                                     $desaList = $customerService->fetchDesaByUnit($unitIdOnly);
+
                                     return collect($desaList)?->mapWithKeys(fn ($desa) => [
                                         "{$desa['id_desa']} - {$desa['nama_desa']}" => "{$desa['id_desa']} - {$desa['nama_desa']}",
                                     ])->toArray() ?? [];
@@ -198,16 +202,19 @@ class MeterAddressChangeTable
                                 ->required()
                                 ->live()
                                 ->afterStateUpdated(fn (callable $set) => $set('id_rt_rw_baru', null)),
-                            
+
                             Select::make('id_rt_rw_baru')
                                 ->label('RT/RW Baru')
                                 ->options(function (callable $get) use ($customerService) {
                                     $desaId = $get('id_desa_baru');
-                                    if (!$desaId) return [];
-                                    
+                                    if (! $desaId) {
+                                        return [];
+                                    }
+
                                     // Extract just the ID from the full "ID - Name" format
-                                    $desaIdOnly = (int)explode(' - ', $desaId)[0];
+                                    $desaIdOnly = (int) explode(' - ', $desaId)[0];
                                     $rtRwList = $customerService->fetchRtRwByDesa($desaIdOnly);
+
                                     return collect($rtRwList)?->mapWithKeys(fn ($rtRw) => [
                                         "{$rtRw['id_rt_rw']} - {$rtRw['formatted']}" => "{$rtRw['id_rt_rw']} - {$rtRw['formatted']}",
                                     ])->toArray() ?? [];
@@ -216,19 +223,21 @@ class MeterAddressChangeTable
                                 ->required()
                                 ->live()
                                 ->afterStateUpdated(fn (callable $set) => $set('id_kolektor_baru', null)),
-                            
+
                             Select::make('id_kolektor_baru')
                                 ->label('Kolektor Baru')
                                 ->options(function (callable $get) use ($customerService) {
                                     $rtRwId = $get('id_rt_rw_baru');
-                                    if (!$rtRwId) return [];
-                                    
+                                    if (! $rtRwId) {
+                                        return [];
+                                    }
+
                                     // Extract just the ID from the full "ID - Name" format
-                                    $rtRwIdOnly = (int)explode(' - ', $rtRwId)[0];
+                                    $rtRwIdOnly = (int) explode(' - ', $rtRwId)[0];
                                     $rtRwList = $customerService->fetchRtRwByDesa($rtRwIdOnly);
                                     $rtRw = collect($rtRwList)->first();
                                     $collectors = $rtRw['collectors'] ?? [];
-                                    
+
                                     return collect($collectors)?->mapWithKeys(fn ($collector) => [
                                         "{$collector['id_collector']} - {$collector['nama_collector']}" => "{$collector['id_collector']} - {$collector['nama_collector']}",
                                     ])->toArray() ?? [];
@@ -236,16 +245,19 @@ class MeterAddressChangeTable
                                 ->searchable()
                                 ->required()
                                 ->live(),
-                            
+
                             Select::make('id_wilayah_baru')
                                 ->label('Wilayah Baru')
                                 ->options(function (callable $get) use ($customerService) {
                                     $unitId = $get('id_unit_baru');
-                                    if (!$unitId) return [];
-                                    
+                                    if (! $unitId) {
+                                        return [];
+                                    }
+
                                     // Extract just the ID from the full "ID - Name" format
-                                    $unitIdOnly = (int)explode(' - ', $unitId)[0];
+                                    $unitIdOnly = (int) explode(' - ', $unitId)[0];
                                     $wilayahList = $customerService->fetchWilayahByUnit($unitIdOnly);
+
                                     return collect($wilayahList)?->mapWithKeys(fn ($wilayah) => [
                                         "{$wilayah['id_wilayah']} - {$wilayah['wilayah']}" => "{$wilayah['id_wilayah']} - {$wilayah['wilayah']}",
                                     ])->toArray() ?? [];
@@ -254,16 +266,19 @@ class MeterAddressChangeTable
                                 ->required()
                                 ->live()
                                 ->afterStateUpdated(fn (callable $set) => $set('id_jalan_baru', null)),
-                            
+
                             Select::make('id_jalan_baru')
                                 ->label('Jalan Baru')
                                 ->options(function (callable $get) use ($customerService) {
                                     $wilayahId = $get('id_wilayah_baru');
-                                    if (!$wilayahId) return [];
-                                    
+                                    if (! $wilayahId) {
+                                        return [];
+                                    }
+
                                     // Extract just the ID from the full "ID - Name" format
-                                    $wilayahIdOnly = (int)explode(' - ', $wilayahId)[0];
+                                    $wilayahIdOnly = (int) explode(' - ', $wilayahId)[0];
                                     $jalanList = $customerService->fetchJalanByWilayah($wilayahIdOnly);
+
                                     return collect($jalanList)?->mapWithKeys(fn ($jalan) => [
                                         "{$jalan['id_jalan']} - {$jalan['nama_jalan']}" => "{$jalan['id_jalan']} - {$jalan['nama_jalan']}",
                                     ])->toArray() ?? [];
@@ -271,7 +286,7 @@ class MeterAddressChangeTable
                                 ->searchable()
                                 ->required()
                                 ->live(),
-                            
+
                             TextInput::make('latitude')
                                 ->label('Latitude')
                                 ->numeric()
@@ -284,17 +299,17 @@ class MeterAddressChangeTable
                                 ->disabled()
                                 ->dehydrated()
                                 ->default(fn () => $record->longitude),
-                            
+
                             TextInput::make('biaya_ubah_alamat')
                                 ->label('Biaya Ubah Alamat')
                                 ->numeric()
                                 ->default(0),
-                            
+
                             Textarea::make('alasan_ubah_alamat')
                                 ->label('Alasan Ubah Alamat')
                                 ->rows(3)
                                 ->required(),
-                            
+
                             FileUpload::make('upload_ktp')
                                 ->label('Upload KTP')
                                 ->image()
@@ -303,13 +318,13 @@ class MeterAddressChangeTable
                                 ->label('Upload KK')
                                 ->image()
                                 ->directory('meter-address-change/kk'),
-                            
+
                             Toggle::make('is_confirmed')
                                 ->label('Konfirmasi')
                                 ->hint('Tandai untuk mengkonfirmasi perubahan alamat')
                                 ->default(false)
                                 ->visible(true),
-                            
+
                             DateTimePicker::make('tanggal')
                                 ->label('Tanggal')
                                 ->default(now())
@@ -318,39 +333,39 @@ class MeterAddressChangeTable
                     })
                     ->action(function ($record, array $data) {
                         $customerService = app(\App\Services\CustomerLookupService::class);
-                        
+
                         // Helper to extract ID from display string like "1 - Ponorogo"
-                        $extractId = fn ($value) => is_string($value) && strpos($value, ' - ') !== false 
-                            ? (int)explode(' - ', $value)[0] 
-                            : (int)$value;
-                        
+                        $extractId = fn ($value) => is_string($value) && strpos($value, ' - ') !== false
+                            ? (int) explode(' - ', $value)[0]
+                            : (int) $value;
+
                         // Helper to extract name from display string like "1 - Ponorogo"
                         $extractName = fn ($value) => is_string($value) && strpos($value, ' - ') !== false
                             ? trim(substr($value, strpos($value, ' - ') + 3))
                             : '';
-                        
+
                         // Build lookup arrays for unit, desa, wilayah, jalan
                         $unitId = $extractId($data['id_unit_baru'] ?? null);
                         $unitsList = collect($customerService->fetchUnits() ?? [])->keyBy('id_unit')->toArray();
                         $unitName = $unitsList[$unitId]['nama_unit'] ?? $extractName($data['id_unit_baru'] ?? null);
-                        
+
                         $desaId = $extractId($data['id_desa_baru'] ?? null);
                         $desaList = collect($customerService->fetchDesaByUnit($unitId) ?? [])->keyBy('id_desa')->toArray();
                         $desaName = $desaList[$desaId]['nama_desa'] ?? $extractName($data['id_desa_baru'] ?? null);
-                        
+
                         $wilayahId = $extractId($data['id_wilayah_baru'] ?? null);
                         $wilayahList = collect($customerService->fetchWilayahByUnit($unitId) ?? [])->keyBy('id_wilayah')->toArray();
                         $wilayahName = $wilayahList[$wilayahId]['wilayah'] ?? $extractName($data['id_wilayah_baru'] ?? null);
-                        
+
                         $jalanId = $extractId($data['id_jalan_baru'] ?? null);
                         $jalanList = collect($customerService->fetchJalanByWilayah($wilayahId) ?? [])->keyBy('id_jalan')->toArray();
                         $jalanName = $jalanList[$jalanId]['nama_jalan'] ?? $extractName($data['id_jalan_baru'] ?? null);
-                        
+
                         $rtRwId = $extractId($data['id_rt_rw_baru'] ?? null);
                         $rtRwList = collect($customerService->fetchRtRwByDesa($desaId) ?? [])->keyBy('id_rt_rw')->toArray();
                         $rtRw = $rtRwList[$rtRwId] ?? [];
                         $rtRwName = $rtRw['formatted'] ?? $extractName($data['id_rt_rw_baru'] ?? null);
-                        
+
                         $kolektorId = $extractId($data['id_kolektor_baru'] ?? null);
                         $collectors = collect($rtRw['collectors'] ?? [])->keyBy('id_collector')->toArray();
                         $kolektorName = $collectors[$kolektorId]['nama_collector'] ?? $extractName($data['id_kolektor_baru'] ?? null);
@@ -361,7 +376,7 @@ class MeterAddressChangeTable
                             'nama_pegawai' => $data['nama_pegawai'] ?? null,
                             'no_sambungan' => $record->no_sambungan,
                             'nama' => $record->nama,
-                            
+
                             // Old data - ID and name
                             'id_unit_lama' => $extractId($data['id_unit_lama'] ?? null),
                             'nama_unit_lama' => $extractName($data['id_unit_lama'] ?? null),
@@ -375,7 +390,7 @@ class MeterAddressChangeTable
                             'nama_rt_rw_lama' => $extractName($data['id_rt_rw_lama'] ?? null),
                             'id_kolektor_lama' => $extractId($data['id_kolektor_lama'] ?? null),
                             'nama_kolektor_lama' => $extractName($data['id_kolektor_lama'] ?? null),
-                            
+
                             // New data - ID and name fetched from API
                             'id_unit_baru' => $unitId,
                             'nama_unit_baru' => $unitName,
@@ -389,7 +404,7 @@ class MeterAddressChangeTable
                             'nama_rt_rw_baru' => $rtRwName,
                             'id_kolektor_baru' => $kolektorId,
                             'nama_kolektor_baru' => $kolektorName,
-                            
+
                             'latitude' => $data['latitude'],
                             'longitude' => $data['longitude'],
                             'biaya_ubah_alamat' => $data['biaya_ubah_alamat'] ?? 0,
@@ -433,7 +448,7 @@ class MeterAddressChangeTable
                                 ->label('Nama')
                                 ->default($spua?->nama)
                                 ->disabled(),
-                            
+
                             // ===== ALAMAT LAMA =====
                             TextInput::make('nama_unit_lama')
                                 ->label('Unit Lama')
@@ -459,7 +474,7 @@ class MeterAddressChangeTable
                                 ->label('Kolektor Lama')
                                 ->default($spua?->nama_kolektor_lama)
                                 ->disabled(),
-                            
+
                             // ===== ALAMAT BARU =====
                             TextInput::make('nama_unit_baru')
                                 ->label('Unit Baru')
@@ -485,7 +500,7 @@ class MeterAddressChangeTable
                                 ->label('Kolektor Baru')
                                 ->default($spua?->nama_kolektor_baru)
                                 ->disabled(),
-                            
+
                             TextInput::make('latitude')
                                 ->label('Latitude')
                                 ->default($spua?->latitude)
@@ -523,7 +538,7 @@ class MeterAddressChangeTable
                                 ->imagePreviewHeight('250')
                                 ->panelLayout('grid')
                                 ->disabled(),
-                            
+
                             Toggle::make('is_confirmed')
                                 ->label('Konfirmasi')
                                 ->disabled(),

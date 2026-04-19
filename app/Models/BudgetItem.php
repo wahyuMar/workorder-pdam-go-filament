@@ -11,10 +11,10 @@ class BudgetItem extends Model
     protected $guarded = [];
 
     protected $casts = [
-        'category'     => BudgetItemCategory::class,
+        'category' => BudgetItemCategory::class,
         'sub_category' => BudgetItemSubCategory::class,
-        'price'        => 'decimal:2',
-        'item_amount'  => 'decimal:2',
+        'price' => 'decimal:2',
+        'item_amount' => 'decimal:2',
     ];
 
     public function budget()

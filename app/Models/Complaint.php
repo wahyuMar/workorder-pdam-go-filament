@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 
 class Complaint extends Model
@@ -11,6 +13,7 @@ class Complaint extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'no_pengaduan',
         'complaint_type_id',
         'no_sambungan',
@@ -119,6 +122,16 @@ class Complaint extends Model
     public function complaintType()
     {
         return $this->belongsTo(ComplaintType::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function scopeOwnedBy(Builder $query, int $userId): Builder
+    {
+        return $query->where('user_id', $userId);
     }
 
     public function followUps()

@@ -22,7 +22,7 @@ class BudgetFactory extends Factory
     public function definition(): array
     {
         return [
-            'budgeting_number' => 'RAB-' . fake()->unique()->numerify('########'),
+            'budgeting_number' => 'RAB-'.fake()->unique()->numerify('########'),
             'survey_id' => Survey::factory(),
             'date' => fake()->date(),
             'blueprint' => null,

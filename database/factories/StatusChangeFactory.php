@@ -21,7 +21,7 @@ class StatusChangeFactory extends Factory
     public function definition(): array
     {
         return [
-            'no_baus' => 'BAUS-' . now()->format('Ymd') . '-' . fake()->unique()->numerify('####'),
+            'no_baus' => 'BAUS-'.now()->format('Ymd').'-'.fake()->unique()->numerify('####'),
             'complaint_id' => Complaint::factory(),
             'no_sambungan' => fake()->numerify('######'),
             'nama' => fake()->name(),

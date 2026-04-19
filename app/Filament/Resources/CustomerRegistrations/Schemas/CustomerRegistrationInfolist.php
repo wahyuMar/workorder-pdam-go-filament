@@ -22,6 +22,13 @@ class CustomerRegistrationInfolist
                         TextEntry::make('tanggal')
                             ->label('Tanggal')
                             ->dateTime('d M Y H:i'),
+                        TextEntry::make('source')
+                            ->label('Sumber')
+                            ->badge()
+                            ->color(fn (?string $state): string => match ($state) {
+                                'mobile' => 'info',
+                                default => 'gray',
+                            }),
                     ])
                     ->columns(2)
                     ->columnSpanFull(),

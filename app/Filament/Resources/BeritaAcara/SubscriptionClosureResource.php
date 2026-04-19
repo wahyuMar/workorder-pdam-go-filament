@@ -19,12 +19,17 @@ class SubscriptionClosureResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::DocumentMagnifyingGlass;
 
     protected static ?string $navigationLabel = 'Tutup Langganan';
+
     protected static string|UnitEnum|null $navigationGroup = 'Trandist Mobile - Berita Acara';
+
     protected static ?int $navigationSort = 2;
 
     protected static ?string $slug = 'berita-acara/subscription-closure';
+
     protected static ?string $modelLabel = 'Tutup Langganan';
+
     protected static ?string $pluralModelLabel = 'Tutup Langganan';
+
     protected static ?string $breadcrumb = 'Tutup Langganan';
 
     public static function form(Schema $schema): Schema

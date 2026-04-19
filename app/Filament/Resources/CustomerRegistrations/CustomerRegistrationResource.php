@@ -65,8 +65,8 @@ class CustomerRegistrationResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->with(
-                'program', 'provinceKtp', 'regencyKtp', 'districtKtp', 'villageKtp',
-                'provincePasang', 'regencyPasang', 'districtPasang', 'villagePasang', 'survey'
-            );
+            'program', 'provinceKtp', 'regencyKtp', 'districtKtp', 'villageKtp',
+            'provincePasang', 'regencyPasang', 'districtPasang', 'villagePasang', 'survey'
+        );
     }
 }

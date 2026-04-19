@@ -21,7 +21,7 @@ class RegenciesTable
                 IconColumn::make('is_selectable')
                     ->label('Is Selectable')
                     ->boolean()
-                    ->sortable()
+                    ->sortable(),
             ])
             ->filters([
                 SelectFilter::make('province')->relationship('province', 'name')

@@ -112,6 +112,7 @@ class ComplaintsTable
                         } elseif ($state['value'] === 'no') {
                             return $query->doesntHave('followUps');
                         }
+
                         return $query;
                     }),
                 SelectFilter::make('sumber')

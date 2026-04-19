@@ -8,7 +8,6 @@ use App\Models\Province;
 use App\Models\Regency;
 use App\Models\Village;
 use Dotswan\MapPicker\Fields\Map;
-use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -18,7 +17,6 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
-
 
 class CustomerRegistrationForm
 {
@@ -102,7 +100,7 @@ class CustomerRegistrationForm
                                 $set('district_id_ktp', null);
                                 $set('village_id_ktp', null);
                             })
-                            ->disabled(fn (Get $get) => !$get('province_id_ktp')),
+                            ->disabled(fn (Get $get) => ! $get('province_id_ktp')),
                         Select::make('district_id_ktp')
                             ->label('Kecamatan KTP')
                             ->options(fn (Get $get) => District::where('regency_id', $get('regency_id_ktp'))
@@ -112,13 +110,13 @@ class CustomerRegistrationForm
                             ->afterStateUpdated(function (Set $set) {
                                 $set('village_id_ktp', null);
                             })
-                            ->disabled(fn (Get $get) => !$get('regency_id_ktp')),
+                            ->disabled(fn (Get $get) => ! $get('regency_id_ktp')),
                         Select::make('village_id_ktp')
                             ->label('Kel/Desa KTP')
                             ->options(fn (Get $get) => Village::where('district_id', $get('district_id_ktp'))
                                 ->pluck('name', 'id'))
                             ->searchable()
-                            ->disabled(fn (Get $get) => !$get('district_id_ktp')),
+                            ->disabled(fn (Get $get) => ! $get('district_id_ktp')),
                     ])
                     ->columns(3),
 
@@ -176,7 +174,7 @@ class CustomerRegistrationForm
                                 $set('district_id_pasang', null);
                                 $set('village_id_pasang', null);
                             })
-                            ->disabled(fn (Get $get) => !$get('province_id_pasang')),
+                            ->disabled(fn (Get $get) => ! $get('province_id_pasang')),
                         Select::make('district_id_pasang')
                             ->label('Kecamatan Pasang')
                             ->options(fn (Get $get) => District::where('regency_id', $get('regency_id_pasang'))
@@ -186,13 +184,13 @@ class CustomerRegistrationForm
                             ->afterStateUpdated(function (Set $set) {
                                 $set('village_id_pasang', null);
                             })
-                            ->disabled(fn (Get $get) => !$get('regency_id_pasang')),
+                            ->disabled(fn (Get $get) => ! $get('regency_id_pasang')),
                         Select::make('village_id_pasang')
                             ->label('Kel/Desa Pasang')
                             ->options(fn (Get $get) => Village::where('district_id', $get('district_id_pasang'))
                                 ->pluck('name', 'id'))
                             ->searchable()
-                            ->disabled(fn (Get $get) => !$get('district_id_pasang')),
+                            ->disabled(fn (Get $get) => ! $get('district_id_pasang')),
                     ])
                     ->columns(3),
 
@@ -283,7 +281,7 @@ class CustomerRegistrationForm
                                 'detectRetina' => true,
                             ])
                             ->extraStyles([
-                                'min-height: 50vh'
+                                'min-height: 50vh',
                             ]),
                         TextInput::make('latitude')
                             ->label('Latitude')

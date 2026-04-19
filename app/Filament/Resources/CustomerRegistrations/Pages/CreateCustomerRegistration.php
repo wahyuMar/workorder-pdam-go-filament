@@ -14,6 +14,7 @@ class CreateCustomerRegistration extends CreateRecord
     {
         $data['no_surat'] = CustomerRegistrationHelper::generateNoSurat();
         $data['tanggal'] = now()->toDateString();
+
         return $data;
     }
 }

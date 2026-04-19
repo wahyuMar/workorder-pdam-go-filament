@@ -19,12 +19,17 @@ class SubscriptionReopeningResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::DocumentMagnifyingGlass;
 
     protected static ?string $navigationLabel = 'Serah Terima Buka Kembali';
+
     protected static string|UnitEnum|null $navigationGroup = 'Trandist Mobile - Berita Acara';
+
     protected static ?int $navigationSort = 3;
 
     protected static ?string $slug = 'berita-acara/subscription-reopening';
+
     protected static ?string $modelLabel = 'Serah Terima Buka Kembali';
+
     protected static ?string $pluralModelLabel = 'Serah Terima Buka Kembali';
+
     protected static ?string $breadcrumb = 'Serah Terima Buka Kembali';
 
     public static function form(Schema $schema): Schema

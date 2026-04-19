@@ -5,13 +5,13 @@ namespace App\Filament\Resources\Complaints\Schemas;
 use App\Models\Complaint;
 use App\Models\ComplaintType;
 use App\Services\CustomerLookupService;
-use Filament\Schemas\Components\Section;
-use Filament\Notifications\Notification;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class ComplaintsForm
@@ -44,6 +44,7 @@ class ComplaintsForm
                                     $set('no_hp', null);
                                     $set('no_ktp', null);
                                     $set('email', null);
+
                                     return;
                                 }
 

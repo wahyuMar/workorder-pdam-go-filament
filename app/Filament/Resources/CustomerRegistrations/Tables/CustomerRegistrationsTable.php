@@ -55,6 +55,14 @@ class CustomerRegistrationsTable
                     ->label('Tanggal')
                     ->dateTime('d M Y H:i')
                     ->sortable(),
+                TextColumn::make('source')
+                    ->label('Sumber')
+                    ->badge()
+                    ->color(fn (?string $state): string => match ($state) {
+                        'mobile' => 'info',
+                        default => 'gray',
+                    })
+                    ->sortable(),
                 TextColumn::make('created_at')
                     ->label('Created At')
                     ->dateTime('d M Y H:i')
@@ -78,6 +86,12 @@ class CustomerRegistrationsTable
                     ->options([
                         'Kecamatan 1' => 'Kecamatan 1',
                         'Kecamatan 2' => 'Kecamatan 2',
+                    ]),
+                SelectFilter::make('source')
+                    ->label('Sumber')
+                    ->options([
+                        'manual' => 'Manual',
+                        'mobile' => 'Mobile',
                     ]),
             ])
             ->recordActions([

@@ -18,12 +18,17 @@ class MeterRateChangeResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::CurrencyDollar;
 
     protected static ?string $navigationLabel = 'Meter Rate Change';
+
     protected static string|UnitEnum|null $navigationGroup = 'Work Order';
+
     protected static ?int $navigationSort = 7;
 
     protected static ?string $slug = 'work-orders/meter-rate-change';
+
     protected static ?string $modelLabel = 'Meter Rate Change';
+
     protected static ?string $pluralModelLabel = 'Meter Rate Change';
+
     protected static ?string $breadcrumb = 'Meter Rate Change';
 
     public static function table(Table $table): Table

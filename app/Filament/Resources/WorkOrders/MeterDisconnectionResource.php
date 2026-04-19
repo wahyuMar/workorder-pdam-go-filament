@@ -18,12 +18,17 @@ class MeterDisconnectionResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::XCircle;
 
     protected static ?string $navigationLabel = 'Meter Disconnection';
+
     protected static string|UnitEnum|null $navigationGroup = 'Work Order';
+
     protected static ?int $navigationSort = 4;
 
     protected static ?string $slug = 'work-orders/meter-disconnection';
+
     protected static ?string $modelLabel = 'Meter Disconnection';
+
     protected static ?string $pluralModelLabel = 'Meter Disconnection';
+
     protected static ?string $breadcrumb = 'Meter Disconnection';
 
     public static function table(Table $table): Table

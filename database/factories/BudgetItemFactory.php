@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Enums\BudgetItemCategory;
-use App\Enums\BudgetItemSubCategory;
 use App\Models\Budget;
 use App\Models\BudgetItem;
 use Illuminate\Database\Eloquent\Factories\Factory;

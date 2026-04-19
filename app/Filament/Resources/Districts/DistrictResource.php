@@ -23,6 +23,7 @@ class DistrictResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'name';
+
     protected static string|UnitEnum|null $navigationGroup = 'Master Data';
 
     protected static ?int $navigationSort = 14;
@@ -53,7 +54,7 @@ class DistrictResource extends Resource
         ];
     }
 
-    public static function getEloquentQuery() : Builder
+    public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
             ->with('regency')

@@ -22,7 +22,7 @@ class MeterReplacementFactory extends Factory
     public function definition(): array
     {
         return [
-            'no_spgm' => 'SPGM-' . now()->format('Ymd') . '-' . fake()->unique()->numerify('####'),
+            'no_spgm' => 'SPGM-'.now()->format('Ymd').'-'.fake()->unique()->numerify('####'),
             'complaint_id' => Complaint::factory(),
             'pegawai_id' => User::factory(),
             'nama_pegawai' => fake()->name(),

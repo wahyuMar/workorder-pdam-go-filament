@@ -18,12 +18,17 @@ class MeterNameChangeResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Pencil;
 
     protected static ?string $navigationLabel = 'Meter Name Change';
+
     protected static string|UnitEnum|null $navigationGroup = 'Work Order';
+
     protected static ?int $navigationSort = 5;
 
     protected static ?string $slug = 'work-orders/meter-name-change';
+
     protected static ?string $modelLabel = 'Meter Name Change';
+
     protected static ?string $pluralModelLabel = 'Meter Name Change';
+
     protected static ?string $breadcrumb = 'Meter Name Change';
 
     public static function table(Table $table): Table

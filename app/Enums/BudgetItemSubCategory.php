@@ -4,26 +4,26 @@ namespace App\Enums;
 
 enum BudgetItemSubCategory: string
 {
-    case PekerjaanTanahDinas              = 'pekerjaan_tanah_dinas';
-    case MaterialPipaDanAccDinas          = 'material_pipa_dan_acc_dinas';
-    case JasaPasangPipaDanAccDinas        = 'jasa_pasang_pipa_dan_acc_dinas';
-    case LainLainDinas                    = 'lain_lain_dinas';
-    case PekerjaanTanahInstalasi          = 'pekerjaan_tanah_instalasi';
-    case MaterialPipaDanAccInstalasi      = 'material_pipa_dan_acc_instalasi';
-    case JasaPasangPipaDanAccInstalasi    = 'jasa_pasang_pipa_dan_acc_instalasi';
-    case LainLainInstalasi                = 'lain_lain_instalasi';
+    case PekerjaanTanahDinas = 'pekerjaan_tanah_dinas';
+    case MaterialPipaDanAccDinas = 'material_pipa_dan_acc_dinas';
+    case JasaPasangPipaDanAccDinas = 'jasa_pasang_pipa_dan_acc_dinas';
+    case LainLainDinas = 'lain_lain_dinas';
+    case PekerjaanTanahInstalasi = 'pekerjaan_tanah_instalasi';
+    case MaterialPipaDanAccInstalasi = 'material_pipa_dan_acc_instalasi';
+    case JasaPasangPipaDanAccInstalasi = 'jasa_pasang_pipa_dan_acc_instalasi';
+    case LainLainInstalasi = 'lain_lain_instalasi';
 
     public function getLabel(): string
     {
         return match ($this) {
-            self::PekerjaanTanahDinas           => 'Pekerjaan Tanah Dinas',
-            self::MaterialPipaDanAccDinas        => 'Material Pipa & Acc Dinas',
-            self::JasaPasangPipaDanAccDinas      => 'Jasa Pasang Pipa & Acc Dinas',
-            self::LainLainDinas                  => 'Lain-lain Dinas',
-            self::PekerjaanTanahInstalasi        => 'Pekerjaan Tanah Instalasi',
-            self::MaterialPipaDanAccInstalasi    => 'Material Pipa & Acc Instalasi',
-            self::JasaPasangPipaDanAccInstalasi  => 'Jasa Pasang Pipa & Acc Instalasi',
-            self::LainLainInstalasi              => 'Lain-lain Instalasi',
+            self::PekerjaanTanahDinas => 'Pekerjaan Tanah Dinas',
+            self::MaterialPipaDanAccDinas => 'Material Pipa & Acc Dinas',
+            self::JasaPasangPipaDanAccDinas => 'Jasa Pasang Pipa & Acc Dinas',
+            self::LainLainDinas => 'Lain-lain Dinas',
+            self::PekerjaanTanahInstalasi => 'Pekerjaan Tanah Instalasi',
+            self::MaterialPipaDanAccInstalasi => 'Material Pipa & Acc Instalasi',
+            self::JasaPasangPipaDanAccInstalasi => 'Jasa Pasang Pipa & Acc Instalasi',
+            self::LainLainInstalasi => 'Lain-lain Instalasi',
         };
     }
 
@@ -34,12 +34,12 @@ enum BudgetItemSubCategory: string
             self::PekerjaanTanahDinas,
             self::MaterialPipaDanAccDinas,
             self::JasaPasangPipaDanAccDinas,
-            self::LainLainDinas          => BudgetItemCategory::PekerjaanPipaDinas,
+            self::LainLainDinas => BudgetItemCategory::PekerjaanPipaDinas,
 
             self::PekerjaanTanahInstalasi,
             self::MaterialPipaDanAccInstalasi,
             self::JasaPasangPipaDanAccInstalasi,
-            self::LainLainInstalasi      => BudgetItemCategory::PekerjaanPipaInstalasi,
+            self::LainLainInstalasi => BudgetItemCategory::PekerjaanPipaInstalasi,
         };
     }
 
@@ -55,7 +55,7 @@ enum BudgetItemSubCategory: string
     public static function options(): array
     {
         return collect(self::cases())
-            ->mapWithKeys(fn(self $c) => [$c->value => $c->getLabel()])
+            ->mapWithKeys(fn (self $c) => [$c->value => $c->getLabel()])
             ->all();
     }
 
@@ -68,7 +68,7 @@ enum BudgetItemSubCategory: string
     {
         return array_values(array_filter(
             self::cases(),
-            fn(self $sub) => $sub->getCategory() === $category,
+            fn (self $sub) => $sub->getCategory() === $category,
         ));
     }
 }

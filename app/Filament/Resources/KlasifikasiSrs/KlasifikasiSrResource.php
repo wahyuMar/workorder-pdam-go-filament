@@ -24,6 +24,7 @@ class KlasifikasiSrResource extends Resource
     protected static ?string $recordTitleAttribute = 'name';
 
     protected static string|UnitEnum|null $navigationGroup = 'Master Data';
+
     protected static ?int $navigationSort = 16;
 
     public static function form(Schema $schema): Schema

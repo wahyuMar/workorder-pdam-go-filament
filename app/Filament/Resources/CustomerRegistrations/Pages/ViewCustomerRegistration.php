@@ -15,9 +15,10 @@ class ViewCustomerRegistration extends ViewRecord
     protected function getHeaderActions(): array
     {
         $surveyExists = $this->record->survey !== null;
+
         return [
-            EditAction::make()->visible(!$surveyExists),
-            CreateSurveyAction::make()->visible(!$surveyExists),
+            EditAction::make()->visible(! $surveyExists),
+            CreateSurveyAction::make()->visible(! $surveyExists),
             GoToSurveyAction::make()->visible($surveyExists),
         ];
     }

@@ -3,15 +3,14 @@
 namespace App\Filament\Resources\BeritaAcara\Tables;
 
 use App\Models\SubscriptionReopening;
-use App\Models\Complaint;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
+use Filament\Actions\Action;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Filament\Actions\Action;
-use Filament\Notifications\Notification;
 
 class SubscriptionReopeningTable
 {

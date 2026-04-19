@@ -21,7 +21,7 @@ class SubscriptionReopeningFactory extends Factory
     public function definition(): array
     {
         return [
-            'no_bast_bk' => 'BAST-BK-' . now()->format('Ymd') . '-' . fake()->unique()->numerify('####'),
+            'no_bast_bk' => 'BAST-BK-'.now()->format('Ymd').'-'.fake()->unique()->numerify('####'),
             'complaint_id' => Complaint::factory(),
             'no_sambungan' => fake()->numerify('######'),
             'nama' => fake()->name(),

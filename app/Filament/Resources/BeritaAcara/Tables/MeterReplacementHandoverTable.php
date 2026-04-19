@@ -3,16 +3,14 @@
 namespace App\Filament\Resources\BeritaAcara\Tables;
 
 use App\Models\MeterReplacementHandover;
-use App\Models\Complaint;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
+use Filament\Actions\Action;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Filament\Actions\Action;
-use Filament\Notifications\Notification;
-use Filament\Resources\Pages\ViewRecord;
 
 class MeterReplacementHandoverTable
 {
@@ -102,6 +100,7 @@ class MeterReplacementHandoverTable
                     ->closeModalByClickingAway(false)
                     ->fillForm(function ($record) {
                         $bastGm = MeterReplacementHandover::where('complaint_id', $record->id)->first();
+
                         return $bastGm ? $bastGm->toArray() : [];
                     }),
                 Action::make('create_bast_gm')

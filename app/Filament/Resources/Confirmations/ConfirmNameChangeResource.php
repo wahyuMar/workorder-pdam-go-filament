@@ -18,12 +18,17 @@ class ConfirmNameChangeResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::CheckCircle;
 
     protected static ?string $navigationLabel = 'Ubah Nama';
+
     protected static string|UnitEnum|null $navigationGroup = 'Confirmation';
+
     protected static ?int $navigationSort = 1;
 
     protected static ?string $slug = 'confirmations/name-change';
+
     protected static ?string $modelLabel = 'Ubah Nama';
+
     protected static ?string $pluralModelLabel = 'Ubah Nama';
+
     protected static ?string $breadcrumb = 'Ubah Nama';
 
     public static function table(Table $table): Table

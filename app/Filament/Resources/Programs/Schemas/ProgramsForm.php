@@ -4,7 +4,6 @@ namespace App\Filament\Resources\Programs\Schemas;
 
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
@@ -20,7 +19,7 @@ class ProgramsForm
                             ->label('Program Name')
                             ->required(),
                         Toggle::make('is_active')
-                            ->label('Is Active')
+                            ->label('Is Active'),
                     ])
                     ->columns(2),
             ]);

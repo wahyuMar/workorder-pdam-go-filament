@@ -2,14 +2,13 @@
 
 namespace App\Filament\Resources\Confirmations\Tables;
 
-use App\Models\MeterRateChange;
 use Filament\Actions\Action;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\Toggle;
+use Filament\Notifications\Notification;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Filament\Notifications\Notification;
 
 class ConfirmRateChangeTable
 {
@@ -68,7 +67,7 @@ class ConfirmRateChangeTable
                     ->label('Konfirmasi')
                     ->icon('heroicon-o-check')
                     ->color('success')
-                    ->visible(fn ($record) => !$record->is_confirmed)
+                    ->visible(fn ($record) => ! $record->is_confirmed)
                     ->form([
                         Toggle::make('is_confirmed')
                             ->label('Setujui Perubahan Tarif')

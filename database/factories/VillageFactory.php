@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\District;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,6 +19,7 @@ class VillageFactory extends Factory
     {
         return [
             'name' => $this->faker->word(),
+            'district_id' => District::factory(),
         ];
     }
 }

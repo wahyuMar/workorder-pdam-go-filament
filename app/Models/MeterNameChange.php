@@ -89,7 +89,7 @@ class MeterNameChange extends Model
 
             $formattedNumber = str_pad($newNumber, 4, '0', STR_PAD_LEFT);
 
-            return $row->prefix . '-' . now()->format('Ymd') . '-' . $formattedNumber;
+            return $row->prefix.'-'.now()->format('Ymd').'-'.$formattedNumber;
         });
     }
 
@@ -121,6 +121,6 @@ class MeterNameChange extends Model
         $newNumber = $lastNumber + 1;
         $formattedNumber = str_pad($newNumber, 4, '0', STR_PAD_LEFT);
 
-        return $row->prefix . '-' . $tomorrow . '-' . $formattedNumber;
+        return $row->prefix.'-'.$tomorrow.'-'.$formattedNumber;
     }
 }

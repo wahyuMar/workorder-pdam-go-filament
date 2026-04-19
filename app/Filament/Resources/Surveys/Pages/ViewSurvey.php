@@ -14,7 +14,7 @@ class ViewSurvey extends ViewRecord
     {
         return [
             CreateBudgetingAction::make()
-                ->visible(fn() => $this->record->budgeting === null),
+                ->visible(fn () => $this->record->budgeting === null),
         ];
     }
 }

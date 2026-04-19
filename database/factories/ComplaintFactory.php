@@ -21,7 +21,7 @@ class ComplaintFactory extends Factory
     public function definition(): array
     {
         return [
-            'no_pengaduan' => 'PGD-' . now()->format('Ymd') . '-' . fake()->unique()->numerify('####'),
+            'no_pengaduan' => 'PGD-'.now()->format('Ymd').'-'.fake()->unique()->numerify('####'),
             'complaint_type_id' => ComplaintType::factory(),
             'no_sambungan' => fake()->numerify('######'),
             'nama' => fake()->name(),

@@ -19,12 +19,17 @@ class SubscriptionCancellationResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::DocumentMagnifyingGlass;
 
     protected static ?string $navigationLabel = 'Cabut Langganan';
+
     protected static string|UnitEnum|null $navigationGroup = 'Trandist Mobile - Berita Acara';
+
     protected static ?int $navigationSort = 4;
 
     protected static ?string $slug = 'berita-acara/subscription-cancellation';
+
     protected static ?string $modelLabel = 'Cabut Langganan';
+
     protected static ?string $pluralModelLabel = 'Cabut Langganan';
+
     protected static ?string $breadcrumb = 'Cabut Langganan';
 
     public static function form(Schema $schema): Schema

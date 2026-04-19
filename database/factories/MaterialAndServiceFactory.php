@@ -35,7 +35,7 @@ class MaterialAndServiceFactory extends Factory
      */
     public function service(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'is_service' => true,
         ]);
     }

@@ -6,8 +6,6 @@ use App\Enums\WorkOrderEnum;
 use App\Filament\Resources\Complaints\ComplaintsResource;
 use App\Models\ComplaintFollowUp;
 use Filament\Actions\Action;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\EditAction;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
@@ -23,7 +21,7 @@ class ViewComplaints extends ViewRecord
 
     public function getTitle(): string
     {
-        return 'Detail Pengaduan - ' . $this->record->no_pengaduan;
+        return 'Detail Pengaduan - '.$this->record->no_pengaduan;
     }
 
     public function getBreadcrumb(): string
@@ -34,13 +32,13 @@ class ViewComplaints extends ViewRecord
     protected function getHeaderActions(): array
     {
         $hasFollowUp = $this->record->followUps()->exists();
-        
+
         return [
             Action::make('tindak_lanjut')
                 ->label($hasFollowUp ? 'Lihat Tindak Lanjut' : 'Tindak Lanjut')
                 ->color($hasFollowUp ? 'info' : 'warning')
                 ->icon($hasFollowUp ? 'heroicon-o-eye' : 'heroicon-o-document-text')
-                ->visible(fn () => !$hasFollowUp)
+                ->visible(fn () => ! $hasFollowUp)
                 ->form([
                     TextInput::make('complaint_number')
                         ->label('No. Pengaduan')
@@ -96,12 +94,13 @@ class ViewComplaints extends ViewRecord
                 ->color('info')
                 ->icon('heroicon-o-eye')
                 ->visible(fn () => $hasFollowUp)
-                ->modalHeading(fn () => 'Detail Tindak Lanjut - ' . $this->record->no_pengaduan)
+                ->modalHeading(fn () => 'Detail Tindak Lanjut - '.$this->record->no_pengaduan)
                 ->modalWidth('2xl')
                 ->modalSubmitAction(false)
                 ->modalCancelActionLabel('Tutup')
                 ->fillForm(function () {
                     $followUp = $this->record->followUps()->latest()->first();
+
                     return [
                         'complaint_number' => $followUp->complaint_number,
                         'carbon_copies' => $followUp->carbon_copies,

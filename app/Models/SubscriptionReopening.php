@@ -31,7 +31,7 @@ class SubscriptionReopening extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            if (!$model->no_bast_bk) {
+            if (! $model->no_bast_bk) {
                 $model->no_bast_bk = self::generateNoBASTBK();
             }
         });
@@ -42,6 +42,7 @@ class SubscriptionReopening extends Model
         return DB::transaction(function () {
             $counter = DB::table('subscription_reopenings')->lockForUpdate()->count();
             $date = now()->format('Ymd');
+
             return sprintf('BAST-BK-%s-%04d', $date, $counter + 1);
         });
     }
@@ -50,6 +51,7 @@ class SubscriptionReopening extends Model
     {
         $counter = SubscriptionReopening::count();
         $date = now()->format('Ymd');
+
         return sprintf('BAST-BK-%s-%04d', $date, $counter + 1);
     }
 

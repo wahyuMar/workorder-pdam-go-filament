@@ -20,16 +20,16 @@ class SurveyFactory extends Factory
     public function definition(): array
     {
         return [
-            'no_survey' => 'SRV-' . fake()->unique()->numberBetween(10000, 99999),
+            'no_survey' => 'SRV-'.fake()->unique()->numberBetween(10000, 99999),
             'lokasi_pipa_distribusi_lat' => fake()->latitude(-10, 6),
             'lokasi_pipa_distribusi_long' => fake()->longitude(95, 141),
             'panjang_pipa_sr' => fake()->numberBetween(5, 100),
             'ukuran_clamp_sadel' => fake()->randomElement(['1/2 inch', '3/4 inch', '1 inch', '1.5 inch', '2 inch']),
             'lokasi_sr_lat' => fake()->latitude(-10, 6),
             'lokasi_sr_long' => fake()->longitude(95, 141),
-            'foto_rumah' => 'surveys/foto-rumah/' . fake()->uuid() . '.jpg',
-            'foto_penghuni' => 'surveys/foto-penghuni/' . fake()->uuid() . '.jpg',
-            'foto_lokasi_wm' => 'surveys/foto-lokasi-wm/' . fake()->uuid() . '.jpg',
+            'foto_rumah' => 'surveys/foto-rumah/'.fake()->uuid().'.jpg',
+            'foto_penghuni' => 'surveys/foto-penghuni/'.fake()->uuid().'.jpg',
+            'foto_lokasi_wm' => 'surveys/foto-lokasi-wm/'.fake()->uuid().'.jpg',
             'lokasi_rabatan_lat' => fake()->latitude(-10, 6),
             'lokasi_rabatan_long' => fake()->longitude(95, 141),
             'panjang_rabatan' => fake()->numberBetween(5, 50),

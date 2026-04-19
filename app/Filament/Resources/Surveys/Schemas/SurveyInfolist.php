@@ -28,7 +28,7 @@ class SurveyInfolist
                             ->suffixAction(Action::make('edit')
                                 ->icon(Heroicon::ArrowUpRight)
                                 ->color('primary')
-                                ->url(fn($record) => route('filament.admin.resources.customer-registrations.view', $record->customerRegistration)))
+                                ->url(fn ($record) => route('filament.admin.resources.customer-registrations.view', $record->customerRegistration)))
                             ->placeholder('-'),
                         TextEntry::make('tanggal_survey')
                             ->label('Tanggal Survey')
@@ -47,7 +47,7 @@ class SurveyInfolist
                         Placeholder::make('map_pipa_distribusi')
                             ->label('Lokasi Pipa Distribusi')
                             ->content(
-                                fn($record) => new HtmlString("
+                                fn ($record) => new HtmlString("
                                 <embed
                                     src='https://maps.google.com/maps?q={$record->lokasi_pipa_distribusi_lat},{$record->lokasi_pipa_distribusi_long}&hl=en&z=16&output=embed'
                                     type='application/pdf'
@@ -75,7 +75,7 @@ class SurveyInfolist
                         Placeholder::make('map_lokasi_sr')
                             ->label('Lokasi SR')
                             ->content(
-                                fn($record) => new HtmlString("
+                                fn ($record) => new HtmlString("
                                 <embed
                                     src='https://maps.google.com/maps?q={$record->lokasi_sr_lat},{$record->lokasi_sr_long}&hl=en&z=16&output=embed'
                                     type='application/pdf'
@@ -95,7 +95,7 @@ class SurveyInfolist
                         Placeholder::make('map_rabatan')
                             ->label('Lokasi Rabatan')
                             ->content(
-                                fn($record) => new HtmlString("
+                                fn ($record) => new HtmlString("
                                 <embed
                                     src='https://maps.google.com/maps?q={$record->lokasi_rabatan_lat},{$record->lokasi_rabatan_long}&hl=en&z=16&output=embed'
                                     type='application/pdf'
@@ -120,7 +120,7 @@ class SurveyInfolist
                         Placeholder::make('map_crossing')
                             ->label('Lokasi Crossing')
                             ->content(
-                                fn($record) => new HtmlString("
+                                fn ($record) => new HtmlString("
                                 <embed
                                     src='https://maps.google.com/maps?q={$record->lokasi_crossing_lat},{$record->lokasi_crossing_long}&hl=en&z=16&output=embed'
                                     type='application/pdf'

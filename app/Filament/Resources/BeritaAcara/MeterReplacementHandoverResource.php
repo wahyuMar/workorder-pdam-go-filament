@@ -19,12 +19,17 @@ class MeterReplacementHandoverResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::DocumentMagnifyingGlass;
 
     protected static ?string $navigationLabel = 'Serah Terima Ganti Meter';
+
     protected static string|UnitEnum|null $navigationGroup = 'Trandist Mobile - Berita Acara';
+
     protected static ?int $navigationSort = 1;
 
     protected static ?string $slug = 'berita-acara/meter-replacement-handover';
+
     protected static ?string $modelLabel = 'Serah Terima Ganti Meter';
+
     protected static ?string $pluralModelLabel = 'Serah Terima Ganti Meter';
+
     protected static ?string $breadcrumb = 'Serah Terima Ganti Meter';
 
     public static function form(Schema $schema): Schema

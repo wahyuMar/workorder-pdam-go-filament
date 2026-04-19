@@ -21,7 +21,7 @@ class SubscriptionClosureFactory extends Factory
     public function definition(): array
     {
         return [
-            'no_batl' => 'BATL-' . now()->format('Ymd') . '-' . fake()->unique()->numerify('####'),
+            'no_batl' => 'BATL-'.now()->format('Ymd').'-'.fake()->unique()->numerify('####'),
             'complaint_id' => Complaint::factory(),
             'no_sambungan' => fake()->numerify('######'),
             'nama' => fake()->name(),

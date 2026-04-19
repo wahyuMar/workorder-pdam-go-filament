@@ -18,12 +18,17 @@ class MeterReplacementResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::ArrowsRightLeft;
 
     protected static ?string $navigationLabel = 'Meter Replacement';
+
     protected static string|UnitEnum|null $navigationGroup = 'Work Order';
+
     protected static ?int $navigationSort = 1;
 
     protected static ?string $slug = 'work-orders/meter-replacement';
+
     protected static ?string $modelLabel = 'Meter Replacement';
+
     protected static ?string $pluralModelLabel = 'Meter Replacement';
+
     protected static ?string $breadcrumb = 'Meter Replacement';
 
     public static function table(Table $table): Table

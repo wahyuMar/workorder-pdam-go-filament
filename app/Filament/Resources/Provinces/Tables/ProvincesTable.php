@@ -19,7 +19,7 @@ class ProvincesTable
                 IconColumn::make('is_selectable')
                     ->label('Is Selectable')
                     ->boolean()
-                    ->sortable()
+                    ->sortable(),
             ])
             ->filters([
                 //

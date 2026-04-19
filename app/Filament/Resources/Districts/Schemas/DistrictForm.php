@@ -24,7 +24,7 @@ class DistrictForm
                             ->required()
                             ->maxLength(255),
                     ])
-                    ->columns(1)
+                    ->columns(1),
             ]);
     }
 }

@@ -79,7 +79,7 @@ class MeterReplacement extends Model
 
             $formattedNumber = str_pad($newNumber, 4, '0', STR_PAD_LEFT);
 
-            return $row->prefix . '-' . now()->format('Ymd') . '-' . $formattedNumber;
+            return $row->prefix.'-'.now()->format('Ymd').'-'.$formattedNumber;
         });
     }
 
@@ -103,7 +103,7 @@ class MeterReplacement extends Model
 
         $nextNumber = ($row->last_date === $today) ? $row->last_number + 1 : 1;
 
-        return $row->prefix . '-' . now()->format('Ymd') . '-' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+        return $row->prefix.'-'.now()->format('Ymd').'-'.str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
     }
 
     public function complaint()

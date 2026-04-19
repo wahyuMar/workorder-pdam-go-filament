@@ -21,7 +21,7 @@ class MeterRateChangeFactory extends Factory
     public function definition(): array
     {
         return [
-            'no_sput' => 'SPUT-' . now()->format('Ymd') . '-' . fake()->unique()->numerify('####'),
+            'no_sput' => 'SPUT-'.now()->format('Ymd').'-'.fake()->unique()->numerify('####'),
             'complaint_id' => Complaint::factory(),
             'no_sambungan' => fake()->numerify('######'),
             'nama' => fake()->name(),
@@ -40,7 +40,7 @@ class MeterRateChangeFactory extends Factory
      */
     public function confirmed(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'is_confirmed' => true,
         ]);
     }

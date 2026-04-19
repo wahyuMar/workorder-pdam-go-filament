@@ -3,13 +3,9 @@
 namespace App\Filament\Resources\WorkOrders\Tables;
 
 use App\Models\MeterRateChange;
-use App\Services\EmployeeLookupService;
-use App\Services\CustomerLookupService;
-use Filament\Actions\ViewAction;
 use Filament\Actions\Action;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -17,7 +13,6 @@ use Filament\Notifications\Notification;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class MeterRateChangeTable
@@ -95,9 +90,9 @@ class MeterRateChangeTable
                         // Fetch customer data from API
                         $customer = null;
                         try {
-                            $client = new \GuzzleHttp\Client();
-                            $response = $client->request('GET', 
-                                config('services.billing_api.base_uri') . '/external/customers/' . $record->no_sambungan,
+                            $client = new \GuzzleHttp\Client;
+                            $response = $client->request('GET',
+                                config('services.billing_api.base_uri').'/external/customers/'.$record->no_sambungan,
                                 [
                                     'headers' => ['X-App-Key' => config('services.billing_api.key')],
                                     'timeout' => 10,
@@ -106,7 +101,7 @@ class MeterRateChangeTable
                             $responseData = json_decode($response->getBody(), true);
                             $customer = $responseData['data'] ?? null;
                         } catch (\Exception $e) {
-                            Log::error('Customer API Error: ' . $e->getMessage());
+                            Log::error('Customer API Error: '.$e->getMessage());
                         }
 
                         return [
@@ -122,46 +117,46 @@ class MeterRateChangeTable
                                 ->default(fn () => $record->no_sambungan)
                                 ->disabled()
                                 ->dehydrated(),
-                            
+
                             TextInput::make('nama')
                                 ->label('Nama')
                                 ->default(fn () => $customer ? $customer['nama_pelanggan'] ?? $record->nama : $record->nama)
                                 ->disabled()
                                 ->dehydrated(),
-                            
+
                             TextInput::make('alamat')
                                 ->label('Alamat')
                                 ->default(fn () => $customer ? ($customer['alamat_berinvestasi'] ?? $customer['alamat'] ?? '') : '')
                                 ->disabled()
                                 ->dehydrated(),
-                            
+
                             TextInput::make('email')
                                 ->label('Email')
                                 ->default(fn () => $customer ? ($customer['email'] ?? '') : '')
                                 ->disabled()
                                 ->dehydrated(),
-                            
+
                             TextInput::make('no_hp')
                                 ->label('No. HP')
                                 ->default(fn () => $customer ? ($customer['no_hp'] ?? '') : '')
                                 ->disabled()
                                 ->dehydrated(),
-                            
+
                             TextInput::make('no_ktp')
                                 ->label('No. KTP')
                                 ->default(fn () => $customer ? ($customer['no_identitas'] ?? '') : '')
                                 ->disabled()
                                 ->dehydrated(),
-                            
+
                             Textarea::make('alasan_ubah_status')
                                 ->label('Alasan Ubah Status')
                                 ->rows(3)
                                 ->required(),
-                            
+
                             Toggle::make('is_confirmed')
                                 ->label('Konfirmasi')
                                 ->default(false),
-                            
+
                             DateTimePicker::make('tanggal')
                                 ->label('Tanggal')
                                 ->default(now())
@@ -236,7 +231,7 @@ class MeterRateChangeTable
                                 ->default($sput?->alasan_ganti_tarif)
                                 ->rows(3)
                                 ->disabled(),
-                            
+
                             Toggle::make('is_confirmed')
                                 ->label('Konfirmasi')
                                 ->disabled(),
