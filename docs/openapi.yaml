@@ -1,0 +1,1312 @@
+openapi: 3.1.0
+info:
+  title: Workorder PDAM Customer API
+  version: 1.0.0
+  description: |
+    Spesifikasi OpenAPI untuk customer-facing API.
+
+    API ini menggunakan Laravel Sanctum session-based authentication.
+    Untuk request yang mengubah state, client harus:
+    1. Memanggil GET /sanctum/csrf-cookie
+    2. Mengirim cookie session
+    3. Mengirim header X-XSRF-TOKEN
+servers:
+  - url: http://localhost:8000
+    description: Local development
+tags:
+  - name: Auth
+  - name: Profile
+  - name: Master Data
+  - name: Customer Numbers
+  - name: Registrations
+  - name: Complaints
+  - name: Uploads
+components:
+  securitySchemes:
+    sanctumSession:
+      type: apiKey
+      in: cookie
+      name: laravel_session
+      description: Session cookie yang dibuat setelah login.
+    xsrfToken:
+      type: apiKey
+      in: header
+      name: X-XSRF-TOKEN
+      description: Header CSRF untuk request state-changing.
+  parameters:
+    PerPage:
+      name: per_page
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 15
+    ProvinceId:
+      name: province
+      in: path
+      required: true
+      schema:
+        type: integer
+    RegencyId:
+      name: regency
+      in: path
+      required: true
+      schema:
+        type: integer
+    DistrictId:
+      name: district
+      in: path
+      required: true
+      schema:
+        type: integer
+    RegistrationId:
+      name: registration
+      in: path
+      required: true
+      schema:
+        type: integer
+    ComplaintId:
+      name: complaint
+      in: path
+      required: true
+      schema:
+        type: integer
+    CustomerNumberNo:
+      name: no
+      in: path
+      required: true
+      schema:
+        type: string
+  schemas:
+    MessageResponse:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          example: Logged out successfully.
+    ValidationError:
+      type: object
+      required:
+        - message
+        - errors
+      properties:
+        message:
+          type: string
+          example: The given data was invalid.
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+    PaginationLinks:
+      type: object
+      properties:
+        first:
+          type: string
+          nullable: true
+        last:
+          type: string
+          nullable: true
+        prev:
+          type: string
+          nullable: true
+        next:
+          type: string
+          nullable: true
+    PaginationMeta:
+      type: object
+      properties:
+        current_page:
+          type: integer
+        per_page:
+          type: integer
+        total:
+          type: integer
+        last_page:
+          type: integer
+    User:
+      type: object
+      required:
+        - id
+        - name
+        - email
+        - created_at
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Budi
+        email:
+          type: string
+          format: email
+          example: budi@example.com
+        created_at:
+          type: string
+          format: date-time
+    UserResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          $ref: '#/components/schemas/User'
+    RegisterRequest:
+      type: object
+      required:
+        - name
+        - email
+        - password
+        - password_confirmation
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        email:
+          type: string
+          format: email
+          maxLength: 255
+        password:
+          type: string
+          minLength: 8
+        password_confirmation:
+          type: string
+          minLength: 8
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 255
+        password:
+          type: string
+          maxLength: 255
+    ProfileUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        email:
+          type: string
+          format: email
+          maxLength: 255
+    ChangePasswordRequest:
+      type: object
+      required:
+        - current_password
+        - password
+        - password_confirmation
+      properties:
+        current_password:
+          type: string
+        password:
+          type: string
+          minLength: 8
+        password_confirmation:
+          type: string
+          minLength: 8
+    MasterDataItem:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Nama Item
+    MasterDataCollectionResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/MasterDataItem'
+    CustomerNumber:
+      type: object
+      required:
+        - id
+        - no_sambungan
+        - verified_at
+        - created_at
+      properties:
+        id:
+          type: integer
+        no_sambungan:
+          type: string
+          example: '1234567890'
+        verified_at:
+          type: string
+          format: date-time
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          nullable: true
+    CustomerNumberResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          $ref: '#/components/schemas/CustomerNumber'
+    CustomerNumberCollectionResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerNumber'
+    CustomerNumberVerifyRequest:
+      type: object
+      required:
+        - no_sambungan
+      properties:
+        no_sambungan:
+          type: string
+          maxLength: 20
+          pattern: ^[A-Za-z0-9]+$
+    CustomerNumberConfirmRequest:
+      type: object
+      required:
+        - no_sambungan
+        - nik
+      properties:
+        no_sambungan:
+          type: string
+          maxLength: 20
+          pattern: ^[A-Za-z0-9]+$
+        nik:
+          type: string
+          maxLength: 20
+          pattern: ^\d+$
+    BillingLookupData:
+      type: object
+      required:
+        - no_sambungan
+        - nama_pelanggan
+        - alamat_pelanggan
+        - no_ktp
+      properties:
+        no_sambungan:
+          type: string
+        nama_pelanggan:
+          type: string
+          nullable: true
+        alamat_pelanggan:
+          type: string
+          nullable: true
+        no_ktp:
+          type: string
+          nullable: true
+          example: 3174****1234
+    BillingLookupResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          $ref: '#/components/schemas/BillingLookupData'
+    RegistrationCreateRequest:
+      type: object
+      required:
+        - nama_lengkap
+      properties:
+        nama_lengkap:
+          type: string
+          maxLength: 255
+        program_id:
+          type: integer
+          nullable: true
+        no_ktp:
+          type: string
+          nullable: true
+        no_kk:
+          type: string
+          nullable: true
+        pekerjaan:
+          type: string
+          nullable: true
+        email:
+          type: string
+          format: email
+          nullable: true
+        no_telp:
+          type: string
+          nullable: true
+        no_hp:
+          type: string
+          nullable: true
+        alamat_ktp:
+          type: string
+          nullable: true
+        dusun_kampung_ktp:
+          type: string
+          nullable: true
+        rt_ktp:
+          type: integer
+          nullable: true
+        rw_ktp:
+          type: integer
+          nullable: true
+        province_id_ktp:
+          type: integer
+          nullable: true
+        regency_id_ktp:
+          type: integer
+          nullable: true
+        district_id_ktp:
+          type: integer
+          nullable: true
+        village_id_ktp:
+          type: integer
+          nullable: true
+        alamat_pasang:
+          type: string
+          nullable: true
+        dusun_kampung_pasang:
+          type: string
+          nullable: true
+        rt_pasang:
+          type: integer
+          nullable: true
+        rw_pasang:
+          type: integer
+          nullable: true
+        province_id_pasang:
+          type: integer
+          nullable: true
+        regency_id_pasang:
+          type: integer
+          nullable: true
+        district_id_pasang:
+          type: integer
+          nullable: true
+        village_id_pasang:
+          type: integer
+          nullable: true
+        jumlah_penghuni_tetap:
+          type: integer
+          nullable: true
+        jumlah_penghuni_tidak_tetap:
+          type: integer
+          nullable: true
+        jumlah_kran_air_minum:
+          type: integer
+          nullable: true
+        jenis_rumah:
+          type: string
+          nullable: true
+          enum:
+            - Permanen
+            - Semi Permanen
+            - Non Permanen
+        jumlah_kran:
+          type: integer
+          nullable: true
+        daya_listrik:
+          type: integer
+          nullable: true
+        upload_ktp:
+          type: string
+          nullable: true
+        upload_kk:
+          type: string
+          nullable: true
+        upload_tagihan_listrik:
+          type: string
+          nullable: true
+        upload_foto_rumah:
+          type: string
+          nullable: true
+        latitude:
+          type: string
+          nullable: true
+        longitude:
+          type: string
+          nullable: true
+    RegistrationListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        no_surat:
+          type: string
+        nama_lengkap:
+          type: string
+        program_id:
+          type: integer
+          nullable: true
+        no_ktp:
+          type: string
+          nullable: true
+        source:
+          type: string
+        tanggal:
+          type: string
+          format: date-time
+          nullable: true
+        has_survey:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          nullable: true
+    RegistrationDetail:
+      allOf:
+        - $ref: '#/components/schemas/RegistrationCreateRequest'
+        - type: object
+          properties:
+            id:
+              type: integer
+            no_surat:
+              type: string
+            source:
+              type: string
+            tanggal:
+              type: string
+              format: date-time
+              nullable: true
+            created_at:
+              type: string
+              format: date-time
+              nullable: true
+            has_survey:
+              type: boolean
+            survey:
+              type: object
+              nullable: true
+              properties:
+                no_survey:
+                  type: string
+                tanggal_survey:
+                  type: string
+                  format: date-time
+                  nullable: true
+    RegistrationResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/RegistrationDetail'
+    RegistrationPaginatedResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/RegistrationListItem'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    ComplaintCreateRequest:
+      type: object
+      required:
+        - no_sambungan
+        - complaint_type_id
+        - judul_pengaduan
+        - isi_pengaduan
+      properties:
+        no_sambungan:
+          type: string
+        complaint_type_id:
+          type: integer
+        judul_pengaduan:
+          type: string
+          maxLength: 255
+        isi_pengaduan:
+          type: string
+          maxLength: 65535
+        foto:
+          type: array
+          maxItems: 5
+          items:
+            type: string
+        latitude:
+          type: number
+          nullable: true
+        longitude:
+          type: number
+          nullable: true
+    ComplaintListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        no_pengaduan:
+          type: string
+        complaint_type:
+          $ref: '#/components/schemas/MasterDataItem'
+        no_sambungan:
+          type: string
+        judul_pengaduan:
+          type: string
+        status:
+          type: string
+        priority:
+          type: string
+        tanggal:
+          type: string
+          format: date-time
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          nullable: true
+    ComplaintDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+        no_pengaduan:
+          type: string
+        complaint_type:
+          $ref: '#/components/schemas/MasterDataItem'
+        no_sambungan:
+          type: string
+        nama:
+          type: string
+          nullable: true
+        alamat:
+          type: string
+          nullable: true
+        latitude:
+          type: number
+          nullable: true
+        longitude:
+          type: number
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        no_hp:
+          type: string
+          nullable: true
+        no_ktp:
+          type: string
+          nullable: true
+        sumber:
+          type: string
+        judul_pengaduan:
+          type: string
+        isi_pengaduan:
+          type: string
+        foto:
+          type: array
+          nullable: true
+          items:
+            type: string
+        tanggal:
+          type: string
+          format: date-time
+          nullable: true
+        status:
+          type: string
+        priority:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          nullable: true
+    ComplaintResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/ComplaintDetail'
+    ComplaintPaginatedResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ComplaintListItem'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    ComplaintTimelineItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        work_order:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+        photos:
+          type: array
+          nullable: true
+          items:
+            type: string
+        carbon_copies:
+          type: array
+          nullable: true
+          items:
+            type: string
+        follow_up_at:
+          type: string
+          format: date-time
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          nullable: true
+    ComplaintTimelineResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ComplaintTimelineItem'
+    UploadResponseData:
+      type: object
+      properties:
+        filename:
+          type: string
+        original_name:
+          type: string
+        size:
+          type: integer
+        mime_type:
+          type: string
+    UploadResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/UploadResponseData'
+paths:
+  /sanctum/csrf-cookie:
+    get:
+      tags:
+        - Auth
+      summary: Bootstrap CSRF cookie
+      description: Mengambil cookie XSRF-TOKEN dan laravel_session sebelum login atau request state-changing.
+      responses:
+        '204':
+          description: CSRF cookie berhasil diset.
+  /api/v1/auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Register customer
+      security:
+        - xsrfToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Customer berhasil dibuat dan login.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '403':
+          description: Sudah terautentikasi.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '422':
+          description: Validation error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+  /api/v1/auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login customer
+      description: Hanya menerima user dengan role customer.
+      security:
+        - sanctumSession: []
+          xsrfToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login berhasil.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '401':
+          description: Kredensial salah atau user bukan customer.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '403':
+          description: Sudah terautentikasi.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '422':
+          description: Validation error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '429':
+          description: Rate limited.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+  /api/v1/auth/logout:
+    post:
+      tags:
+        - Auth
+      summary: Logout customer
+      security:
+        - sanctumSession: []
+          xsrfToken: []
+      responses:
+        '200':
+          description: Logout berhasil.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '401':
+          description: Unauthenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+  /api/v1/profile:
+    get:
+      tags:
+        - Profile
+      summary: Get current profile
+      security:
+        - sanctumSession: []
+      responses:
+        '200':
+          description: Profil user saat ini.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '401':
+          description: Unauthenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+    put:
+      tags:
+        - Profile
+      summary: Update current profile
+      security:
+        - sanctumSession: []
+          xsrfToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfileUpdateRequest'
+      responses:
+        '200':
+          description: Profil berhasil diupdate.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '401':
+          description: Unauthenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '422':
+          description: Validation error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+  /api/v1/profile/password:
+    put:
+      tags:
+        - Profile
+      summary: Change current password
+      security:
+        - sanctumSession: []
+          xsrfToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+      responses:
+        '200':
+          description: Password berhasil diubah.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '401':
+          description: Unauthenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '422':
+          description: Validation error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+  /api/v1/master/programs:
+    get:
+      tags:
+        - Master Data
+      summary: List programs
+      security:
+        - sanctumSession: []
+      responses:
+        '200':
+          description: Daftar program aktif.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MasterDataCollectionResponse'
+  /api/v1/master/provinces:
+    get:
+      tags:
+        - Master Data
+      summary: List provinces
+      security:
+        - sanctumSession: []
+      responses:
+        '200':
+          description: Daftar provinsi selectable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MasterDataCollectionResponse'
+  /api/v1/master/regencies/{province}:
+    get:
+      tags:
+        - Master Data
+      summary: List regencies by province
+      security:
+        - sanctumSession: []
+      parameters:
+        - $ref: '#/components/parameters/ProvinceId'
+      responses:
+        '200':
+          description: Daftar regency.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MasterDataCollectionResponse'
+  /api/v1/master/districts/{regency}:
+    get:
+      tags:
+        - Master Data
+      summary: List districts by regency
+      security:
+        - sanctumSession: []
+      parameters:
+        - $ref: '#/components/parameters/RegencyId'
+      responses:
+        '200':
+          description: Daftar district.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MasterDataCollectionResponse'
+  /api/v1/master/villages/{district}:
+    get:
+      tags:
+        - Master Data
+      summary: List villages by district
+      security:
+        - sanctumSession: []
+      parameters:
+        - $ref: '#/components/parameters/DistrictId'
+      responses:
+        '200':
+          description: Daftar village.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MasterDataCollectionResponse'
+  /api/v1/master/complaint-types:
+    get:
+      tags:
+        - Master Data
+      summary: List complaint types
+      security:
+        - sanctumSession: []
+      responses:
+        '200':
+          description: Daftar complaint type aktif.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MasterDataCollectionResponse'
+  /api/v1/customer-numbers/verify:
+    post:
+      tags:
+        - Customer Numbers
+      summary: Verify customer number in billing
+      security:
+        - sanctumSession: []
+          xsrfToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerNumberVerifyRequest'
+      responses:
+        '200':
+          description: Nomor sambungan ditemukan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillingLookupResponse'
+        '404':
+          description: Nomor sambungan tidak ditemukan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '503':
+          description: Billing service unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+  /api/v1/customer-numbers/confirm:
+    post:
+      tags:
+        - Customer Numbers
+      summary: Confirm and attach customer number
+      security:
+        - sanctumSession: []
+          xsrfToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerNumberConfirmRequest'
+      responses:
+        '200':
+          description: Nomor sambungan berhasil ditautkan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerNumberResponse'
+        '404':
+          description: Nomor sambungan tidak ditemukan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '409':
+          description: Sudah terhubung ke akun.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '422':
+          description: Validation error atau NIK billing belum tersedia.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ValidationError'
+                  - $ref: '#/components/schemas/MessageResponse'
+        '503':
+          description: Billing service unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+  /api/v1/customer-numbers:
+    get:
+      tags:
+        - Customer Numbers
+      summary: List attached customer numbers
+      security:
+        - sanctumSession: []
+      responses:
+        '200':
+          description: Daftar nomor sambungan milik user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerNumberCollectionResponse'
+  /api/v1/customer-numbers/{no}/billing:
+    get:
+      tags:
+        - Customer Numbers
+      summary: Get billing snapshot for attached customer number
+      security:
+        - sanctumSession: []
+      parameters:
+        - $ref: '#/components/parameters/CustomerNumberNo'
+      responses:
+        '200':
+          description: Snapshot billing data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillingLookupResponse'
+        '404':
+          description: Nomor sambungan atau data billing tidak ditemukan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '503':
+          description: Billing service unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+  /api/v1/customer-numbers/{no}:
+    delete:
+      tags:
+        - Customer Numbers
+      summary: Remove attached customer number
+      security:
+        - sanctumSession: []
+          xsrfToken: []
+      parameters:
+        - $ref: '#/components/parameters/CustomerNumberNo'
+      responses:
+        '200':
+          description: Nomor sambungan berhasil dihapus.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '404':
+          description: Nomor sambungan tidak ditemukan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+  /api/v1/registrations:
+    post:
+      tags:
+        - Registrations
+      summary: Create SR registration
+      security:
+        - sanctumSession: []
+          xsrfToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistrationCreateRequest'
+      responses:
+        '201':
+          description: Registrasi berhasil dibuat.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistrationResponse'
+        '422':
+          description: Validation error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+    get:
+      tags:
+        - Registrations
+      summary: List registrations
+      security:
+        - sanctumSession: []
+      parameters:
+        - $ref: '#/components/parameters/PerPage'
+      responses:
+        '200':
+          description: Daftar registrasi milik user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistrationPaginatedResponse'
+  /api/v1/registrations/{registration}:
+    get:
+      tags:
+        - Registrations
+      summary: Get registration detail
+      security:
+        - sanctumSession: []
+      parameters:
+        - $ref: '#/components/parameters/RegistrationId'
+      responses:
+        '200':
+          description: Detail registrasi.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistrationResponse'
+        '404':
+          description: Registrasi tidak ditemukan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+  /api/v1/complaints:
+    post:
+      tags:
+        - Complaints
+      summary: Create complaint
+      security:
+        - sanctumSession: []
+          xsrfToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ComplaintCreateRequest'
+      responses:
+        '201':
+          description: Pengaduan berhasil dibuat.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComplaintResponse'
+        '422':
+          description: Validation error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '503':
+          description: Billing service unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+    get:
+      tags:
+        - Complaints
+      summary: List complaints
+      security:
+        - sanctumSession: []
+      parameters:
+        - $ref: '#/components/parameters/PerPage'
+      responses:
+        '200':
+          description: Daftar pengaduan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComplaintPaginatedResponse'
+  /api/v1/complaints/{complaint}:
+    get:
+      tags:
+        - Complaints
+      summary: Get complaint detail
+      security:
+        - sanctumSession: []
+      parameters:
+        - $ref: '#/components/parameters/ComplaintId'
+      responses:
+        '200':
+          description: Detail pengaduan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComplaintResponse'
+        '404':
+          description: Pengaduan tidak ditemukan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+  /api/v1/complaints/{complaint}/timeline:
+    get:
+      tags:
+        - Complaints
+      summary: Get complaint timeline
+      security:
+        - sanctumSession: []
+      parameters:
+        - $ref: '#/components/parameters/ComplaintId'
+      responses:
+        '200':
+          description: Timeline pengaduan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComplaintTimelineResponse'
+        '404':
+          description: Pengaduan tidak ditemukan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+  /api/v1/uploads:
+    post:
+      tags:
+        - Uploads
+      summary: Upload attachment
+      security:
+        - sanctumSession: []
+          xsrfToken: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: File berhasil diupload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadResponse'
+        '422':
+          description: Validation error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'

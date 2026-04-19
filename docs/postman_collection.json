@@ -1,0 +1,233 @@
+{
+  "info": {
+    "name": "Workorder PDAM Customer API",
+    "description": "Postman collection untuk customer API berbasis Laravel Sanctum session auth.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8000" },
+    { "key": "apiBase", "value": "{{baseUrl}}/api/v1" },
+    { "key": "registrationId", "value": "1" },
+    { "key": "complaintId", "value": "1" },
+    { "key": "provinceId", "value": "1" },
+    { "key": "regencyId", "value": "1" },
+    { "key": "districtId", "value": "1" },
+    { "key": "customerNumber", "value": "1234567890" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Get CSRF Cookie",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/sanctum/csrf-cookie",
+              "host": ["{{baseUrl}}"],
+              "path": ["sanctum", "csrf-cookie"]
+            },
+            "description": "Wajib dipanggil sebelum login atau request POST/PUT/DELETE jika cookie belum ada."
+          }
+        },
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Budi\",\n  \"email\": \"budi@example.com\",\n  \"password\": \"password123\",\n  \"password_confirmation\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{apiBase}}/auth/register",
+              "host": ["{{apiBase}}"],
+              "path": ["auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"customer@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{apiBase}}/auth/login",
+              "host": ["{{apiBase}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Pastikan request Get CSRF Cookie sudah dijalankan. Postman akan menyimpan cookie di cookie jar."
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{apiBase}}/auth/logout",
+              "host": ["{{apiBase}}"],
+              "path": ["auth", "logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Profile",
+      "item": [
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{apiBase}}/profile", "host": ["{{apiBase}}"], "path": ["profile"] }
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Budi Baru\",\n  \"email\": \"budi-baru@example.com\"\n}"
+            },
+            "url": { "raw": "{{apiBase}}/profile", "host": ["{{apiBase}}"], "path": ["profile"] }
+          }
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"current_password\": \"password123\",\n  \"password\": \"passwordBaru123\",\n  \"password_confirmation\": \"passwordBaru123\"\n}"
+            },
+            "url": { "raw": "{{apiBase}}/profile/password", "host": ["{{apiBase}}"], "path": ["profile", "password"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Master Data",
+      "item": [
+        { "name": "Programs", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{apiBase}}/master/programs", "host": ["{{apiBase}}"], "path": ["master", "programs"] } } },
+        { "name": "Provinces", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{apiBase}}/master/provinces", "host": ["{{apiBase}}"], "path": ["master", "provinces"] } } },
+        { "name": "Regencies", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{apiBase}}/master/regencies/{{provinceId}}", "host": ["{{apiBase}}"], "path": ["master", "regencies", "{{provinceId}}"] } } },
+        { "name": "Districts", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{apiBase}}/master/districts/{{regencyId}}", "host": ["{{apiBase}}"], "path": ["master", "districts", "{{regencyId}}"] } } },
+        { "name": "Villages", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{apiBase}}/master/villages/{{districtId}}", "host": ["{{apiBase}}"], "path": ["master", "villages", "{{districtId}}"] } } },
+        { "name": "Complaint Types", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{apiBase}}/master/complaint-types", "host": ["{{apiBase}}"], "path": ["master", "complaint-types"] } } }
+      ]
+    },
+    {
+      "name": "Customer Numbers",
+      "item": [
+        {
+          "name": "Verify Customer Number",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"no_sambungan\": \"{{customerNumber}}\"\n}" },
+            "url": { "raw": "{{apiBase}}/customer-numbers/verify", "host": ["{{apiBase}}"], "path": ["customer-numbers", "verify"] }
+          }
+        },
+        {
+          "name": "Confirm Customer Number",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"no_sambungan\": \"{{customerNumber}}\",\n  \"nik\": \"3174000011112222\"\n}" },
+            "url": { "raw": "{{apiBase}}/customer-numbers/confirm", "host": ["{{apiBase}}"], "path": ["customer-numbers", "confirm"] }
+          }
+        },
+        { "name": "List Customer Numbers", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{apiBase}}/customer-numbers", "host": ["{{apiBase}}"], "path": ["customer-numbers"] } } },
+        { "name": "Billing Snapshot", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{apiBase}}/customer-numbers/{{customerNumber}}/billing", "host": ["{{apiBase}}"], "path": ["customer-numbers", "{{customerNumber}}", "billing"] } } },
+        { "name": "Delete Customer Number", "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{apiBase}}/customer-numbers/{{customerNumber}}", "host": ["{{apiBase}}"], "path": ["customer-numbers", "{{customerNumber}}"] } } }
+      ]
+    },
+    {
+      "name": "Registrations",
+      "item": [
+        {
+          "name": "Create Registration",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"nama_lengkap\": \"Budi\",\n  \"program_id\": 1,\n  \"no_ktp\": \"3174000011112222\",\n  \"no_hp\": \"08123456789\"\n}" },
+            "url": { "raw": "{{apiBase}}/registrations", "host": ["{{apiBase}}"], "path": ["registrations"] }
+          }
+        },
+        { "name": "List Registrations", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{apiBase}}/registrations?per_page=15", "host": ["{{apiBase}}"], "path": ["registrations"], "query": [{ "key": "per_page", "value": "15" }] } } },
+        { "name": "Get Registration Detail", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{apiBase}}/registrations/{{registrationId}}", "host": ["{{apiBase}}"], "path": ["registrations", "{{registrationId}}"] } } }
+      ]
+    },
+    {
+      "name": "Complaints",
+      "item": [
+        {
+          "name": "Create Complaint",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"no_sambungan\": \"{{customerNumber}}\",\n  \"complaint_type_id\": 1,\n  \"judul_pengaduan\": \"Air kecil\",\n  \"isi_pengaduan\": \"Debit air sangat kecil sejak pagi.\",\n  \"foto\": [\n    \"bukti-1.jpg\"\n  ],\n  \"latitude\": -6.2,\n  \"longitude\": 106.8\n}" },
+            "url": { "raw": "{{apiBase}}/complaints", "host": ["{{apiBase}}"], "path": ["complaints"] }
+          }
+        },
+        { "name": "List Complaints", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{apiBase}}/complaints?per_page=15", "host": ["{{apiBase}}"], "path": ["complaints"], "query": [{ "key": "per_page", "value": "15" }] } } },
+        { "name": "Get Complaint Detail", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{apiBase}}/complaints/{{complaintId}}", "host": ["{{apiBase}}"], "path": ["complaints", "{{complaintId}}"] } } },
+        { "name": "Get Complaint Timeline", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{apiBase}}/complaints/{{complaintId}}/timeline", "host": ["{{apiBase}}"], "path": ["complaints", "{{complaintId}}", "timeline"] } } }
+      ]
+    },
+    {
+      "name": "Uploads",
+      "item": [
+        {
+          "name": "Upload File",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "file", "type": "file", "src": "" }
+              ]
+            },
+            "url": { "raw": "{{apiBase}}/uploads", "host": ["{{apiBase}}"], "path": ["uploads"] },
+            "description": "Valid file: jpg, jpeg, png, pdf. Maks 2048 KB."
+          }
+        }
+      ]
+    }
+  ]
+}
