@@ -214,7 +214,8 @@ class CustomerLookupService
     public function fetchTagihan(string $noSambungan, bool $throwOnError = false): array
     {
         $timestamp = time();
-        $signature = hash_hmac('sha256', $this->tagihanApiKey.$noSambungan.$timestamp, $this->tagihanApiSecret);
+        $string = "{$noSambungan}&{$this->tagihanApiKey}&{$timestamp}&{$this->tagihanApiSecret}";
+        $signature = hash_hmac('sha256', $string, $this->tagihanApiSecret);
 
         try {
             $response = Http::timeout(Config::get('services.billing_api.timeout', 10))
