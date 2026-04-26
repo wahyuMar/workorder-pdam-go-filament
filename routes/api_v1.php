@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\BeritaController;
 use App\Http\Controllers\Api\V1\ComplaintController;
 use App\Http\Controllers\Api\V1\CustomerNumberController;
 use App\Http\Controllers\Api\V1\MasterDataController;
@@ -25,6 +26,10 @@ Route::middleware('throttle:guest')->group(function () {
     // Auth
     Route::post('/auth/register', [AuthController::class, 'register'])->name('api.v1.auth.register');
     Route::post('/auth/login', [AuthController::class, 'login'])->middleware('throttle:login')->name('api.v1.auth.login');
+
+    // News (public)
+    Route::get('/beritas', [BeritaController::class, 'index'])->name('api.v1.beritas.index');
+    Route::get('/beritas/{berita}', [BeritaController::class, 'show'])->whereNumber('berita')->name('api.v1.beritas.show');
 
     // Password Reset (deferred post-MVP)
     // Route::post('/auth/forgot-password', ...)->name('api.v1.auth.forgot-password');

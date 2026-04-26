@@ -718,6 +718,105 @@ Response 201:
 
 Gunakan nilai `filename` ini untuk field seperti `upload_ktp`, `upload_kk`, `upload_tagihan_listrik`, `upload_foto_rumah`, atau elemen array `foto` pada pengaduan.
 
+---
+
+## News & Announcements
+
+Dua endpoint ini **tidak memerlukan autentikasi**. Bisa dipanggil langsung tanpa login.
+
+### GET /api/v1/beritas
+
+Mengambil daftar berita/pengumuman yang sudah dipublish, diurutkan terbaru di atas.
+
+**Query Parameters:**
+
+| Parameter  | Tipe    | Wajib | Keterangan                                      |
+|------------|---------|-------|-------------------------------------------------|
+| `per_page` | integer | Tidak | Jumlah item per halaman (1–100, default: 15)    |
+| `kategori` | string  | Tidak | Filter: `news` atau `pengumuman`                |
+
+**Contoh request:**
+
+```http
+GET /api/v1/beritas?kategori=pengumuman&per_page=10
+Accept: application/json
+```
+
+**Response 200:**
+
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "judul": "PDAM Tingkatkan Layanan Air Bersih",
+      "kategori": "news",
+      "kategori_label": "News",
+      "image": "http://localhost:8001/storage/beritas/images/01KQ5HS8VB5VKM8QHKQMDV2AQ6.jpg",
+      "is_publish": true,
+      "created_at": "2026-04-26T15:48:41+00:00"
+    }
+  ],
+  "links": {
+    "first": "...",
+    "last": "...",
+    "prev": null,
+    "next": null
+  },
+  "meta": {
+    "current_page": 1,
+    "per_page": 15,
+    "total": 1,
+    "last_page": 1
+  }
+}
+```
+
+---
+
+### GET /api/v1/beritas/{id}
+
+Mengambil detail satu berita yang sudah dipublish.
+
+**Path Parameters:**
+
+| Parameter | Tipe    | Keterangan  |
+|-----------|---------|-------------|
+| `id`      | integer | ID berita   |
+
+**Contoh request:**
+
+```http
+GET /api/v1/beritas/1
+Accept: application/json
+```
+
+**Response 200:**
+
+```json
+{
+  "data": {
+    "id": 1,
+    "judul": "PDAM Tingkatkan Layanan Air Bersih",
+    "kategori": "news",
+    "kategori_label": "News",
+    "content": "<p>Mulai 1 Mei 2026 layanan air bersih...</p>",
+    "image": "http://localhost:8001/storage/beritas/images/01KQ5HS8VB5VKM8QHKQMDV2AQ6.jpg",
+    "file_lampiran": null,
+    "is_publish": true,
+    "created_by": {
+      "id": 1,
+      "name": "Admin"
+    },
+    "created_at": "2026-04-26T15:48:41+00:00"
+  }
+}
+```
+
+**Response 404** — jika berita tidak ditemukan atau belum dipublish.
+
+---
+
 ## Error Handling Yang Perlu Ditangani Frontend
 
 - `401 Unauthenticated`: session belum ada atau sudah expired

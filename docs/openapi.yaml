@@ -20,6 +20,7 @@ tags:
   - name: Customer Numbers
   - name: Registrations
   - name: Complaints
+  - name: News
   - name: Uploads
 components:
   securitySchemes:
@@ -692,6 +693,99 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/UploadResponseData'
+    BeritaListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        judul:
+          type: string
+          example: PDAM Tingkatkan Layanan Air Bersih
+        kategori:
+          type: string
+          enum:
+            - news
+            - pengumuman
+          example: news
+        kategori_label:
+          type: string
+          example: News
+        image:
+          type: string
+          format: uri
+          nullable: true
+          example: http://localhost:8001/storage/beritas/images/01KQ5HS8VB5VKM8QHKQMDV2AQ6.jpg
+        is_publish:
+          type: boolean
+          example: true
+        created_at:
+          type: string
+          format: date-time
+          nullable: true
+    BeritaDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        judul:
+          type: string
+          example: PDAM Tingkatkan Layanan Air Bersih
+        kategori:
+          type: string
+          enum:
+            - news
+            - pengumuman
+          example: news
+        kategori_label:
+          type: string
+          example: News
+        content:
+          type: string
+          description: HTML content.
+          example: <p>Mulai 1 Mei 2026 layanan air bersih...</p>
+        image:
+          type: string
+          format: uri
+          nullable: true
+          example: http://localhost:8001/storage/beritas/images/01KQ5HS8VB5VKM8QHKQMDV2AQ6.jpg
+        file_lampiran:
+          type: string
+          format: uri
+          nullable: true
+          example: http://localhost:8001/storage/beritas/attachments/01KQ5HS8VB5VKM8QHKQMDV2AQ7.pdf
+        is_publish:
+          type: boolean
+          example: true
+        created_by:
+          type: object
+          nullable: true
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+        created_at:
+          type: string
+          format: date-time
+          nullable: true
+    BeritaPaginatedResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/BeritaListItem'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    BeritaResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/BeritaDetail'
 paths:
   /sanctum/csrf-cookie:
     get:
@@ -1277,6 +1371,52 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MessageResponse'
+  /api/v1/beritas:
+    get:
+      tags:
+        - News
+      summary: List published news / announcements
+      description: |
+        Returns a paginated list of published berita. No authentication required.
+        Optionally filter by category.
+      parameters:
+        - $ref: '#/components/parameters/PerPage'
+        - name: kategori
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - news
+              - pengumuman
+      responses:
+        '200':
+          description: Paginated list of berita.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BeritaPaginatedResponse'
+  /api/v1/beritas/{berita}:
+    get:
+      tags:
+        - News
+      summary: Get detail of a published berita
+      description: Returns full detail of a single published berita. Returns 404 if not found or not published.
+      parameters:
+        - name: berita
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Berita detail.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BeritaResponse'
+        '404':
+          description: Not found or not published.
   /api/v1/uploads:
     post:
       tags:
