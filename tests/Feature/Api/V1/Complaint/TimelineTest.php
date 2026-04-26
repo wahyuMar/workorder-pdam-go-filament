@@ -73,20 +73,14 @@ class TimelineTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
-                    '*' => [
-                        'id',
-                        'work_order',
-                        'notes',
-                        'photos',
-                        'carbon_copies',
-                        'follow_up_at',
-                        'created_at',
-                    ],
+                    '*' => ['type', 'at', 'payload'],
                 ],
             ])
-            ->assertJsonCount(1, 'data')
-            ->assertJsonPath('data.0.work_order', 'Ganti Meter')
-            ->assertJsonPath('data.0.notes', 'Teknisi ditugaskan.');
+            ->assertJsonCount(2, 'data')
+            ->assertJsonPath('data.0.type', 'complaint_created')
+            ->assertJsonPath('data.1.type', 'follow_up')
+            ->assertJsonPath('data.1.payload.work_order', 'Ganti Meter')
+            ->assertJsonPath('data.1.payload.notes', 'Teknisi ditugaskan.');
     }
 
     public function test_timeline_ordered_chronologically(): void
@@ -99,7 +93,7 @@ class TimelineTest extends TestCase
             'complaint_number' => $complaint->no_pengaduan,
             'work_order' => 'Ganti Meter',
             'notes' => 'First follow-up',
-            'follow_up_at' => now()->subDays(2),
+            'follow_up_at' => now()->addDay(),
         ]);
 
         $newer = ComplaintFollowUp::create([
@@ -107,16 +101,17 @@ class TimelineTest extends TestCase
             'complaint_number' => $complaint->no_pengaduan,
             'work_order' => 'Tutup',
             'notes' => 'Second follow-up',
-            'follow_up_at' => now()->subDay(),
+            'follow_up_at' => now()->addDays(2),
         ]);
 
         $response = $this->actingAs($user)->getJson("/api/v1/complaints/{$complaint->id}/timeline");
 
         $response->assertStatus(200)
-            ->assertJsonCount(2, 'data');
+            ->assertJsonCount(3, 'data');
 
-        $this->assertEquals($older->id, $response->json('data.0.id'));
-        $this->assertEquals($newer->id, $response->json('data.1.id'));
+        $this->assertEquals('complaint_created', $response->json('data.0.type'));
+        $this->assertEquals($older->id, $response->json('data.1.payload.id'));
+        $this->assertEquals($newer->id, $response->json('data.2.payload.id'));
     }
 
     public function test_empty_timeline_returns_empty_data(): void
@@ -127,7 +122,8 @@ class TimelineTest extends TestCase
         $response = $this->actingAs($user)->getJson("/api/v1/complaints/{$complaint->id}/timeline");
 
         $response->assertStatus(200)
-            ->assertJsonCount(0, 'data');
+            ->assertJsonCount(1, 'data')
+            ->assertJsonPath('data.0.type', 'complaint_created');
     }
 
     public function test_cannot_view_other_users_complaint_timeline(): void

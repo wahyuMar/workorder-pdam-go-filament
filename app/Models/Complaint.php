@@ -194,4 +194,29 @@ class Complaint extends Model
     {
         return $this->hasOne(TeraMeterReport::class);
     }
+
+    public function meterReplacementHandover()
+    {
+        return $this->hasOne(MeterReplacementHandover::class);
+    }
+
+    public function statusChange()
+    {
+        return $this->hasOne(StatusChange::class);
+    }
+
+    public function subscriptionCancellation()
+    {
+        return $this->hasOne(SubscriptionCancellation::class);
+    }
+
+    public function subscriptionClosure()
+    {
+        return $this->hasOne(SubscriptionClosure::class);
+    }
+
+    public function subscriptionReopening()
+    {
+        return $this->hasOne(SubscriptionReopening::class);
+    }
 }

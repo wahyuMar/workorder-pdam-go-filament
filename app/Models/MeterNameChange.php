@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 class MeterNameChange extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'no_spun',
         'complaint_id',
