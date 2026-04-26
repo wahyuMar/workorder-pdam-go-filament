@@ -14,10 +14,16 @@ class CustomerLookupService
 
     protected string $appKey;
 
+    protected string $tagihanApiKey;
+
+    protected string $tagihanApiSecret;
+
     public function __construct()
     {
         $this->baseUri = rtrim(Config::get('services.billing_api.base_uri'), '/');
         $this->appKey = Config::get('services.billing_api.app_key');
+        $this->tagihanApiKey = Config::get('services.billing_api.api_key', '');
+        $this->tagihanApiSecret = Config::get('services.billing_api.api_secret', '');
     }
 
     public function fetchByNoSambungan(string $noSambungan, bool $throwOnError = false): array
@@ -200,5 +206,56 @@ class CustomerLookupService
         foreach (Cache::tags(['customer_api'])->flush() as $key) {
             Cache::forget($key);
         }
+    }
+
+    /**
+     * Fetch tagihan (billing invoice) for a given no_sambungan using HMAC-signed request.
+     */
+    public function fetchTagihan(string $noSambungan, bool $throwOnError = false): array
+    {
+        $timestamp = time();
+        $signature = hash_hmac('sha256', $this->tagihanApiKey.$noSambungan.$timestamp, $this->tagihanApiSecret);
+
+        try {
+            $response = Http::timeout(Config::get('services.billing_api.timeout', 10))
+                ->get($this->baseUri.'/billing/tagihan/json', [
+                    'api_key' => $this->tagihanApiKey,
+                    'nosambungan' => $noSambungan,
+                    'timestamp' => $timestamp,
+                    'signature' => $signature,
+                ]);
+
+            Log::info('Tagihan lookup response', [
+                'no_sambungan' => $noSambungan,
+                'status' => $response->status(),
+            ]);
+        } catch (\Throwable $e) {
+            Log::warning('Tagihan lookup failed', [
+                'no_sambungan' => $noSambungan,
+                'error' => $e->getMessage(),
+            ]);
+
+            if ($throwOnError) {
+                throw new BillingApiException($e->getMessage(), (int) $e->getCode(), $e);
+            }
+
+            return ['data' => null, 'message' => 'Tidak dapat terhubung ke layanan billing'];
+        }
+
+        if ($response->status() === 404 || ! $response->json('success')) {
+            if ($throwOnError && $response->serverError()) {
+                throw new BillingApiException('Billing API returned HTTP '.$response->status());
+            }
+
+            return [
+                'data' => null,
+                'message' => $response->json('message') ?? 'Nomor sambungan tidak ditemukan',
+            ];
+        }
+
+        return [
+            'data' => $response->json('data'),
+            'message' => null,
+        ];
     }
 }

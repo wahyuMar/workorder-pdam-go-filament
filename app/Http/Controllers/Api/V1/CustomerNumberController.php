@@ -166,6 +166,35 @@ class CustomerNumberController extends Controller
         ]);
     }
 
+    public function tagihan(Request $request, string $no): JsonResponse
+    {
+        $customerNumber = CustomerNumber::ownedBy($request->user()->id)
+            ->where('no_sambungan', $no)
+            ->first();
+
+        if (! $customerNumber) {
+            return response()->json([
+                'message' => 'Nomor sambungan tidak ditemukan.',
+            ], 404);
+        }
+
+        try {
+            $result = $this->customerLookupService->fetchTagihan($customerNumber->no_sambungan, throwOnError: true);
+        } catch (BillingApiException) {
+            return response()->json([
+                'message' => 'Layanan billing sedang tidak tersedia.',
+            ], 503);
+        }
+
+        if ($result['data'] === null) {
+            return response()->json([
+                'message' => $result['message'] ?? 'Data tagihan tidak ditemukan.',
+            ], 404);
+        }
+
+        return response()->json(['data' => $result['data']]);
+    }
+
     private function maskNik(?string $nik): ?string
     {
         if ($nik === null) {

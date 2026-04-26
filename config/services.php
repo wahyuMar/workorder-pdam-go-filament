@@ -38,6 +38,8 @@ return [
     'billing_api' => [
         'base_uri' => env('BILLING_API_BASE_URI', 'http://localhost:9000/api/v2'),
         'app_key' => env('BILLING_API_KEY', 'hK511gZV21OGnVa6qkbI5VFmqlRAT354mE4Do0bc'),
+        'api_key' => env('BILLING_API_TAGIHAN_KEY', 'lzui0C6I'),
+        'api_secret' => env('BILLING_API_TAGIHAN_SECRET', ''),
         'timeout' => env('BILLING_API_TIMEOUT', 10),
     ],
 

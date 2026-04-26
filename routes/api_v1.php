@@ -61,6 +61,7 @@ Route::middleware(['auth:sanctum', 'customer'])->group(function () {
         Route::post('/customer-numbers/confirm', [CustomerNumberController::class, 'confirm'])->name('api.v1.customer-numbers.confirm');
         Route::get('/customer-numbers', [CustomerNumberController::class, 'index'])->name('api.v1.customer-numbers.index');
         Route::get('/customer-numbers/{no}/billing', [CustomerNumberController::class, 'billing'])->name('api.v1.customer-numbers.billing');
+        Route::get('/customer-numbers/{no}/tagihan', [CustomerNumberController::class, 'tagihan'])->name('api.v1.customer-numbers.tagihan');
         Route::delete('/customer-numbers/{no}', [CustomerNumberController::class, 'destroy'])->name('api.v1.customer-numbers.destroy');
 
         // SR Registrations

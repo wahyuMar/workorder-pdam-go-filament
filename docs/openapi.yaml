@@ -693,6 +693,74 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/UploadResponseData'
+    TagihanPelanggan:
+      type: object
+      properties:
+        no_sambungan:
+          type: string
+          example: 01PNRG0001
+        nama_pelanggan:
+          type: string
+          example: Wahyu
+        alamat_pelanggan:
+          type: string
+          example: Jl. Dolopo No.1
+    TagihanItem:
+      type: object
+      properties:
+        bulan:
+          type: integer
+          example: 12
+        tahun:
+          type: integer
+          example: 2025
+        tagihan:
+          type: string
+          example: Tagihan Air Bulan 12 Tahun 2025
+        kd_jenistarif:
+          type: string
+          example: A1
+        nama_jenistarif:
+          type: string
+          example: Rumah Tangga
+        administrasi:
+          type: number
+          example: 2000
+        denda:
+          type: number
+          example: 0
+        danameter:
+          type: number
+          example: 1000
+        stand_lalu:
+          type: number
+          example: 120
+        stand_ini:
+          type: number
+          example: 130
+        pakai:
+          type: number
+          example: 10
+        total:
+          type: number
+          example: 8000
+    TagihanData:
+      type: object
+      properties:
+        pelanggan:
+          $ref: '#/components/schemas/TagihanPelanggan'
+        total_tagihan:
+          type: number
+          example: 8000
+        info_tagihan:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagihanItem'
+    TagihanResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/TagihanData'
     BeritaListItem:
       type: object
       properties:
@@ -1182,6 +1250,37 @@ paths:
                 $ref: '#/components/schemas/BillingLookupResponse'
         '404':
           description: Nomor sambungan atau data billing tidak ditemukan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '503':
+          description: Billing service unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+  /api/v1/customer-numbers/{no}/tagihan:
+    get:
+      tags:
+        - Customer Numbers
+      summary: Get invoice (tagihan) for attached customer number
+      description: |
+        Fetches live invoice data from the billing API using an HMAC-signed request.
+        Only accessible for customer numbers already linked to the authenticated user's account.
+      security:
+        - sanctumSession: []
+      parameters:
+        - $ref: '#/components/parameters/CustomerNumberNo'
+      responses:
+        '200':
+          description: Invoice data from billing system.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagihanResponse'
+        '404':
+          description: Customer number not found or billing data unavailable.
           content:
             application/json:
               schema:

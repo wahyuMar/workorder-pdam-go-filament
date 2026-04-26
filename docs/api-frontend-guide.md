@@ -437,6 +437,47 @@ Response 200:
 }
 ```
 
+### GET `/customer-numbers/{no}/tagihan`
+
+Mengambil data tagihan (invoice) terkini dari sistem billing untuk nomor sambungan yang sudah terhubung ke akun user.
+
+Request otomatis disign dengan HMAC SHA256 di sisi server — frontend cukup panggil endpoint ini langsung.
+
+Response 200:
+
+```json
+{
+  "data": {
+    "pelanggan": {
+      "no_sambungan": "01PNRG0001",
+      "nama_pelanggan": "Wahyu",
+      "alamat_pelanggan": "Jl. Dolopo No.1"
+    },
+    "total_tagihan": 8000,
+    "info_tagihan": [
+      {
+        "bulan": 12,
+        "tahun": 2025,
+        "tagihan": "Tagihan Air Bulan 12 Tahun 2025",
+        "kd_jenistarif": "A1",
+        "nama_jenistarif": "Rumah Tangga",
+        "administrasi": 2000,
+        "denda": 0,
+        "danameter": 1000,
+        "stand_lalu": 120,
+        "stand_ini": 130,
+        "pakai": 10,
+        "total": 8000
+      }
+    ]
+  }
+}
+```
+
+Error responses:
+- `404` — nomor sambungan tidak terdaftar di akun atau tidak ditemukan di billing
+- `503` — layanan billing sedang tidak tersedia
+
 ### DELETE `/customer-numbers/{no}`
 
 Menghapus nomor sambungan dari akun user.
