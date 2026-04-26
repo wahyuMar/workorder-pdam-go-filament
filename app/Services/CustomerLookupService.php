@@ -27,6 +27,11 @@ class CustomerLookupService
                 ->withHeaders([
                     'X-App-Key' => $this->appKey,
                 ])->get($this->baseUri.'/external/customers/'.$noSambungan);
+            Log::info('Customer lookup response', [
+                'no_sambungan' => $noSambungan,
+                'status' => $response->status(),
+                'body' => $response->body(),
+            ]);
         } catch (\Throwable $e) {
             Log::warning('Customer lookup failed', [
                 'no_sambungan' => $noSambungan,

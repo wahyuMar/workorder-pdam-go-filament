@@ -23,6 +23,18 @@ class ApiInfrastructureTest extends TestCase
         $this->assertNotNull(config('permission'));
     }
 
+    public function test_cors_config_supports_frontend_credentials(): void
+    {
+        $this->assertFileExists(config_path('cors.php'));
+
+        $config = config('cors');
+        $this->assertNotNull($config);
+        $this->assertContains('api/*', $config['paths']);
+        $this->assertContains('sanctum/csrf-cookie', $config['paths']);
+        $this->assertContains('http://localhost:3000', $config['allowed_origins']);
+        $this->assertTrue($config['supports_credentials']);
+    }
+
     public function test_api_log_channel_configured(): void
     {
         $channels = config('logging.channels');

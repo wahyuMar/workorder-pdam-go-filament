@@ -21,7 +21,7 @@ class CustomerRegistrationSourceFilterTest extends TestCase
         parent::setUp();
 
         $this->admin = User::factory()->create();
-        $this->actingAs($this->admin);
+        $this->actingAs($this->admin, 'admin');
     }
 
     public function test_source_column_renders_in_table(): void
