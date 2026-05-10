@@ -21,10 +21,12 @@ class MeterDisconnection extends Model
         'latitude',
         'longitude',
         'alasan_cabut',
+        'is_confirmed',
         'tanggal',
     ];
 
     protected $casts = [
+        'is_confirmed' => 'boolean',
         'tanggal' => 'datetime',
     ];
 

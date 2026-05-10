@@ -39,6 +39,12 @@ class RepairReport extends Model
                 $repairReport->no_bap = static::generateNoBAP();
             }
         });
+
+        static::created(function (RepairReport $repairReport): void {
+            $repairReport->complaint?->meterRepair?->update([
+                'is_confirmed' => true,
+            ]);
+        });
     }
 
     public static function generateNoBAP(): string
@@ -54,7 +60,7 @@ class RepairReport extends Model
 
     public static function peekNextNoBAP(): string
     {
-        $counter = static::query()->count();
+        $counter = static::query()->count('*');
 
         return sprintf('BAP-%s-%04d', now()->format('Ymd'), $counter + 1);
     }

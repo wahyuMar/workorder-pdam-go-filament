@@ -41,6 +41,12 @@ class MeterReplacementHandover extends Model
                 $model->no_bast_gm = self::generateNoBASTGM();
             }
         });
+
+        static::created(function (MeterReplacementHandover $model): void {
+            $model->complaint?->meterReplacement?->update([
+                'is_confirmed' => true,
+            ]);
+        });
     }
 
     public static function generateNoBASTGM()
@@ -55,7 +61,7 @@ class MeterReplacementHandover extends Model
 
     public static function peekNextNoBASTGM()
     {
-        $counter = MeterReplacementHandover::count();
+        $counter = MeterReplacementHandover::query()->count('*');
         $date = now()->format('Ymd');
 
         return sprintf('BAST-GM-%s-%04d', $date, $counter + 1);

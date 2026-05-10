@@ -38,6 +38,12 @@ class SubscriptionCancellation extends Model
                 $model->no_bacl = self::generateNoBACL();
             }
         });
+
+        static::created(function (SubscriptionCancellation $model): void {
+            $model->complaint?->meterDisconnection?->update([
+                'is_confirmed' => true,
+            ]);
+        });
     }
 
     public static function generateNoBACL()
@@ -52,7 +58,7 @@ class SubscriptionCancellation extends Model
 
     public static function peekNextNoBACL()
     {
-        $counter = SubscriptionCancellation::count();
+        $counter = SubscriptionCancellation::query()->count('*');
         $date = now()->format('Ymd');
 
         return sprintf('BACL-%s-%04d', $date, $counter + 1);

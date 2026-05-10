@@ -23,10 +23,12 @@ class MeterRepair extends Model
         'longitude',
         'keluhan',
         'tindakan_perbaikan',
+        'is_confirmed',
         'tanggal',
     ];
 
     protected $casts = [
+        'is_confirmed' => 'boolean',
         'tanggal' => 'datetime',
     ];
 

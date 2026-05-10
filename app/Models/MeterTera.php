@@ -23,10 +23,12 @@ class MeterTera extends Model
         'longitude',
         'keluhan',
         'hasil_tera_meter',
+        'is_confirmed',
         'tanggal',
     ];
 
     protected $casts = [
+        'is_confirmed' => 'boolean',
         'tanggal' => 'datetime',
     ];
 

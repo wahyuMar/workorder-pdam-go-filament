@@ -38,6 +38,12 @@ class SubscriptionReopening extends Model
                 $model->no_bast_bk = self::generateNoBASTBK();
             }
         });
+
+        static::created(function (SubscriptionReopening $model): void {
+            $model->complaint?->meterReopening?->update([
+                'is_confirmed' => true,
+            ]);
+        });
     }
 
     public static function generateNoBASTBK()
@@ -52,7 +58,7 @@ class SubscriptionReopening extends Model
 
     public static function peekNextNoBASTBK()
     {
-        $counter = SubscriptionReopening::count();
+        $counter = SubscriptionReopening::query()->count('*');
         $date = now()->format('Ymd');
 
         return sprintf('BAST-BK-%s-%04d', $date, $counter + 1);

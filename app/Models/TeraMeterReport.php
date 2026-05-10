@@ -39,6 +39,12 @@ class TeraMeterReport extends Model
                 $teraMeterReport->no_bap = static::generateNoBAP();
             }
         });
+
+        static::created(function (TeraMeterReport $teraMeterReport): void {
+            $teraMeterReport->complaint?->meterTera?->update([
+                'is_confirmed' => true,
+            ]);
+        });
     }
 
     public static function generateNoBAP(): string
@@ -54,7 +60,7 @@ class TeraMeterReport extends Model
 
     public static function peekNextNoBAP(): string
     {
-        $counter = static::query()->count();
+        $counter = static::query()->count('*');
 
         return sprintf('BATM-%s-%04d', now()->format('Ymd'), $counter + 1);
     }

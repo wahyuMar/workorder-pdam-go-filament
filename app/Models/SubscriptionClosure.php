@@ -38,6 +38,12 @@ class SubscriptionClosure extends Model
                 $model->no_batl = self::generateNoBATL();
             }
         });
+
+        static::created(function (SubscriptionClosure $model): void {
+            $model->complaint?->meterClosed?->update([
+                'is_confirmed' => true,
+            ]);
+        });
     }
 
     public static function generateNoBATL()
@@ -52,7 +58,7 @@ class SubscriptionClosure extends Model
 
     public static function peekNextNoBATL()
     {
-        $counter = SubscriptionClosure::count();
+        $counter = SubscriptionClosure::query()->count('*');
         $date = now()->format('Ymd');
 
         return sprintf('BATL-%s-%04d', $date, $counter + 1);

@@ -21,10 +21,12 @@ class MeterClosed extends Model
         'latitude',
         'longitude',
         'alasan_tutup',
+        'is_confirmed',
         'tanggal',
     ];
 
     protected $casts = [
+        'is_confirmed' => 'boolean',
         'tanggal' => 'datetime',
     ];
 

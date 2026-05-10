@@ -22,10 +22,12 @@ class MeterReplacement extends Model
         'longitude',
         'alasan_penggantian',
         'biaya_ganti_meter',
+        'is_confirmed',
         'tanggal',
     ];
 
     protected $casts = [
+        'is_confirmed' => 'boolean',
         'tanggal' => 'datetime',
         'biaya_ganti_meter' => 'decimal:2',
     ];

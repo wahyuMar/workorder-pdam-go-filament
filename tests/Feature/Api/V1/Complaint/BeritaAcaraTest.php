@@ -4,7 +4,13 @@ namespace Tests\Feature\Api\V1\Complaint;
 
 use App\Models\Complaint;
 use App\Models\ComplaintType;
+use App\Models\MeterClosed;
+use App\Models\MeterDisconnection;
+use App\Models\MeterRepair;
+use App\Models\MeterReplacement;
 use App\Models\MeterReplacementHandover;
+use App\Models\MeterReopening;
+use App\Models\MeterTera;
 use App\Models\RepairReport;
 use App\Models\SubscriptionCancellation;
 use App\Models\SubscriptionClosure;
@@ -207,6 +213,44 @@ class BeritaAcaraTest extends TestCase
         $this->assertNotNull($event);
         $this->assertEquals('buka_kembali', $event['payload']['jenis']);
         $this->assertEquals('Buka kembali atas permintaan pelanggan', $event['payload']['details']['catatan']);
+    }
+
+    public static function beritaAcaraConfirmationProvider(): array
+    {
+        return [
+            'perbaikan' => [MeterRepair::class, RepairReport::class],
+            'tera meter' => [MeterTera::class, TeraMeterReport::class],
+            'ganti meter' => [MeterReplacement::class, MeterReplacementHandover::class],
+            'cabut langganan' => [MeterDisconnection::class, SubscriptionCancellation::class],
+            'tutup langganan' => [MeterClosed::class, SubscriptionClosure::class],
+            'buka kembali' => [MeterReopening::class, SubscriptionReopening::class],
+        ];
+    }
+
+    /**
+     * @dataProvider beritaAcaraConfirmationProvider
+     */
+    public function test_creating_berita_acara_confirms_related_work_order(string $workOrderModel, string $beritaAcaraModel): void
+    {
+        $user = $this->createCustomerUser();
+        $complaint = $this->createComplaint($user);
+
+        $workOrder = $workOrderModel::factory()->create([
+            'complaint_id' => $complaint->id,
+            'no_sambungan' => $complaint->no_sambungan,
+            'nama' => $complaint->nama,
+            'alamat' => 'Jl. Test No. 1',
+            'is_confirmed' => false,
+        ]);
+
+        $beritaAcaraModel::factory()->create([
+            'complaint_id' => $complaint->id,
+            'no_sambungan' => $complaint->no_sambungan,
+            'nama' => $complaint->nama,
+            'alamat' => 'Jl. Test No. 1',
+        ]);
+
+        $this->assertTrue($workOrder->fresh()->is_confirmed);
     }
 
     public function test_cannot_see_other_users_berita_acara_timeline(): void

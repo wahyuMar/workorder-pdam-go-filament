@@ -22,10 +22,12 @@ class MeterReopening extends Model
         'longitude',
         'alasan_buka_kembali',
         'biaya_buka_kembali',
+        'is_confirmed',
         'tanggal',
     ];
 
     protected $casts = [
+        'is_confirmed' => 'boolean',
         'tanggal' => 'datetime',
         'biaya_buka_kembali' => 'decimal:2',
     ];
