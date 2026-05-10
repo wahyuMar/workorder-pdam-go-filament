@@ -44,6 +44,7 @@ class RepairReport extends Model
             $repairReport->complaint?->meterRepair?->update([
                 'is_confirmed' => true,
             ]);
+            $repairReport->complaint?->update(['status' => 'resolved']);
         });
     }
 

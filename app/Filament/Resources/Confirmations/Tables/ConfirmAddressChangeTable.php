@@ -68,6 +68,7 @@ class ConfirmAddressChangeTable
                     ])
                     ->action(function ($record, array $data) {
                         $record->update(['is_confirmed' => true]);
+                        $record->complaint?->update(['status' => 'resolved']);
 
                         Notification::make()
                             ->title('Konfirmasi Berhasil')

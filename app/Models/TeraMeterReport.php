@@ -44,6 +44,7 @@ class TeraMeterReport extends Model
             $teraMeterReport->complaint?->meterTera?->update([
                 'is_confirmed' => true,
             ]);
+            $teraMeterReport->complaint?->update(['status' => 'resolved']);
         });
     }
 

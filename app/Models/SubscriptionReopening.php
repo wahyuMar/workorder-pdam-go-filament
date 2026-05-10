@@ -43,6 +43,7 @@ class SubscriptionReopening extends Model
             $model->complaint?->meterReopening?->update([
                 'is_confirmed' => true,
             ]);
+            $model->complaint?->update(['status' => 'resolved']);
         });
     }
 

@@ -46,6 +46,7 @@ class MeterReplacementHandover extends Model
             $model->complaint?->meterReplacement?->update([
                 'is_confirmed' => true,
             ]);
+            $model->complaint?->update(['status' => 'resolved']);
         });
     }
 

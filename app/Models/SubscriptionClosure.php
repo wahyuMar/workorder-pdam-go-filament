@@ -43,6 +43,7 @@ class SubscriptionClosure extends Model
             $model->complaint?->meterClosed?->update([
                 'is_confirmed' => true,
             ]);
+            $model->complaint?->update(['status' => 'resolved']);
         });
     }
 

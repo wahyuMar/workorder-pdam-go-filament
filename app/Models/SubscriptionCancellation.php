@@ -43,6 +43,7 @@ class SubscriptionCancellation extends Model
             $model->complaint?->meterDisconnection?->update([
                 'is_confirmed' => true,
             ]);
+            $model->complaint?->update(['status' => 'resolved']);
         });
     }
 
