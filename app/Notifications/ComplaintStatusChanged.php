@@ -4,7 +4,6 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
-use Illuminate\Notifications\Messages\DatabaseMessage;
 
 class ComplaintStatusChanged extends Notification
 {
@@ -15,12 +14,12 @@ class ComplaintStatusChanged extends Notification
         public ?string $message = null
     ) {}
 
-    public function via($notifiable): array
+    public function via(object $notifiable): array
     {
         return ['database'];
     }
 
-    public function toDatabase($notifiable): array
+    public function toDatabase(object $notifiable): array
     {
         return [
             'title' => 'Status Pengaduan Diperbarui',
