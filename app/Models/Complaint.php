@@ -219,4 +219,21 @@ class Complaint extends Model
     {
         return $this->hasOne(SubscriptionReopening::class);
     }
+
+    public function setStatusAttribute($value)
+    {
+        if ($this->status !== $value) {
+            $this->attributes['status'] = $value;
+            $this->notifyStatusChanged($value);
+        } else {
+            $this->attributes['status'] = $value;
+        }
+    }
+
+    protected function notifyStatusChanged($status)
+    {
+        if ($this->user) {
+            $this->user->notify(new \App\Notifications\ComplaintStatusChanged($status));
+        }
+    }
 }

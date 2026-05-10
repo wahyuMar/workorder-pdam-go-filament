@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\BeritaController;
 use App\Http\Controllers\Api\V1\ComplaintController;
 use App\Http\Controllers\Api\V1\CustomerNumberController;
 use App\Http\Controllers\Api\V1\MasterDataController;
+use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Controllers\Api\V1\ProfileController;
 use App\Http\Controllers\Api\V1\RegistrationController;
 use App\Http\Controllers\Api\V1\UploadController;
@@ -74,6 +75,11 @@ Route::middleware(['auth:sanctum', 'customer'])->group(function () {
         Route::get('/complaints', [ComplaintController::class, 'index'])->name('api.v1.complaints.index');
         Route::get('/complaints/{complaint}', [ComplaintController::class, 'show'])->name('api.v1.complaints.show');
         Route::get('/complaints/{complaint}/timeline', [ComplaintController::class, 'timeline'])->name('api.v1.complaints.timeline');
+
+        // Notifications
+        Route::get('/notifications', [NotificationController::class, 'index'])->name('api.v1.notifications.index');
+        Route::get('/notifications/unread', [NotificationController::class, 'unread'])->name('api.v1.notifications.unread');
+        Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('api.v1.notifications.read');
     });
 
     // File Upload (separate rate limit)
